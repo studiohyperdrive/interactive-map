@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "next": "node node_modules/next/dist/bin/next",
+    "dev": "npm run next dev",
+    "build": "npm run next build",
+    "start": "npm run next start",
+    "lint": "npm run next lint"
   },
   "dependencies": {
     "next": "11.1.2",
