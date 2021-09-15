@@ -1,3 +1,3 @@
-import { SceneSubject } from "../../../types";
+import { IUpdates } from "../../../types";
 
-export interface CubeTypes extends SceneSubject {}
+export interface ICube extends IUpdates, THREE.Mesh {}
