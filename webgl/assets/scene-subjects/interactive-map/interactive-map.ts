@@ -18,9 +18,5 @@ export default class InteractiveMap implements IInteractiveMap {
         });
     }
 
-    public update() {
-        if (this.instance) {
-            this.instance.rotation.y -= 0.001;
-        };
-    }
+    public update() {}
 };
