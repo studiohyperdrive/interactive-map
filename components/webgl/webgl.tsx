@@ -8,7 +8,7 @@ const WebGL: React.FC<WebGLProps> = () => {
 
 	useEffect(() => {
 		if (threeRootElement.current) {
-			ThreeEntryPoint(threeRootElement.current);
+			new ThreeEntryPoint(threeRootElement.current);
 		}
 	}, []);
 

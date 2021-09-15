@@ -1,29 +1,33 @@
 import SceneManager from './scene-manager';
 
-const threeEntryPoint = (canvas: HTMLCanvasElement): void => {
-	const sceneManager = new SceneManager(canvas);
+export default class ThreeEntryPoint {
+	public canvas;
+	public manager;
 
-	const bindEventListeners = () => {
-		window.onresize = resizeCanvas;
+	constructor(canvas: HTMLCanvasElement) {
+		this.canvas = canvas;
+		this.manager = new SceneManager(canvas);
+
+		this.bindEventListeners();
+		this.render();
+	}
+
+	public bindEventListeners(): void {
+		window.onresize = this.resizeCanvas;
 		
-		resizeCanvas();
+		this.resizeCanvas();
 	}
 
-	const resizeCanvas = () => {		
-		canvas.style.width = '100%';
-		canvas.style.height= '100%';
-		canvas.width = canvas.offsetWidth;
-		canvas.height = canvas.offsetHeight;
-		sceneManager.onWindowResizeCallback();
+	public resizeCanvas(): void {		
+		this.canvas.style.width = '100%';
+		this.canvas.style.height= '100%';
+		this.canvas.width = this.canvas.offsetWidth;
+		this.canvas.height = this.canvas.offsetHeight;
+		this.manager.onWindowResizeCallback();
 	}
 
-	const render = (): void => {
-		requestAnimationFrame(render);
-		sceneManager.update();
+	public render(): void {
+		requestAnimationFrame(this.render);
+		this.manager.update();
 	};
-
-	bindEventListeners();
-	render();
 };
-
-export default threeEntryPoint;
