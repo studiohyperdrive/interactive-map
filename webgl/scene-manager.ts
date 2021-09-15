@@ -4,7 +4,8 @@ import { onWindowResize } from "./assets/utils/eventHelpers";
 import { IManager, ISize } from './types';
 import InteractiveMap from './assets/scene-subjects/interactive-map/interactive-map';
 import GlobalIllumination from './assets/scene-subjects/global-illumination/global-illumination';
-import Controls from './assets/scene-subjects/controls/controls';
+import MouseControls from './assets/scene-subjects/controls/mouse-controls/mouse-controls';
+import RotateControls from "./assets/scene-subjects/controls/rotate-controls/rotate-controls";
 
 const SceneManager = (canvas: HTMLCanvasElement): IManager  => {
 	// Constants
@@ -18,7 +19,8 @@ const SceneManager = (canvas: HTMLCanvasElement): IManager  => {
 		const sceneSubjects: any[] = [
 			new InteractiveMap(scene, '/models/interactive-map_v1.glb'),
 			new GlobalIllumination(scene),
-			new Controls(camera, canvas),
+			new MouseControls(camera, canvas),
+			new RotateControls(camera),
 		];
 		
 		return sceneSubjects;

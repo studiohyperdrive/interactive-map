@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 import { MapControls } from 'three/examples/jsm/controls/OrbitControls';
 
-import { IMapControls } from './controls.types';
+import { IMapControls } from './mouse-controls.types';
 
-export default class Controls implements IMapControls {
+export default class MouseControls implements IMapControls {
     public mapControls;
 
     constructor(camera: THREE.Camera, canvas: HTMLCanvasElement) {
@@ -17,16 +17,20 @@ export default class Controls implements IMapControls {
     public createOribitControls(camera: THREE.Camera, canvas: HTMLCanvasElement): MapControls {
         const orbitControls = new MapControls(camera, canvas);
         orbitControls.enableDamping = true;
-    
+        orbitControls.dampingFactor = 0.1;
+
+        orbitControls.enableRotate = false;
+        
         // Vertical rotation limits
         orbitControls.minPolarAngle = Math.PI / 2 + camera.rotation.x
         orbitControls.maxPolarAngle = Math.PI / 2 + camera.rotation.x
-    
+        
         // Horizontal rotation limits
         orbitControls.minAzimuthAngle = - Math.PI / 4
         orbitControls.maxAzimuthAngle = Math.PI / 4
     
         // Dolly (zoom) limits
+        orbitControls.zoomSpeed = 0.3;
         orbitControls.minDistance = 2;
         orbitControls.maxDistance = 5;
 

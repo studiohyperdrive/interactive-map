@@ -1,0 +1,15 @@
+.webgl__rotate-buttons {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    left: calc(50% - 100px);
+    width: 200px;
+}
+
+.webgl__rotate-button {
+    background-color: white;
+    padding: 1rem;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+}

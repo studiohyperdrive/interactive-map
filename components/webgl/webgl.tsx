@@ -13,7 +13,13 @@ const WebGL: React.FC<WebGLProps> = () => {
 	}, []);
 
 	return (
-		<canvas id="SHDGate" ref={threeRootElement} />
+        <div>
+		    <canvas ref={threeRootElement} />
+            <div className="webgl__rotate-buttons">
+                <div className="webgl__rotate-button" id="webgl__rotate-left">{'<-'}</div>
+                <div className="webgl__rotate-button" id="webgl__rotate-right">{'->'}</div>
+            </div>
+        </div>
 	);
 };
 
