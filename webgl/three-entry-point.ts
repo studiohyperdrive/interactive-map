@@ -1,7 +1,7 @@
 import SceneManager from './scene-manager';
 
 const threeEntryPoint = (canvas: HTMLCanvasElement): void => {
-	const sceneManager = SceneManager(canvas);
+	const sceneManager = new SceneManager(canvas);
 
 	const bindEventListeners = () => {
 		window.onresize = resizeCanvas;
