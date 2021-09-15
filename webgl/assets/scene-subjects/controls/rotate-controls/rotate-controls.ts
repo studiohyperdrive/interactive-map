@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import gsap from 'gsap';
+import gsap, {Power1} from 'gsap';
 
 import { IRotateControls } from './rotate-controls.types';
 
@@ -33,10 +33,10 @@ export default class RotateControls implements IRotateControls {
     };
 
     public handleClickRotateLeft = () => {
-       gsap.to(this, {rotation: this.rotation - Math.PI / 10})
+       gsap.to(this, {rotation: this.rotation - Math.PI / 10, ease: Power1.easeInOut})
     }
 
     public handleClickRotateRight = () => {        
-        gsap.to(this, {rotation: this.rotation + Math.PI / 10})
+        gsap.to(this, {rotation: this.rotation + Math.PI / 10, ease: Power1.easeInOut})
     }
 };

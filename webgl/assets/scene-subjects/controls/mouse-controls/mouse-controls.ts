@@ -17,9 +17,11 @@ export default class MouseControls implements IMapControls {
     public createOribitControls(camera: THREE.Camera, canvas: HTMLCanvasElement): MapControls {
         const orbitControls = new MapControls(camera, canvas);
         orbitControls.enableDamping = true;
-        orbitControls.dampingFactor = 0.1;
-
         orbitControls.enableRotate = false;
+        
+        orbitControls.dampingFactor = 0.1;
+        orbitControls.panSpeed = 0.5;
+        orbitControls.zoomSpeed = 0.3;
         
         // Vertical rotation limits
         orbitControls.minPolarAngle = Math.PI / 2 + camera.rotation.x
@@ -30,7 +32,6 @@ export default class MouseControls implements IMapControls {
         orbitControls.maxAzimuthAngle = Math.PI / 4
     
         // Dolly (zoom) limits
-        orbitControls.zoomSpeed = 0.3;
         orbitControls.minDistance = 2;
         orbitControls.maxDistance = 5;
 
