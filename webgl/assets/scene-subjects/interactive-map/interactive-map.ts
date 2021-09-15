@@ -1,32 +1,26 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
-import { InteractiveMapTypes } from './interactive-map.types';
+import { IInteractiveMap } from './interactive-map.types';
 
-const InteractiveMap = (scene: THREE.Scene): InteractiveMapTypes => {
-    let sceneInstance: THREE.Group | null = null;
+export default class InteractiveMap implements IInteractiveMap {
+    public loader: GLTFLoader;
+    public instance: THREE.Group | null = null;
 
-	// Add DRACO loader
+    constructor(scene: THREE.Scene, path: string) {
+        // Add loader
+        this.loader = new GLTFLoader();
 
-    // Add loader
-    const loader = new GLTFLoader();
-    loader.load('/models/interactive-map_v1.glb', 
-    (gltf) => {
-        sceneInstance = gltf.scene;
-        scene.add(gltf.scene);
-    });
+        // Add map to schene
+        this.loader.load(path, (gltf) => {
+            this.instance = gltf.scene;
+            scene.add(gltf.scene);
+        });
+    }
 
-    // Add map to schene
-
-    const update = () => {
-        if (sceneInstance) {
-            sceneInstance.rotation.y -= 0.001;
+    public update() {
+        if (this.instance) {
+            this.instance.rotation.y -= 0.001;
         };
-    };
-
-    return {
-        update,
-    };
+    }
 };
-
-export default InteractiveMap;

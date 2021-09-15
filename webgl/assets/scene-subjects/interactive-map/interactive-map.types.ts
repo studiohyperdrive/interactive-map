@@ -1,3 +1,7 @@
-import { SceneSubject } from "../../../types";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { IUpdates } from "../../../types";
 
-export interface InteractiveMapTypes extends SceneSubject {}
+export interface IInteractiveMap extends IUpdates {
+    loader: GLTFLoader;
+    instance: THREE.Group | null;
+}
