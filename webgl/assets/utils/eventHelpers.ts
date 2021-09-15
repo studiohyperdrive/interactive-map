@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import { Sizes } from '../../types';
+import { ISize } from '../../types';
 
-export const onWindowResize = (renderer: THREE.WebGLRenderer, camera: THREE.PerspectiveCamera, sizes: Sizes): void => {
+export const onWindowResize = (renderer: THREE.WebGLRenderer, camera: THREE.PerspectiveCamera, sizes: ISize): void => {
     sizes.width = window.innerWidth;
     sizes.height = window.innerHeight;
 
