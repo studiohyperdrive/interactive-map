@@ -1,9 +1,10 @@
 import { buildScene, buildRenderer, buildCamera, buildClock } from "./assets/utils/buildHelpers";
 import { onWindowResize } from "./assets/utils/eventHelpers";
 
+import { IManager, ISize } from './types';
 import InteractiveMap from './assets/scene-subjects/interactive-map/interactive-map';
 import GlobalIllumination from './assets/scene-subjects/global-illumination/global-illumination';
-import { IManager, ISize } from "./types";
+import Controls from './assets/scene-subjects/controls/controls';
 
 const SceneManager = (canvas: HTMLCanvasElement): IManager  => {
 	// Constants
@@ -17,6 +18,7 @@ const SceneManager = (canvas: HTMLCanvasElement): IManager  => {
 		const sceneSubjects: any[] = [
 			new InteractiveMap(scene, '/models/interactive-map_v1.glb'),
 			new GlobalIllumination(scene),
+			new Controls(camera, canvas),
 		];
 		
 		return sceneSubjects;
