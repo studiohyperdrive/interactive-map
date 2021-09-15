@@ -39,7 +39,7 @@ export default class SceneManager implements IManager {
 	}
 
 	public onWindowResizeCallback(): void {
-		onWindowResize(this.renderer, this.camera, this.sizes);
+		this.sizes = onWindowResize(this.renderer, this.camera);
 	}
 
 	public createSubjects(scene: THREE.Scene): IUpdates[] {
