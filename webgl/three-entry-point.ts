@@ -1,3 +1,5 @@
+import { Mesh } from 'three';
+import { debounce } from './assets/utils/eventHelpers';
 import SceneManager from './scene-manager';
 
 export default class ThreeEntryPoint {
@@ -14,6 +16,24 @@ export default class ThreeEntryPoint {
 
 	public bindEventListeners(): void {
 		window.onresize = () => {this.resizeCanvas()};
+		window.onmousemove = debounce((e: MouseEvent) => {
+			this.manager.updateMouse(e);
+			this.manager.updateIntersections();
+		}, 12);
+		window.onclick = (e: MouseEvent) => {
+			this.manager.updateMouse(e);
+			this.manager.updateIntersections();
+
+			const clicked = this.manager.intersections[0].object;
+			
+			if (clicked instanceof Mesh) {
+				this.manager.bindings.click.filter(binding => {
+					if (this.manager.isMatching(clicked, binding)) {
+						binding.onClick(clicked);
+					}
+				});
+			}
+		}
 
 		this.resizeCanvas();
 	}
