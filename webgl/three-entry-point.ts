@@ -27,7 +27,7 @@ export default class ThreeEntryPoint {
 	}
 
 	public render(): void {
-		requestAnimationFrame(this.render);
+		requestAnimationFrame(() => {this.render()});
 		this.manager.update();
 	};
 };
