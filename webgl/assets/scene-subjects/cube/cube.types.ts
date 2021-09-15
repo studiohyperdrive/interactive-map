@@ -1,3 +1,3 @@
-export interface cubeTypes {
-    update: Function;
-}
+import { SceneSubject } from "../../../types";
+
+export interface CubeTypes extends SceneSubject {}

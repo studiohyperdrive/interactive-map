@@ -1,7 +1,9 @@
 import { Sizes, SceneManagerTypes } from './types';
 import { buildScene, buildRenderer, buildCamera, buildClock } from "./assets/utils/buildHelpers";
 import { onWindowResize } from "./assets/utils/eventHelpers";
-import Cube from './assets/scene-subjects/cube/cube';
+import InteractiveMap from './assets/scene-subjects/interactive-map/interactive-map';
+import GlobalIllumination from './assets/scene-subjects/global-illumination/global-illumination';
+import Controls from './assets/scene-subjects/controls/controls';
 
 const SceneManager = (canvas: HTMLCanvasElement): SceneManagerTypes  => {
 	// Constants
@@ -13,7 +15,8 @@ const SceneManager = (canvas: HTMLCanvasElement): SceneManagerTypes  => {
 	// Subjects
 	const createSceneSubjects = (): any[] => {
 		const sceneSubjects: any[] = [
-			Cube(scene, clock),
+			InteractiveMap(scene),
+			GlobalIllumination(scene),
 		];
 		
 		return sceneSubjects;
@@ -22,7 +25,7 @@ const SceneManager = (canvas: HTMLCanvasElement): SceneManagerTypes  => {
 	// Initialize scene
 	const scene = buildScene();
 	const renderer = buildRenderer(canvas, sizes);
-	const camera = buildCamera(scene, sizes);
+	const camera = buildCamera(scene, sizes, {x: 0, y: 1, z: 3});
 	const clock = buildClock();
 	const sceneSubjects = createSceneSubjects();
 
