@@ -39,10 +39,10 @@ export default class MouseControls implements IMapControls {
         // Vertical rotation limits
         mapControls.minPolarAngle = Math.PI / 2 + camera.rotation.x
         mapControls.maxPolarAngle = Math.PI / 2 + camera.rotation.x
-        
+
         // Horizontal rotation limits
-        // mapControls.minAzimuthAngle = - Math.PI / 4
-        // mapControls.maxAzimuthAngle = Math.PI / 4
+        mapControls.minAzimuthAngle = -Math.PI / 4
+        mapControls.maxAzimuthAngle = Math.PI / 4
     
         // Dolly (zoom) limits
         mapControls.minDistance = 2;
@@ -51,10 +51,16 @@ export default class MouseControls implements IMapControls {
     }
 
     public handleClickRotateLeft = () => {        
-        this.mapControls.rotate(this.rotationStep);
+        // Stop rotations if next angle will exceed limit
+        if (this.mapControls.getAzimuthalAngle() - this.rotationStep > -Math.PI/4) {
+            this.mapControls.rotate(this.rotationStep);
+        }
     }
 
     public handleClickRotateRight = () => {
-        this.mapControls.rotate(-this.rotationStep);
+        // Stop rotations if next angle will exceed limit
+        if (this.mapControls.getAzimuthalAngle() + this.rotationStep < Math.PI/4) {
+            this.mapControls.rotate(-this.rotationStep);
+        }
     }
 };
