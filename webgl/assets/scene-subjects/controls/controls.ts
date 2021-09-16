@@ -1,20 +1,24 @@
 import * as THREE from 'three';
-import { MapControls } from '../../modified/orbitControls/OrbitControls';
+import { MapControls } from 'three/examples/jsm/controls/OrbitControls';
+import gsap from 'gsap';
 
+import { rotateArountPoint } from '../../utils/generalHelpers';
 import { IMapControls } from './controls.types';
 
 export default class Controls implements IMapControls {
     public mapControls;
+    public camera;
 
-    public rotationStep;
+    public rotationDelta;
 
     public rotateLeftButton;
     public rotateRightButton;
 
     constructor(camera: THREE.Camera, canvas: HTMLCanvasElement) {
         this.mapControls = this.createOribitControls(camera, canvas);
+        this.camera = camera;
 
-        this.rotationStep = Math.PI/12;
+        this.rotationDelta = 0;
 
         this.rotateLeftButton = document.querySelector('#webgl__rotate-left');
         this.rotateLeftButton?.addEventListener('click', this.handleClickRotateLeft);
@@ -25,6 +29,12 @@ export default class Controls implements IMapControls {
 
     public update() {
         this.mapControls.update();
+
+        // Add damping to rotation
+        this.mapControls.enabled = false;
+        rotateArountPoint(this.camera, this.mapControls.target, new THREE.Vector3(0, 1, 0), this.rotationDelta);
+        this.rotationDelta *= (1 - 0.05);
+        this.mapControls.enabled = true;
     };
 
     public createOribitControls(camera: THREE.Camera, canvas: HTMLCanvasElement): MapControls {
@@ -39,33 +49,31 @@ export default class Controls implements IMapControls {
         // Vertical rotation limits
         mapControls.minPolarAngle = Math.PI / 2 + camera.rotation.x
         mapControls.maxPolarAngle = Math.PI / 2 + camera.rotation.x
-
-        // Horizontal rotation limits
-        mapControls.minAzimuthAngle = -Math.PI / 4
-        mapControls.maxAzimuthAngle = Math.PI / 4
     
         // Dolly (zoom) limits
         mapControls.minDistance = 2;
         mapControls.maxDistance = 4;
 
         // Panning limits
-        mapControls.minPan = new THREE.Vector3(-1, 0, -2);
-        mapControls.maxPan = new THREE.Vector3(1, 0, 0);
+        const minPan = new THREE.Vector3(-1, 0, -2);
+        const maxPan = new THREE.Vector3(1, 0, 0);
+        const _v = new THREE.Vector3();
+        
+        mapControls.addEventListener("change", () => {
+            _v.copy(mapControls.target);
+            mapControls.target.clamp(minPan, maxPan);
+            _v.sub(mapControls.target);
+            camera.position.sub(_v);
+        })
 
         return mapControls
     }
 
-    public handleClickRotateLeft = () => {        
-        // Stop rotations if next angle will exceed limit
-        if (this.mapControls.getAzimuthalAngle() - this.rotationStep > -Math.PI/4) {
-            this.mapControls.rotate(this.rotationStep);
-        }
+    public handleClickRotateLeft = () => {       
+        this.rotationDelta = -Math.PI/270; 
     }
 
     public handleClickRotateRight = () => {
-        // Stop rotations if next angle will exceed limit
-        if (this.mapControls.getAzimuthalAngle() + this.rotationStep < Math.PI/4) {
-            this.mapControls.rotate(-this.rotationStep);
-        }
+        this.rotationDelta = Math.PI/270; 
     }
 };
