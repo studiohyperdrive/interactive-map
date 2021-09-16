@@ -252,6 +252,7 @@ class OrbitControls extends EventDispatcher {
 
 				}
 
+				// Note(Bavo) apply panning limits
 				scope.target.clamp( this.minPan, this.maxPan );
 
 				offset.setFromSpherical( spherical );
