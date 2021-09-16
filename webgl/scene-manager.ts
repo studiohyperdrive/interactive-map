@@ -14,9 +14,7 @@ export default class SceneManager implements IManager {
 
 	public bindings: {
 		click: IClickBindingConfig[]
-	} = {
-			click: []
-		};
+	} = { click: [] };
 
 	public scene: Scene;
 	public renderer: WebGLRenderer;
