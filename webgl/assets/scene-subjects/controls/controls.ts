@@ -46,7 +46,12 @@ export default class MouseControls implements IMapControls {
     
         // Dolly (zoom) limits
         mapControls.minDistance = 2;
-        mapControls.maxDistance = 5;
+        mapControls.maxDistance = 4;
+
+        // Panning limits
+        mapControls.minPan = new THREE.Vector3(-1, 0, -2);
+        mapControls.maxPan = new THREE.Vector3(1, 0, 0);
+
         return mapControls
     }
 
