@@ -3,7 +3,7 @@ import { MapControls } from '../../modified/orbitControls/OrbitControls';
 
 import { IMapControls } from './controls.types';
 
-export default class MouseControls implements IMapControls {
+export default class Controls implements IMapControls {
     public mapControls;
 
     public rotationStep;

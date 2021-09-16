@@ -3,7 +3,7 @@ import { onWindowResize } from "./assets/utils/eventHelpers";
 
 import InteractiveMap from './assets/scene-subjects/interactive-map/interactive-map';
 import GlobalIllumination from './assets/scene-subjects/global-illumination/global-illumination';
-import MouseControls from "./assets/scene-subjects/controls/controls";
+import Controls from "./assets/scene-subjects/controls/controls";
 
 import { IManager, ISize, IUpdates } from "./types";
 
@@ -47,7 +47,7 @@ export default class SceneManager implements IManager {
 		return [
 			new InteractiveMap(scene, '/models/interactive-map_v1.glb'),
 			new GlobalIllumination(scene),
-			new MouseControls(camera, canvas),
+			new Controls(camera, canvas),
 		];
 	}
 };
