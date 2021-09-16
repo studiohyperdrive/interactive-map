@@ -17,8 +17,8 @@ export const buildRenderer = (canvas: HTMLCanvasElement, sizes: ISize): WebGLRen
 export const buildCamera = (scene: Scene, sizes: ISize, position: IPosition): PerspectiveCamera => {
     const camera: PerspectiveCamera = new PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
     camera.position.set(position.x, position.y, position.z);
-    camera.lookAt(new Vector3),
-        scene.add(camera);
+    camera.lookAt(new Vector3);
+    scene.add(camera);
 
     return camera;
 };
