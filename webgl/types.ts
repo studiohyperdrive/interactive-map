@@ -21,5 +21,5 @@ export interface IUpdates {
 export interface IClickBindingConfig {
     name: string,
     onClick: Function,
-    matching?: 'exact' | 'partial',
+    matching?: "exact" | "partial",
 }

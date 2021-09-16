@@ -1,7 +1,7 @@
-import { Group, Scene } from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { Group, Scene } from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
-import { IInteractiveMap } from './interactive-map.types';
+import { IInteractiveMap } from "./interactive-map.types";
 
 export default class InteractiveMap implements IInteractiveMap {
     public loader: GLTFLoader;

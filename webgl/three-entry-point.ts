@@ -1,7 +1,7 @@
-import { debounce } from './assets/utils/eventHelpers';
-import SceneManager from './scene-manager';
+import { debounce } from "./assets/utils/eventHelpers";
+import SceneManager from "./scene-manager";
 
-import { IClickBindingConfig } from './types';
+import { IClickBindingConfig } from "./types";
 
 export default class ThreeEntryPoint {
 	public canvas;
@@ -36,8 +36,8 @@ export default class ThreeEntryPoint {
 	}
 
 	public resizeCanvas(): void {
-		this.canvas.style.width = '100%';
-		this.canvas.style.height = '100%';
+		this.canvas.style.width = "100%";
+		this.canvas.style.height = "100%";
 		this.canvas.width = this.canvas.offsetWidth;
 		this.canvas.height = this.canvas.offsetHeight;
 		this.manager.onWindowResizeCallback();

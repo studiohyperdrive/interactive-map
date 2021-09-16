@@ -1,4 +1,6 @@
-export const visibleHeightAtZDepth = (depth: number, camera: THREE.PerspectiveCamera): number => {
+import { PerspectiveCamera } from "three";
+
+export const visibleHeightAtZDepth = (depth: number, camera: PerspectiveCamera): number => {
     // compensate for cameras not positioned at z=0
     const cameraOffset = camera.position.z;
     if (depth < cameraOffset) depth -= cameraOffset;
@@ -11,7 +13,7 @@ export const visibleHeightAtZDepth = (depth: number, camera: THREE.PerspectiveCa
     return 2 * Math.tan(vFOV / 2) * Math.abs(depth);
 };
 
-export const visibleWidthAtZDepth = (depth: number, camera: THREE.PerspectiveCamera): number => {
+export const visibleWidthAtZDepth = (depth: number, camera: PerspectiveCamera): number => {
     const height = visibleHeightAtZDepth(depth, camera);
     return height * camera.aspect;
 };

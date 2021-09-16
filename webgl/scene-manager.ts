@@ -3,8 +3,8 @@ import { Clock, Intersection, Mesh, PerspectiveCamera, Raycaster, Scene, Vector2
 import { buildScene, buildRenderer, buildCamera, buildClock, buildMouse, calculateCursorX, calculateCursorY, buildRaycaster } from "./assets/utils/buildHelpers";
 import { onWindowResize } from "./assets/utils/eventHelpers";
 
-import InteractiveMap from './assets/scene-subjects/interactive-map/interactive-map';
-import GlobalIllumination from './assets/scene-subjects/global-illumination/global-illumination';
+import InteractiveMap from "./assets/scene-subjects/interactive-map/interactive-map";
+import GlobalIllumination from "./assets/scene-subjects/global-illumination/global-illumination";
 
 import { IClickBindingConfig, IManager, ISize, IUpdates } from "./types";
 import { flattenChildren } from "./assets/utils/gltfHelpers";
@@ -72,7 +72,7 @@ export default class SceneManager implements IManager {
 	 */
 	public createSubjects(scene: Scene): IUpdates[] {
 		return [
-			new InteractiveMap(scene, '/models/interactive-map_v1.glb'),
+			new InteractiveMap(scene, "/models/interactive-map_v1.glb"),
 			new GlobalIllumination(scene),
 		];
 	}
@@ -97,7 +97,7 @@ export default class SceneManager implements IManager {
 
 	/**
 	 * Function used to instruct the raycaster to update the list of intersecting objects.
-	 * Intersections are only tracked if they're a Mesh and have a corresponding binding.
+	 * Intersections are only tracked if they"re a Mesh and have a corresponding binding.
 	 */
 	public updateIntersections(): void {
 		if (this.mouse === undefined) return;
@@ -124,10 +124,10 @@ export default class SceneManager implements IManager {
 	 */
 	public isMatching(mesh: Mesh, binding: IClickBindingConfig): boolean {
 		switch (binding.matching) {
-			case 'partial':
+			case "partial":
 				return mesh.name.indexOf(binding.name) > -1;
 
-			case 'exact':
+			case "exact":
 			default:
 				return mesh.name === binding.name;
 		}
