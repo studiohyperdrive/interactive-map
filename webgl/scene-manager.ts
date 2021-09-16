@@ -1,4 +1,4 @@
-import { Clock, Intersection, Mesh, MeshBasicMaterial, Object3D, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer } from "three";
+import { Clock, Intersection, Mesh, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer } from "three";
 
 import { buildScene, buildRenderer, buildCamera, buildClock, buildMouse, calculateCursorX, calculateCursorY, buildRaycaster } from "./assets/utils/buildHelpers";
 import { onWindowResize } from "./assets/utils/eventHelpers";
@@ -14,7 +14,9 @@ export default class SceneManager implements IManager {
 
 	public bindings: {
 		click: IClickBindingConfig[]
-	}
+	} = {
+			click: []
+		};
 
 	public scene: Scene;
 	public renderer: WebGLRenderer;
@@ -32,21 +34,6 @@ export default class SceneManager implements IManager {
 			height: window.innerHeight,
 		};
 
-		this.bindings = {
-			click: [
-				{
-					name: 'skyscraper',
-					matching: 'partial',
-					onClick: (mesh: Mesh) => {
-						const random = new MeshBasicMaterial();
-						random.color.setHex(Math.random() * 0xffffff);
-
-						mesh.material = random;
-					}
-				}
-			]
-		};
-
 		this.scene = buildScene();
 		this.renderer = buildRenderer(canvas, this.sizes);
 		this.camera = buildCamera(this.scene, this.sizes, { x: 0, y: 1, z: 3 });
@@ -56,6 +43,13 @@ export default class SceneManager implements IManager {
 		this.subjects = this.createSubjects(this.scene);
 	}
 
+	//
+	// Rendering
+	//
+
+	/**
+	 * Render cycle function, updates every updateable subject.
+	 */
 	public update(): void {
 		for (let i = 0; i < this.subjects.length; i++) {
 			this.subjects[i].update();
@@ -64,30 +58,47 @@ export default class SceneManager implements IManager {
 		this.renderer.render(this.scene, this.camera);
 	}
 
+	/**
+	 * Callback function responsible for keeping the sizes object up-to-date.
+	 */
 	public onWindowResizeCallback(): void {
 		this.sizes = onWindowResize(this.renderer, this.camera);
 	}
 
-	public createSubjects(scene: THREE.Scene): IUpdates[] {
+	/**
+	 * Create the initial elements in the given Scene
+	 * @param scene scene object the subjects will be created in
+	 * @returns an array of subjects that have update functions
+	 */
+	public createSubjects(scene: Scene): IUpdates[] {
 		return [
-			new InteractiveMap(scene, '/models/interactive-map_v1.glb', this.bindings.click),
+			new InteractiveMap(scene, '/models/interactive-map_v1.glb'),
 			new GlobalIllumination(scene),
 		];
 	}
 
-	public initMouse(e: MouseEvent): void {
-		this.mouse = buildMouse(e);
-	}
+	//
+	// Click Events
+	//
 
+	/**
+	 * Function used to create the initial Vector2 object for the mouse and keep it in sync. Fires debounced.
+	 * 
+	 * @param e OnMouseMove event.
+	 */
 	public updateMouse(e: MouseEvent): void {
 		if (this.mouse === undefined) {
-			this.initMouse(e);
+			this.mouse = buildMouse(e);
 		} else {
 			this.mouse.x = calculateCursorX(e);
 			this.mouse.y = calculateCursorY(e);
 		}
 	}
 
+	/**
+	 * Function used to instruct the raycaster to update the list of intersecting objects.
+	 * Intersections are only tracked if they're a Mesh and have a corresponding binding.
+	 */
 	public updateIntersections(): void {
 		if (this.mouse === undefined) return;
 
@@ -104,14 +115,49 @@ export default class SceneManager implements IManager {
 		this.intersections = this.raycaster.intersectObjects(children);
 	}
 
-    public isMatching(mesh: Mesh, binding: IClickBindingConfig): boolean {
+	/**
+	 * Function containing matching rules for click bindings, vaguely similar to QuerySelector.
+	 * 
+	 * @param mesh object to "bind" the click handler to.
+	 * @param binding binding to "fire" when the matched object is "clicked".
+	 * @returns whether the given binding applies to the given mesh.
+	 */
+	public isMatching(mesh: Mesh, binding: IClickBindingConfig): boolean {
 		switch (binding.matching) {
-            case 'partial':
-                return mesh.name.indexOf(binding.name) > -1;
+			case 'partial':
+				return mesh.name.indexOf(binding.name) > -1;
 
-            case 'exact': 
-            default:
-                return mesh.name === binding.name;
-        }
-    }
+			case 'exact':
+			default:
+				return mesh.name === binding.name;
+		}
+	}
+
+	/**
+	 * Function firing the onClick handlers defined in the click bindings.
+	 * 
+	 * @param e event fired by DOM.
+	 */
+	public handleClick(e: MouseEvent): void {
+		if (this.intersections.length <= 0) return;
+
+		const clicked = this.intersections[0].object;
+
+		if (clicked instanceof Mesh) {
+			this.bindings.click.forEach(binding => {
+				if (this.isMatching(clicked, binding)) {
+					binding.onClick(clicked);
+				}
+			});
+		}
+	}
+
+	/**
+	 * Register click bindings for the managed scene
+	 * 
+	 * @param bindings The bindings that should be accounted for during render cycles.
+	 */
+	public setClickBindings(bindings: IClickBindingConfig[]) {
+		this.bindings.click = bindings;
+	}
 };

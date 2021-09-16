@@ -14,7 +14,7 @@ export default class GlobalIllumination implements IGlobalIllumination {
         scene.add(this.directional);
     }
 
-    public update() {}
+    public update() { }
 
     public createAmbient() {
         return new THREE.AmbientLight(0xffffff, 0.5);
