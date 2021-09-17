@@ -1,21 +1,21 @@
 import { debounce } from "./assets/utils/eventHelpers";
 import SceneManager from "./scene-manager";
 
-import { IClickBindingConfig } from "./types";
+import { IClickBindingConfig, IHoverBindingConfig } from "./types";
 
 export default class ThreeEntryPoint {
 	public canvas;
 	public manager;
 
-	constructor(canvas: HTMLCanvasElement, click: IClickBindingConfig[] = []) {
+	constructor(canvas: HTMLCanvasElement, click: IClickBindingConfig[] = [], hover: IHoverBindingConfig[] = []) {
 		this.canvas = canvas;
 		this.manager = new SceneManager(canvas);
 
-		this.bindEventListeners(click);
+		this.bindEventListeners(click, hover);
 		this.render();
 	}
 
-	public bindEventListeners(click: IClickBindingConfig[]): void {
+	public bindEventListeners(click: IClickBindingConfig[], hover: IHoverBindingConfig[]): void {
 		window.onresize = () => {
 			this.resizeCanvas()
 		};
@@ -23,6 +23,7 @@ export default class ThreeEntryPoint {
 		window.onmousemove = debounce((e: MouseEvent) => {
 			this.manager.updateMouse(e);
 			this.manager.updateIntersections();
+			this.manager.updateHover();
 		}, 12);
 
 		window.onclick = (e: MouseEvent) => {
@@ -33,6 +34,7 @@ export default class ThreeEntryPoint {
 
 		this.resizeCanvas();
 		this.manager.setClickBindings(click);
+		this.manager.setHoverBindings(hover);
 	}
 
 	public resizeCanvas(): void {

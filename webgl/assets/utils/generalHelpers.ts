@@ -1,4 +1,4 @@
-import { PerspectiveCamera } from "three";
+import { PerspectiveCamera, Intersection, Object3D } from "three";
 
 export const visibleHeightAtZDepth = (depth: number, camera: PerspectiveCamera): number => {
     // compensate for cameras not positioned at z=0
@@ -25,3 +25,10 @@ export const calculateCursorX = (e: MouseEvent): number => {
 export const calculateCursorY = (e: MouseEvent): number => {
     return - (e.clientY / window.innerHeight) * 2 + 1;
 }
+
+export const getFirstIntersectionObject = (intersections: Intersection[]): Object3D | null => {
+    if (intersections.length <= 0) {
+        return null;
+    }
+    return intersections[0].object;
+};

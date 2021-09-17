@@ -2,20 +2,21 @@ import { Clock, Intersection, Mesh, PerspectiveCamera, Raycaster, Scene, Vector2
 
 import { buildScene, buildRenderer, buildCamera, buildClock, buildMouse, buildRaycaster } from "./assets/utils/buildHelpers";
 import { onWindowResize } from "./assets/utils/eventHelpers";
-import { calculateCursorX, calculateCursorY } from "./assets/utils/generalHelpers";
+import { calculateCursorX, calculateCursorY, getFirstIntersectionObject } from "./assets/utils/generalHelpers";
 import { flattenChildren } from "./assets/utils/gltfHelpers";
 
 import InteractiveMap from "./assets/scene-subjects/interactive-map/interactive-map";
 import GlobalIllumination from "./assets/scene-subjects/global-illumination/global-illumination";
 
-import { IClickBindingConfig, IManager, ISize, IUpdates } from "./types";
+import { IBindingConfig, IClickBindingConfig, IHoverBindingConfig, IManager, ISize, IUpdates } from "./types";
 
 export default class SceneManager implements IManager {
 	public sizes: ISize;
 
 	public bindings: {
-		click: IClickBindingConfig[]
-	} = { click: [] };
+		click: IClickBindingConfig[],
+		hover: IHoverBindingConfig[],
+	} = { click: [], hover: [] };
 
 	public scene: Scene;
 	public renderer: WebGLRenderer;
@@ -26,6 +27,7 @@ export default class SceneManager implements IManager {
 
 	public subjects: IUpdates[] = [];
 	public intersections: Intersection[] = [];
+	public currentHover: THREE.Mesh | null = null;
 
 	constructor(canvas: HTMLCanvasElement) {
 		this.sizes = {
@@ -106,9 +108,15 @@ export default class SceneManager implements IManager {
 		const children = (flattenChildren(this.scene.children).filter(c => {
 			return c instanceof Mesh;
 		}) as Mesh[]).filter(mesh => {
-			return this.bindings.click.some(binding => {
-				return this.isMatching(mesh, binding);
-			})
+			return (
+				this.bindings.click.some(binding => {
+					return this.isMatching(mesh, binding);
+				})
+			||
+				this.bindings.hover.some(binding => {
+					return this.isMatching(mesh, binding);
+				})
+			);
 		});
 
 		this.intersections = this.raycaster.intersectObjects(children);
@@ -121,7 +129,7 @@ export default class SceneManager implements IManager {
 	 * @param binding binding to "fire" when the matched object is "clicked".
 	 * @returns whether the given binding applies to the given mesh.
 	 */
-	public isMatching(mesh: Mesh, binding: IClickBindingConfig): boolean {
+	public isMatching(mesh: Mesh, binding: IBindingConfig): boolean {
 		switch (binding.matching) {
 			case "partial":
 				return mesh.name.indexOf(binding.name) > -1;
@@ -138,7 +146,7 @@ export default class SceneManager implements IManager {
 	 * @param e event fired by DOM.
 	 */
 	public handleClick(e: MouseEvent): void {
-		if (this.intersections.length <= 0) return;
+		if (!getFirstIntersectionObject(this.intersections)) return;
 
 		const clicked = this.intersections[0].object;
 
@@ -152,11 +160,52 @@ export default class SceneManager implements IManager {
 	}
 
 	/**
+	 * Function that updates every frame and fires the onHover handlers defined in the click bindings
+	 *
+	 */
+
+	public updateHover(): void {		
+		const prevHover = this.currentHover;
+		const currentHover = getFirstIntersectionObject(this.intersections);
+		
+		if (prevHover === currentHover) {
+			return
+		}
+
+		if (currentHover instanceof Mesh) {
+			this.bindings.hover.forEach(hover => {
+				if (this.isMatching(currentHover, hover)) {		
+					hover.onHoverStart(currentHover);
+				}
+			});
+		}
+
+		if (prevHover instanceof Mesh) {
+			this.bindings.hover.forEach(hover => {
+				if (this.isMatching(prevHover, hover)) {					
+					hover.onHoverEnd(prevHover);
+				}
+			});
+		}
+
+		this.currentHover = (currentHover as Mesh);
+	}
+
+	/**
 	 * Register click bindings for the managed scene
 	 * 
 	 * @param bindings The bindings that should be accounted for during render cycles.
 	 */
 	public setClickBindings(bindings: IClickBindingConfig[]) {
 		this.bindings.click = bindings;
+	}
+
+	/**
+	 * Register hover bindings for the managed scene
+	 * 
+	 * @param bindings The bindings that should be accounted for during render cycles.
+	 */
+	 public setHoverBindings(bindings: IHoverBindingConfig[]) {
+		this.bindings.hover = bindings;
 	}
 };
