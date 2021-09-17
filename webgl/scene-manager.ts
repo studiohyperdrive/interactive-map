@@ -1,13 +1,14 @@
 import { Clock, Intersection, Mesh, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer } from "three";
 
-import { buildScene, buildRenderer, buildCamera, buildClock, buildMouse, calculateCursorX, calculateCursorY, buildRaycaster } from "./assets/utils/buildHelpers";
+import { buildScene, buildRenderer, buildCamera, buildClock, buildMouse, buildRaycaster } from "./assets/utils/buildHelpers";
 import { onWindowResize } from "./assets/utils/eventHelpers";
+import { calculateCursorX, calculateCursorY } from "./assets/utils/generalHelpers";
+import { flattenChildren } from "./assets/utils/gltfHelpers";
 
 import InteractiveMap from "./assets/scene-subjects/interactive-map/interactive-map";
 import GlobalIllumination from "./assets/scene-subjects/global-illumination/global-illumination";
 
 import { IClickBindingConfig, IManager, ISize, IUpdates } from "./types";
-import { flattenChildren } from "./assets/utils/gltfHelpers";
 
 export default class SceneManager implements IManager {
 	public sizes: ISize;
