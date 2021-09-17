@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import { MapControls } from 'three/examples/jsm/controls/OrbitControls';
-import gsap from 'gsap';
 
 import { rotateArountPoint } from '../../utils/generalHelpers';
 import { IMapControls } from './controls.types';
