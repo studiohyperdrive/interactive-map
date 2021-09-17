@@ -1,9 +1,11 @@
+import { AmbientLight, DirectionalLight } from "three";
+
 import { IUpdates } from "../../../types";
 
 export interface IGlobalIllumination extends IUpdates {
-    ambient: THREE.AmbientLight;
-    directional: THREE.DirectionalLight;
+    ambient: AmbientLight;
+    directional: DirectionalLight;
 
-    createAmbient(): THREE.AmbientLight;
-    createDirectional(): THREE.DirectionalLight;
+    createAmbient(): AmbientLight;
+    createDirectional(): DirectionalLight;
 }

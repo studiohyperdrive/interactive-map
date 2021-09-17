@@ -1,12 +1,12 @@
-import * as THREE from 'three';
+import { AmbientLight, DirectionalLight, Scene } from "three";
 
-import { IGlobalIllumination } from './global-illumination.types';
+import { IGlobalIllumination } from "./global-illumination.types";
 
 export default class GlobalIllumination implements IGlobalIllumination {
     public ambient;
     public directional;
 
-    constructor(scene: THREE.Scene) {
+    constructor(scene: Scene) {
         this.ambient = this.createAmbient();
         this.directional = this.createDirectional();
 
@@ -14,14 +14,14 @@ export default class GlobalIllumination implements IGlobalIllumination {
         scene.add(this.directional);
     }
 
-    public update() {}
+    public update() { }
 
     public createAmbient() {
-        return new THREE.AmbientLight(0xffffff, 0.5);
+        return new AmbientLight(0xffffff, 0.5);
     }
 
     public createDirectional() {
-        const light = new THREE.DirectionalLight(0xffffff, 1);
+        const light = new DirectionalLight(0xffffff, 1);
         light.position.set(1, 1, 0.2);
 
         return light;

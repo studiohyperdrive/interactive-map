@@ -1,14 +1,19 @@
 import React, { useEffect, useRef } from 'react';
 
-import { WebGLProps } from './webgl.types';
 import ThreeEntryPoint from '../../webgl/three-entry-point';
+import click from '../../bindings/click';
+
+import { WebGLProps } from './webgl.types';
 
 const WebGL: React.FC<WebGLProps> = () => {
 	const threeRootElement = useRef<HTMLCanvasElement | null>(null);
 
 	useEffect(() => {
 		if (threeRootElement.current) {
-			new ThreeEntryPoint(threeRootElement.current);
+			new ThreeEntryPoint(
+				threeRootElement.current,
+				click
+			);
 		}
 	}, []);
 

@@ -17,3 +17,9 @@ export interface IPosition {
 export interface IUpdates {
     update: Function;
 }
+
+export interface IClickBindingConfig {
+    name: string,
+    onClick: Function,
+    matching?: "exact" | "partial",
+}

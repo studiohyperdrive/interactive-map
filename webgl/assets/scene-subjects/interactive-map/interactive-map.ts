@@ -1,13 +1,13 @@
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { Group, Scene } from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
-import { IInteractiveMap } from './interactive-map.types';
+import { IInteractiveMap } from "./interactive-map.types";
 
 export default class InteractiveMap implements IInteractiveMap {
     public loader: GLTFLoader;
-    public instance: THREE.Group | null = null;
+    public instance: Group | null = null;
 
-    constructor(scene: THREE.Scene, path: string) {
+    constructor(scene: Scene, path: string) {
         // Add loader
         this.loader = new GLTFLoader();
 
