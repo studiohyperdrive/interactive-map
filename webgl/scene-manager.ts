@@ -25,6 +25,7 @@ export default class SceneManager implements IManager {
 
 	public subjects: IUpdates[] = [];
 	public intersections: Intersection[] = [];
+	public currentHover: THREE.Mesh | null = null;
 
 	constructor(canvas: HTMLCanvasElement) {
 		this.sizes = {
@@ -39,6 +40,9 @@ export default class SceneManager implements IManager {
 		this.raycaster = buildRaycaster();
 
 		this.subjects = this.createSubjects(this.scene);
+
+		// Update mouse for hover interaction
+		window.addEventListener('mousemove', this.updateMouse);
 	}
 
 	//
@@ -49,6 +53,8 @@ export default class SceneManager implements IManager {
 	 * Render cycle function, updates every updateable subject.
 	 */
 	public update(): void {
+		this.updateHover();
+
 		for (let i = 0; i < this.subjects.length; i++) {
 			this.subjects[i].update();
 		}
@@ -148,6 +154,40 @@ export default class SceneManager implements IManager {
 				}
 			});
 		}
+	}
+
+	/**
+	 * Function that updates every frame and fires the onHover handlers defined in the click bindings
+	 * @returns 
+	 */
+
+	public updateHover(): void {
+		this.updateIntersections();
+		
+		const prevHover = this.currentHover;
+		const hover = this.intersections.length >= 0 ? this.intersections[0]?.object : null;
+		
+		if (prevHover === hover) {
+			return
+		}
+
+		if (hover instanceof Mesh) {
+			this.bindings.click.forEach(binding => {
+				if (this.isMatching(hover, binding)) {					
+					binding.onHoverStart(hover);
+				}
+			});
+		}
+
+		if (prevHover instanceof Mesh) {
+			this.bindings.click.forEach(binding => {
+				if (this.isMatching(prevHover, binding)) {					
+					binding.onHoverEnd(prevHover);
+				}
+			});
+		}
+
+		this.currentHover = (hover as Mesh);
 	}
 
 	/**
