@@ -146,7 +146,7 @@ export default class SceneManager implements IManager {
 	 * @param e event fired by DOM.
 	 */
 	public handleClick(e: MouseEvent): void {
-		if (this.intersections.length <= 0) return;
+		if (!getFirstIntersectionObject(this.intersections)) return;
 
 		const clicked = this.intersections[0].object;
 
@@ -166,7 +166,7 @@ export default class SceneManager implements IManager {
 
 	public updateHover(): void {		
 		const prevHover = this.currentHover;
-		const hover = this.intersections.length >= 0 ? this.intersections[0]?.object : null;
+		const currentHover = getFirstIntersectionObject(this.intersections);
 		
 		if (prevHover === currentHover) {
 			return
