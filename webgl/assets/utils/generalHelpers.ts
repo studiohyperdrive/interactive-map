@@ -18,6 +18,14 @@ export const visibleWidthAtZDepth = (depth: number, camera: PerspectiveCamera): 
     return height * camera.aspect;
 };
 
+export const calculateCursorX = (e: MouseEvent): number => {
+    return (e.clientX / window.innerWidth) * 2 - 1;
+}
+
+export const calculateCursorY = (e: MouseEvent): number => {
+    return - (e.clientY / window.innerHeight) * 2 + 1;
+}
+
 export const getFirstIntersectionObject = (intersections: Intersection[]): Object3D | null => {
     if (intersections.length <= 0) {
         return null;
