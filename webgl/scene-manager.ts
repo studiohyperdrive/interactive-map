@@ -2,19 +2,21 @@ import { Clock, Intersection, Mesh, PerspectiveCamera, Raycaster, Scene, Vector2
 
 import { buildScene, buildRenderer, buildCamera, buildClock, buildMouse, calculateCursorX, calculateCursorY, buildRaycaster } from "./assets/utils/buildHelpers";
 import { onWindowResize } from "./assets/utils/eventHelpers";
+import { flattenChildren } from "./assets/utils/gltfHelpers";
+import { getFirstIntersectionObject } from "./assets/utils/generalHelpers";
 
 import InteractiveMap from "./assets/scene-subjects/interactive-map/interactive-map";
 import GlobalIllumination from "./assets/scene-subjects/global-illumination/global-illumination";
 
-import { IClickBindingConfig, IManager, ISize, IUpdates } from "./types";
-import { flattenChildren } from "./assets/utils/gltfHelpers";
+import { IBindingConfig, IClickBindingConfig, IHoverBindingConfig, IManager, ISize, IUpdates } from "./types";
 
 export default class SceneManager implements IManager {
 	public sizes: ISize;
 
 	public bindings: {
-		click: IClickBindingConfig[]
-	} = { click: [] };
+		click: IClickBindingConfig[],
+		hover: IHoverBindingConfig[],
+	} = { click: [], hover: [] };
 
 	public scene: Scene;
 	public renderer: WebGLRenderer;
@@ -40,9 +42,6 @@ export default class SceneManager implements IManager {
 		this.raycaster = buildRaycaster();
 
 		this.subjects = this.createSubjects(this.scene);
-
-		// Update mouse for hover interaction
-		window.addEventListener('mousemove', this.updateMouse);
 	}
 
 	//
@@ -53,8 +52,6 @@ export default class SceneManager implements IManager {
 	 * Render cycle function, updates every updateable subject.
 	 */
 	public update(): void {
-		this.updateHover();
-
 		for (let i = 0; i < this.subjects.length; i++) {
 			this.subjects[i].update();
 		}
@@ -111,9 +108,15 @@ export default class SceneManager implements IManager {
 		const children = (flattenChildren(this.scene.children).filter(c => {
 			return c instanceof Mesh;
 		}) as Mesh[]).filter(mesh => {
-			return this.bindings.click.some(binding => {
-				return this.isMatching(mesh, binding);
-			})
+			return (
+				this.bindings.click.some(binding => {
+					return this.isMatching(mesh, binding);
+				})
+			||
+				this.bindings.hover.some(binding => {
+					return this.isMatching(mesh, binding);
+				})
+			);
 		});
 
 		this.intersections = this.raycaster.intersectObjects(children);
@@ -126,7 +129,7 @@ export default class SceneManager implements IManager {
 	 * @param binding binding to "fire" when the matched object is "clicked".
 	 * @returns whether the given binding applies to the given mesh.
 	 */
-	public isMatching(mesh: Mesh, binding: IClickBindingConfig): boolean {
+	public isMatching(mesh: Mesh, binding: IBindingConfig): boolean {
 		switch (binding.matching) {
 			case "partial":
 				return mesh.name.indexOf(binding.name) > -1;
@@ -158,36 +161,34 @@ export default class SceneManager implements IManager {
 
 	/**
 	 * Function that updates every frame and fires the onHover handlers defined in the click bindings
-	 * @returns 
+	 *
 	 */
 
-	public updateHover(): void {
-		this.updateIntersections();
-		
+	public updateHover(): void {		
 		const prevHover = this.currentHover;
 		const hover = this.intersections.length >= 0 ? this.intersections[0]?.object : null;
 		
-		if (prevHover === hover) {
+		if (prevHover === currentHover) {
 			return
 		}
 
-		if (hover instanceof Mesh) {
-			this.bindings.click.forEach(binding => {
-				if (this.isMatching(hover, binding)) {					
-					binding.onHoverStart(hover);
+		if (currentHover instanceof Mesh) {
+			this.bindings.hover.forEach(hover => {
+				if (this.isMatching(currentHover, hover)) {		
+					hover.onHoverStart(currentHover);
 				}
 			});
 		}
 
 		if (prevHover instanceof Mesh) {
-			this.bindings.click.forEach(binding => {
-				if (this.isMatching(prevHover, binding)) {					
-					binding.onHoverEnd(prevHover);
+			this.bindings.hover.forEach(hover => {
+				if (this.isMatching(prevHover, hover)) {					
+					hover.onHoverEnd(prevHover);
 				}
 			});
 		}
 
-		this.currentHover = (hover as Mesh);
+		this.currentHover = (currentHover as Mesh);
 	}
 
 	/**
@@ -197,5 +198,14 @@ export default class SceneManager implements IManager {
 	 */
 	public setClickBindings(bindings: IClickBindingConfig[]) {
 		this.bindings.click = bindings;
+	}
+
+	/**
+	 * Register hover bindings for the managed scene
+	 * 
+	 * @param bindings The bindings that should be accounted for during render cycles.
+	 */
+	 public setHoverBindings(bindings: IHoverBindingConfig[]) {
+		this.bindings.hover = bindings;
 	}
 };

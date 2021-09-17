@@ -18,10 +18,16 @@ export interface IUpdates {
     update: Function;
 }
 
-export interface IClickBindingConfig {
+export interface IBindingConfig {
     name: string,
+    matching?: "exact" | "partial",
+}
+
+export interface IClickBindingConfig extends IBindingConfig{
     onClick: Function,
+}
+
+export interface IHoverBindingConfig extends IBindingConfig{
     onHoverStart: Function,
     onHoverEnd: Function,
-    matching?: "exact" | "partial",
 }
