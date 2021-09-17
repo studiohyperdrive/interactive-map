@@ -2,6 +2,8 @@ import { Clock, PerspectiveCamera, Raycaster, Scene, Vector2, Vector3, WebGLRend
 
 import { ISize, IPosition } from "../../types";
 
+import { calculateCursorX, calculateCursorY } from "./generalHelpers";
+
 export const buildScene = (): Scene => {
     return new Scene();
 };
@@ -34,14 +36,6 @@ export const buildMouse = (e: MouseEvent): Vector2 => {
     mouse.y = calculateCursorY(e);
 
     return mouse;
-}
-
-export const calculateCursorX = (e: MouseEvent): number => {
-    return (e.clientX / window.innerWidth) * 2 - 1;
-}
-
-export const calculateCursorY = (e: MouseEvent): number => {
-    return - (e.clientY / window.innerHeight) * 2 + 1;
 }
 
 export const buildRaycaster = (): Raycaster => {
