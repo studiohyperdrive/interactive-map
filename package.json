@@ -1,6 +1,6 @@
 {
   "name": "studio-hyperdrive_interactive-map",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "next": "node node_modules/next/dist/bin/next",
