@@ -169,18 +169,18 @@ export default class SceneManager implements IManager {
 			return
 		}
 
-		if (current instanceof Mesh) {
-			this.bindings.hover.forEach(hover => {
-				if (this.isMatching(current, hover)) {
-					hover.onHoverStart(current);
-				}
-			});
-		}
-
 		if (previous instanceof Mesh) {
 			this.bindings.hover.forEach(hover => {
 				if (this.isMatching(previous, hover)) {
 					hover.onHoverEnd(previous);
+				}
+			});
+		}
+
+		if (current instanceof Mesh) {
+			this.bindings.hover.forEach(hover => {
+				if (this.isMatching(current, hover)) {
+					hover.onHoverStart(current);
 				}
 			});
 		}
