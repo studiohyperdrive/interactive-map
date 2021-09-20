@@ -224,7 +224,6 @@ export default class SceneManager implements IManager {
 			if (clicked instanceof Mesh) {
 				this.bindings.animation.forEach(binding => {					
 					if (binding.trigger.includes('click') && binding.mesh.some(mesh => this.isMatching(clicked, mesh))) {
-						console.log(this.mixer);
 						
 						const animation = this.scene.animations.filter(animation => this.isMatching(animation, binding))[0];
 						const action = this.mixer.clipAction(animation);
