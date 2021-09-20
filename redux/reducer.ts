@@ -7,8 +7,6 @@ const initialState = {
 }
 
 export default function reducer(state = initialState, action: AnyAction) {
-  console.info("reducer", action);
-
   switch (action.type) {
     case actions.three.set: {
       return {
