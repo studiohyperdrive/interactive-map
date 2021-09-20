@@ -1,3 +1,3 @@
 export interface TooltipProps {
-    title?: string
+    title?: string;
 };

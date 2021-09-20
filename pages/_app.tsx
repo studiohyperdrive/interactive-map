@@ -28,7 +28,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     return () => {
       router.events.off("routeChangeStart", handleStart)
     }
-  }, []);
+  }, [router]);
 
   return (
     <Provider store={store}>

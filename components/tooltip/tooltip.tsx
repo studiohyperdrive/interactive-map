@@ -3,12 +3,12 @@ import { connect } from "react-redux";
 
 import { TooltipProps } from "./tooltip.types";
 
-const Tooltip: React.FC<TooltipProps> = (props) => {
-  return props.title ? (
-    <MaterialTooltip title={props.title} followCursor>
+const Tooltip: React.FC<TooltipProps> = ({title}) => {
+  return title ? (
+    <MaterialTooltip title={title} followCursor>
       <section id="overlay"></section>
     </MaterialTooltip>
-  ): null
+  ): null;
 }
 
 export default connect((state: {tooltip?: string}) => {

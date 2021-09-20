@@ -45,7 +45,7 @@ export default function createHoverBindings(store: Store) {
             onHoverEnd: (mesh: Mesh) => {
                 store.dispatch({
                     type: actions.tooltip.reset
-                })
+                });
             }
         }
     ] as IHoverBindingConfig[]);

@@ -30,7 +30,7 @@ const WebGL: FC<WebGLProps> = ({ three }) => {
         threeRootElement.current?.replaceWith(three.canvas);
       }
     }
-  }, []);
+  }, [router, three]);
 
   return (
     <div>
