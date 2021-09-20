@@ -21,6 +21,8 @@ export default class InteractiveMap implements IInteractiveMap {
         // Add map to schene
         this.loader.load(path, (gltf) => {
             this.instance = gltf.scene;
+            
+            scene.animations = gltf.animations;            
             scene.add(gltf.scene);
         });
     }

@@ -1,6 +1,6 @@
-import { Clock, Intersection, Mesh, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer } from "three";
+import { AnimationClip, AnimationMixer, Clock, Intersection, Mesh, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer } from "three";
 
-import { buildScene, buildRenderer, buildCamera, buildClock, buildMouse, buildRaycaster } from "./assets/utils/buildHelpers";
+import { buildScene, buildRenderer, buildCamera, buildClock, buildMouse, buildRaycaster, buildAnimationMixer } from "./assets/utils/buildHelpers";
 import { onWindowResize } from "./assets/utils/eventHelpers";
 import { calculateCursorX, calculateCursorY, getFirstIntersectionObject } from "./assets/utils/generalHelpers";
 import { flattenChildren } from "./assets/utils/gltfHelpers";
@@ -9,7 +9,8 @@ import InteractiveMap from './assets/scene-subjects/interactive-map/interactive-
 import GlobalIllumination from './assets/scene-subjects/global-illumination/global-illumination';
 import Controls from "./assets/scene-subjects/controls/controls";
 
-import { IBindingConfig, IClickBindingConfig, IHoverBindingConfig, IManager, ISize, IUpdates } from "./types";
+import { IAnimationBindingConfig, IBindingConfig, IClickBindingConfig, IHoverBindingConfig, IManager, ISize, IUpdates } from "./types";
+import animation from "../bindings/animation";
 
 export default class SceneManager implements IManager {
 	public sizes: ISize;
@@ -17,18 +18,23 @@ export default class SceneManager implements IManager {
 	public bindings: {
 		click: IClickBindingConfig[],
 		hover: IHoverBindingConfig[],
-	} = { click: [], hover: [] };
+		animation: IAnimationBindingConfig[],
+	} = { click: [], hover: [], animation: [] };
 
 	public scene: Scene;
 	public renderer: WebGLRenderer;
 	public camera: PerspectiveCamera;
-	public clock: Clock;
 	public raycaster: Raycaster;
+	public mixer: AnimationMixer;
 	public mouse?: Vector2;
 
 	public subjects: IUpdates[] = [];
 	public intersections: Intersection[] = [];
 	public currentHover: THREE.Mesh | null = null;
+	
+	public clock: Clock;
+	public deltaTime: number;
+	public previousTime: number;
 
 	constructor(canvas: HTMLCanvasElement) {
 		this.sizes = {
@@ -36,13 +42,17 @@ export default class SceneManager implements IManager {
 			height: window.innerHeight,
 		};
 
+		this.deltaTime = 0;
+		this.previousTime = 0;
+
 		this.scene = buildScene();
 		this.renderer = buildRenderer(canvas, this.sizes);
 		this.camera = buildCamera(this.scene, this.sizes, { x: 0, y: 1, z: 3 });
 		this.clock = buildClock();
 		this.raycaster = buildRaycaster();
+		this.mixer = buildAnimationMixer(this.scene);
 
-		this.subjects = this.createSubjects(canvas, this.scene, this.camera);
+		this.subjects = this.createSubjects(canvas, this.scene, this.camera, this.clock);
 	}
 
 	//
@@ -53,8 +63,16 @@ export default class SceneManager implements IManager {
 	 * Render cycle function, updates every updateable subject.
 	 */
 	public update(): void {
+		const elapsedTime = this.clock.getElapsedTime();
+		this.deltaTime = elapsedTime - this.previousTime;
+		this.previousTime = elapsedTime;
+
 		for (let i = 0; i < this.subjects.length; i++) {
 			this.subjects[i].update();
+		}
+
+		if (this.scene.animations) {
+			this.mixer.update(this.deltaTime);
 		}
 
 		this.renderer.render(this.scene, this.camera);
@@ -72,9 +90,9 @@ export default class SceneManager implements IManager {
 	 * @param scene scene object the subjects will be created in
 	 * @returns an array of subjects that have update functions
 	 */
-	public createSubjects(canvas: HTMLCanvasElement, scene: THREE.Scene, camera: THREE.PerspectiveCamera): IUpdates[] {
+	public createSubjects(canvas: HTMLCanvasElement, scene: Scene, camera: PerspectiveCamera, clock: Clock): IUpdates[] {
 		return [
-			new InteractiveMap(scene, "/models/interactive-map_v1.glb"),
+			new InteractiveMap(scene, "/models/interactive-map_v2.7-draco.glb"),
 			new GlobalIllumination(scene),
 			new Controls(camera, canvas),
 		];
@@ -131,14 +149,14 @@ export default class SceneManager implements IManager {
 	 * @param binding binding to "fire" when the matched object is "clicked".
 	 * @returns whether the given binding applies to the given mesh.
 	 */
-	public isMatching(mesh: Mesh, binding: IBindingConfig): boolean {
+	public isMatching(item: Mesh|AnimationClip, binding: IBindingConfig): boolean {
 		switch (binding.matching) {
 			case "partial":
-				return mesh.name.indexOf(binding.name) > -1;
+				return item.name.indexOf(binding.name) > -1;
 
 			case "exact":
 			default:
-				return mesh.name === binding.name;
+				return item.name === binding.name;
 		}
 	}
 
@@ -193,6 +211,29 @@ export default class SceneManager implements IManager {
 		this.currentHover = (currentHover as Mesh);
 	}
 
+		/**
+	 * Function firing the onClick animations defined in the animation bindings.
+	 * 
+	 * @param e event fired by DOM.
+	 */
+		 public handleClickAnimation(): void {
+			if (!getFirstIntersectionObject(this.intersections)) return;
+	
+			const clicked = this.intersections[0].object;
+	
+			if (clicked instanceof Mesh) {
+				this.bindings.animation.forEach(binding => {					
+					if (binding.trigger.includes('click') && binding.mesh.some(mesh => this.isMatching(clicked, mesh))) {
+						console.log(this.mixer);
+						
+						const animation = this.scene.animations.filter(animation => this.isMatching(animation, binding))[0];
+						const action = this.mixer.clipAction(animation);
+						action.loop = binding.loop;
+						action.play();
+					}
+				});
+			}
+		}
 	/**
 	 * Register click bindings for the managed scene
 	 * 
@@ -209,5 +250,14 @@ export default class SceneManager implements IManager {
 	 */
 	 public setHoverBindings(bindings: IHoverBindingConfig[]) {
 		this.bindings.hover = bindings;
+	}
+
+	/**
+	 * Register animation bindings for the managed scene
+	 * 
+	 * @param bindings The bindings that should be accounted for during render cycles.
+	 */
+	 public setAnimationBindings(bindings: IAnimationBindingConfig[]) {
+		this.bindings.animation = bindings;
 	}
 };

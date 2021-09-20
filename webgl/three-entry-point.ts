@@ -1,21 +1,22 @@
+import animation from "../bindings/animation";
 import { debounce } from "./assets/utils/eventHelpers";
 import SceneManager from "./scene-manager";
 
-import { IClickBindingConfig, IHoverBindingConfig } from "./types";
+import { IAnimationBindingConfig, IClickBindingConfig, IHoverBindingConfig } from "./types";
 
 export default class ThreeEntryPoint {
 	public canvas;
 	public manager;
 
-	constructor(canvas: HTMLCanvasElement, click: IClickBindingConfig[] = [], hover: IHoverBindingConfig[] = []) {
+	constructor(canvas: HTMLCanvasElement, click: IClickBindingConfig[] = [], hover: IHoverBindingConfig[] = [], animation: IAnimationBindingConfig[]) {
 		this.canvas = canvas;
 		this.manager = new SceneManager(canvas);
 
-		this.bindEventListeners(click, hover);
+		this.bindEventListeners(click, hover, animation);
 		this.render();
 	}
 
-	public bindEventListeners(click: IClickBindingConfig[], hover: IHoverBindingConfig[]): void {
+	public bindEventListeners(click: IClickBindingConfig[], hover: IHoverBindingConfig[], animation: IAnimationBindingConfig[]): void {
 		window.onresize = () => {
 			this.resizeCanvas()
 		};
@@ -30,11 +31,13 @@ export default class ThreeEntryPoint {
 			this.manager.updateMouse(e);
 			this.manager.updateIntersections();
 			this.manager.handleClick(e);
+			this.manager.handleClickAnimation();
 		};
 
 		this.resizeCanvas();
 		this.manager.setClickBindings(click);
 		this.manager.setHoverBindings(hover);
+		this.manager.setAnimationBindings(animation);
 	}
 
 	public resizeCanvas(): void {
