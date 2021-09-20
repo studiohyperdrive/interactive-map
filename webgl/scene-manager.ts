@@ -43,6 +43,8 @@ export default class SceneManager implements IManager {
 		this.raycaster = buildRaycaster();
 
 		this.subjects = this.createSubjects(canvas, this.scene, this.camera);
+
+		console.info("SceneManager", this.scene);
 	}
 
 	//
