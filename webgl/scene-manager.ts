@@ -28,7 +28,7 @@ export default class SceneManager implements IManager {
 
 	public subjects: IUpdates[] = [];
 	public intersections: Intersection[] = [];
-	public currentHover: THREE.Mesh | null = null;
+	public hovered: THREE.Mesh | null = null;
 
 	constructor(canvas: HTMLCanvasElement) {
 		this.sizes = {
@@ -103,25 +103,18 @@ export default class SceneManager implements IManager {
 	 * Intersections are only tracked if they"re a Mesh and have a corresponding binding.
 	 */
 	public updateIntersections(): void {
-		if (this.mouse === undefined) return;
+		if (this.mouse === undefined) {
+			return
+		};
 
 		this.raycaster.setFromCamera(this.mouse, this.camera);
 
 		const children = (flattenChildren(this.scene.children).filter(c => {
 			return c instanceof Mesh;
-		}) as Mesh[]).filter(mesh => {
-			return (
-				this.bindings.click.some(binding => {
-					return this.isMatching(mesh, binding);
-				})
-			||
-				this.bindings.hover.some(binding => {
-					return this.isMatching(mesh, binding);
-				})
-			);
-		});
+		}) as Mesh[]);
 
-		this.intersections = this.raycaster.intersectObjects(children);
+		// Only keep track of 5 closest intersections to avoid memory overflow
+		this.intersections = this.raycaster.intersectObjects(children).slice(0, 4);
 	}
 
 	/**
@@ -148,7 +141,9 @@ export default class SceneManager implements IManager {
 	 * @param e event fired by DOM.
 	 */
 	public handleClick(e: MouseEvent): void {
-		if (!getFirstIntersectionObject(this.intersections)) return;
+		if (!getFirstIntersectionObject(this.intersections)) {
+			return
+		};
 
 		const clicked = this.intersections[0].object;
 
@@ -162,35 +157,33 @@ export default class SceneManager implements IManager {
 	}
 
 	/**
-	 * Function that updates every frame and fires the onHover handlers defined in the click bindings
-	 *
+	 * Function that updates every frame and fires the onHover handlers defined in the hover bindings
 	 */
+	public handleHover(e: MouseEvent): void {
+		const previous = this.hovered;
+		const current = getFirstIntersectionObject(this.intersections);
 
-	public updateHover(): void {		
-		const prevHover = this.currentHover;
-		const currentHover = getFirstIntersectionObject(this.intersections);
-		
-		if (prevHover === currentHover) {
+		if (previous === current) {
 			return
 		}
 
-		if (currentHover instanceof Mesh) {
+		if (current instanceof Mesh) {
 			this.bindings.hover.forEach(hover => {
-				if (this.isMatching(currentHover, hover)) {		
-					hover.onHoverStart(currentHover);
+				if (this.isMatching(current, hover)) {
+					hover.onHoverStart(current);
 				}
 			});
 		}
 
-		if (prevHover instanceof Mesh) {
+		if (previous instanceof Mesh) {
 			this.bindings.hover.forEach(hover => {
-				if (this.isMatching(prevHover, hover)) {					
-					hover.onHoverEnd(prevHover);
+				if (this.isMatching(previous, hover)) {
+					hover.onHoverEnd(previous);
 				}
 			});
 		}
 
-		this.currentHover = (currentHover as Mesh);
+		this.hovered = (current as Mesh);
 	}
 
 	/**
@@ -207,7 +200,7 @@ export default class SceneManager implements IManager {
 	 * 
 	 * @param bindings The bindings that should be accounted for during render cycles.
 	 */
-	 public setHoverBindings(bindings: IHoverBindingConfig[]) {
+	public setHoverBindings(bindings: IHoverBindingConfig[]) {
 		this.bindings.hover = bindings;
 	}
 };

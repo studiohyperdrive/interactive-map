@@ -23,7 +23,7 @@ export default class ThreeEntryPoint {
 		window.onmousemove = debounce((e: MouseEvent) => {
 			this.manager.updateMouse(e);
 			this.manager.updateIntersections();
-			this.manager.updateHover();
+			this.manager.handleHover(e);
 		}, 12);
 
 		window.onclick = (e: MouseEvent) => {
