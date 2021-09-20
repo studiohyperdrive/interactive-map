@@ -1,4 +1,4 @@
-import { AnimationClip, AnimationMixer, Clock, Intersection, Mesh, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer } from "three";
+import { AnimationClip, AnimationMixer, Clock, Intersection, LoopOnce, Mesh, Object3D, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer } from "three";
 
 import { buildScene, buildRenderer, buildCamera, buildClock, buildMouse, buildRaycaster, buildAnimationMixer } from "./assets/utils/buildHelpers";
 import { onWindowResize } from "./assets/utils/eventHelpers";
@@ -155,7 +155,7 @@ export default class SceneManager implements IManager {
 	 * @param binding binding to "fire" when the matched object is "clicked".
 	 * @returns whether the given binding applies to the given mesh.
 	 */
-	public isMatching(item: Mesh|AnimationClip, binding: IBindingConfig): boolean {
+	public isMatching(item: Mesh | AnimationClip, binding: IBindingConfig): boolean {
 		switch (binding.matching) {
 			case "partial":
 				return item.name.indexOf(binding.name) > -1;
@@ -164,6 +164,10 @@ export default class SceneManager implements IManager {
 			default:
 				return item.name === binding.name;
 		}
+	}
+
+	public hasAnimation(item: Mesh, binding: IAnimationBindingConfig, type: "click" | "hover") {
+		return binding.trigger.includes(type) && binding.mesh.some(mesh => this.isMatching(item, mesh))
 	}
 
 	/**
@@ -206,8 +210,6 @@ export default class SceneManager implements IManager {
 					hover.onHoverStart(currentHover);
 				}
 			});
-
-			this.updateHoverAnimation(currentHover);
 		}
 
 		if (prevHover instanceof Mesh) {
@@ -217,6 +219,7 @@ export default class SceneManager implements IManager {
 				}
 			});
 		}
+		this.updateHoverAnimation(currentHover, prevHover);
 
 		this.currentHover = (currentHover as Mesh);
 	}
@@ -225,14 +228,14 @@ export default class SceneManager implements IManager {
 	 * Function firing the onClick animations defined in the animation bindings.
 	 * 
 	 */
-		public handleClickAnimation(): void {
+	public handleClickAnimation(): void {
 		if (!getFirstIntersectionObject(this.intersections)) return;
 
 		const clicked = getFirstIntersectionObject(this.intersections);
 
 		if (clicked instanceof Mesh) {
 			this.bindings.animation.forEach(binding => {					
-				if (binding.trigger.includes('click') && binding.mesh.some(mesh => this.isMatching(clicked, mesh))) {
+				if (this.hasAnimation(clicked, binding, "click")) {
 					const animations = this.scene.animations.filter(animation => this.isMatching(animation, binding));
 					animations.forEach(animation => {
 						const action = this.mixer.clipAction(animation);
@@ -248,17 +251,31 @@ export default class SceneManager implements IManager {
 	 * Function firing the hover animations defined in the animation bindings.
 	 * 
 	 */
-	public updateHoverAnimation(currentHover: Mesh) {
-		this.bindings.animation.forEach(binding => {		
-			if (binding.trigger.includes('hover') && binding.mesh.some(mesh => this.isMatching(currentHover, mesh))) {
-				const animations = this.scene.animations.filter(animation => this.isMatching(animation, binding));
-				animations.forEach(animation => {
-					const action = this.mixer.clipAction(animation);
-					action.loop = binding.loop;
-					action.play();
-				})
-			}
-		});
+	public updateHoverAnimation(currentHover: Mesh | Object3D | null, prevHover: Mesh | Object3D | null) {
+		if (currentHover instanceof Mesh) {
+			this.bindings.animation.forEach(binding => {		
+				if (this.hasAnimation(currentHover, binding, "hover")) {
+					const animations = this.scene.animations.filter(animation => this.isMatching(animation, binding));
+					animations.forEach(animation => {
+						const action = this.mixer.clipAction(animation);
+						action.loop = binding.loop;
+						action.play();
+					})
+				}
+			});
+		}
+
+		if (prevHover instanceof Mesh) {
+			this.bindings.animation.forEach(binding => {		
+				if (this.hasAnimation(prevHover, binding, "hover")) {
+					const animations = this.scene.animations.filter(animation => this.isMatching(animation, binding));
+					animations.forEach(animation => {
+						const action = this.mixer.clipAction(animation);
+						action.loop = LoopOnce;
+					})
+				}
+			});
+		}
 	}
 
 	/**

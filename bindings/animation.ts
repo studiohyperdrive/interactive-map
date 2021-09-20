@@ -1,4 +1,4 @@
-import { LoopOnce } from "three";
+import { LoopOnce, LoopRepeat } from "three";
 import { IAnimationBindingConfig } from "../webgl/types";
 
 export default ([
@@ -16,7 +16,7 @@ export default ([
         name: 'roofAction',
         matching: 'exact',
         trigger: ['hover'],
-        loop: LoopOnce,
+        loop: LoopRepeat,
         mesh: [{
             name: 'ring',
             matching: 'partial',
@@ -26,7 +26,7 @@ export default ([
         name: 'penthouseAction',
         matching: 'partial',
         trigger: ['hover'],
-        loop: LoopOnce,
+        loop: LoopRepeat,
         mesh: [{
             name: 'tower',
             matching: 'partial',
