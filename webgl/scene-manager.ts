@@ -26,6 +26,7 @@ export default class SceneManager implements IManager {
 	public raycaster: Raycaster;
 	public mouse?: Vector2;
 
+	public controls: Controls;
 	public subjects: IUpdates[] = [];
 	public intersections: Intersection[] = [];
 	public currentHover: THREE.Mesh | null = null;
@@ -42,9 +43,8 @@ export default class SceneManager implements IManager {
 		this.clock = buildClock();
 		this.raycaster = buildRaycaster();
 
+		this.controls = new Controls(this.camera, canvas);
 		this.subjects = this.createSubjects(canvas, this.scene, this.camera);
-
-		console.info("SceneManager", this.scene);
 	}
 
 	//
@@ -78,7 +78,7 @@ export default class SceneManager implements IManager {
 		return [
 			new InteractiveMap(scene, "/models/interactive-map_v1.glb"),
 			new GlobalIllumination(scene),
-			new Controls(camera, canvas),
+			this.controls
 		];
 	}
 

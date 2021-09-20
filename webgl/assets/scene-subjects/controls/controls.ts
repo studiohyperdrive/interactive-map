@@ -10,20 +10,11 @@ export default class Controls implements IMapControls {
 
     public rotationDelta;
 
-    public rotateLeftButton;
-    public rotateRightButton;
-
     constructor(camera: Camera, canvas: HTMLCanvasElement) {
         this.mapControls = this.createOribitControls(camera, canvas);
         this.camera = camera;
 
         this.rotationDelta = 0;
-
-        this.rotateLeftButton = document.querySelector('#webgl__rotate-left');
-        this.rotateLeftButton?.addEventListener('click', this.handleClickRotateLeft);
-        
-        this.rotateRightButton = document.querySelector('#webgl__rotate-right');
-        this.rotateRightButton?.addEventListener('click', this.handleClickRotateRight);
     }
 
     public update() {
