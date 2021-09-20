@@ -136,6 +136,12 @@ export default class SceneManager implements IManager {
 				this.bindings.hover.some(binding => {
 					return this.isMatching(mesh, binding);
 				})
+			||
+				this.bindings.animation.some(binding => {
+					return binding.mesh.some(triggerMesh => {
+						return this.isMatching(mesh, triggerMesh);
+					})
+				})
 			);
 		});
 
@@ -168,7 +174,7 @@ export default class SceneManager implements IManager {
 	public handleClick(e: MouseEvent): void {
 		if (!getFirstIntersectionObject(this.intersections)) return;
 
-		const clicked = this.intersections[0].object;
+		const clicked = getFirstIntersectionObject(this.intersections);
 
 		if (clicked instanceof Mesh) {
 			this.bindings.click.forEach(binding => {
@@ -198,6 +204,8 @@ export default class SceneManager implements IManager {
 					hover.onHoverStart(currentHover);
 				}
 			});
+
+			this.updateHoverAnimation(currentHover);
 		}
 
 		if (prevHover instanceof Mesh) {
@@ -219,20 +227,35 @@ export default class SceneManager implements IManager {
 		 public handleClickAnimation(): void {
 			if (!getFirstIntersectionObject(this.intersections)) return;
 	
-			const clicked = this.intersections[0].object;
+			const clicked = getFirstIntersectionObject(this.intersections);
 	
 			if (clicked instanceof Mesh) {
 				this.bindings.animation.forEach(binding => {					
 					if (binding.trigger.includes('click') && binding.mesh.some(mesh => this.isMatching(clicked, mesh))) {
-						
-						const animation = this.scene.animations.filter(animation => this.isMatching(animation, binding))[0];
-						const action = this.mixer.clipAction(animation);
-						action.loop = binding.loop;
-						action.play();
+						const animations = this.scene.animations.filter(animation => this.isMatching(animation, binding));
+						animations.forEach(animation => {
+							const action = this.mixer.clipAction(animation);
+							action.loop = binding.loop;
+							action.play();
+						})
 					}
 				});
 			}
 		}
+
+	public updateHoverAnimation(currentHover: Mesh) {
+		this.bindings.animation.forEach(binding => {		
+			if (binding.trigger.includes('hover') && binding.mesh.some(mesh => this.isMatching(currentHover, mesh))) {
+				const animations = this.scene.animations.filter(animation => this.isMatching(animation, binding));
+				animations.forEach(animation => {
+					const action = this.mixer.clipAction(animation);
+					action.loop = binding.loop;
+					action.play();
+				})
+			}
+		});
+	}
+
 	/**
 	 * Register click bindings for the managed scene
 	 * 
