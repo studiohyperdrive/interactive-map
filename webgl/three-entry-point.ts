@@ -31,7 +31,6 @@ export default class ThreeEntryPoint {
 			this.manager.updateMouse(e);
 			this.manager.updateIntersections();
 			this.manager.handleClick(e);
-			this.manager.handleClickAnimation();
 		};
 
 		this.resizeCanvas();

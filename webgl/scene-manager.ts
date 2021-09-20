@@ -183,6 +183,8 @@ export default class SceneManager implements IManager {
 				}
 			});
 		}
+
+		this.handleClickAnimation();
 	}
 
 	/**
@@ -219,30 +221,33 @@ export default class SceneManager implements IManager {
 		this.currentHover = (currentHover as Mesh);
 	}
 
-		/**
+	/**
 	 * Function firing the onClick animations defined in the animation bindings.
 	 * 
-	 * @param e event fired by DOM.
 	 */
-		 public handleClickAnimation(): void {
-			if (!getFirstIntersectionObject(this.intersections)) return;
-	
-			const clicked = getFirstIntersectionObject(this.intersections);
-	
-			if (clicked instanceof Mesh) {
-				this.bindings.animation.forEach(binding => {					
-					if (binding.trigger.includes('click') && binding.mesh.some(mesh => this.isMatching(clicked, mesh))) {
-						const animations = this.scene.animations.filter(animation => this.isMatching(animation, binding));
-						animations.forEach(animation => {
-							const action = this.mixer.clipAction(animation);
-							action.loop = binding.loop;
-							action.play();
-						})
-					}
-				});
-			}
-		}
+		public handleClickAnimation(): void {
+		if (!getFirstIntersectionObject(this.intersections)) return;
 
+		const clicked = getFirstIntersectionObject(this.intersections);
+
+		if (clicked instanceof Mesh) {
+			this.bindings.animation.forEach(binding => {					
+				if (binding.trigger.includes('click') && binding.mesh.some(mesh => this.isMatching(clicked, mesh))) {
+					const animations = this.scene.animations.filter(animation => this.isMatching(animation, binding));
+					animations.forEach(animation => {
+						const action = this.mixer.clipAction(animation);
+						action.loop = binding.loop;
+						action.play();
+					})
+				}
+			});
+		}
+	}
+
+	/**
+	 * Function firing the hover animations defined in the animation bindings.
+	 * 
+	 */
 	public updateHoverAnimation(currentHover: Mesh) {
 		this.bindings.animation.forEach(binding => {		
 			if (binding.trigger.includes('hover') && binding.mesh.some(mesh => this.isMatching(currentHover, mesh))) {
