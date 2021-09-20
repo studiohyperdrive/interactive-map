@@ -1,4 +1,9 @@
+import { Store } from "redux";
+
 import { Mesh, MeshPhysicalMaterial } from "three";
+
+import actions from "../redux/actions";
+
 import { IHoverBindingConfig } from "../webgl/types";
 import mutateRandomColor from "../webgl/utils/random-color";
 
@@ -14,17 +19,34 @@ const mutatePlainColor = (mesh: Mesh) => {
     mesh.material = plain;
 };
 
-export default ([
-    {
-        name: 'skyscraper',
-        matching: 'partial',
-        onHoverStart: mutateRandomColor,
-        onHoverEnd: mutatePlainColor
-    },
-    {
-        name: 'small-house',
-        matching: 'partial',
-        onHoverStart: mutateRandomColor,
-        onHoverEnd: mutatePlainColor
-    }
-] as IHoverBindingConfig[]);
+export default function createHoverBindings(store: Store) {
+    return ([
+        {
+            name: 'skyscraper',
+            matching: 'partial',
+            onHoverStart: mutateRandomColor,
+            onHoverEnd: mutatePlainColor
+        },
+        {
+            name: 'small-house',
+            matching: 'partial',
+            onHoverStart: mutateRandomColor,
+            onHoverEnd: mutatePlainColor
+        },
+        {
+            name: "", // apply to everything
+            matching: "partial",
+            onHoverStart: (mesh: Mesh) => {
+                store.dispatch({
+                    type: actions.tooltip.set,
+                    payload: mesh.name
+                });
+            },
+            onHoverEnd: (mesh: Mesh) => {
+                store.dispatch({
+                    type: actions.tooltip.reset
+                })
+            }
+        }
+    ] as IHoverBindingConfig[]);
+}
