@@ -24,7 +24,7 @@ export default class ThreeEntryPoint {
 			this.manager.updateMouse(e);
 			this.manager.updateIntersections();
 			this.manager.handleHover(e);
-		}, 12);
+		}, 8);
 
 		window.onclick = (e: MouseEvent) => {
 			this.manager.updateMouse(e);
