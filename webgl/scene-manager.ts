@@ -155,7 +155,7 @@ export default class SceneManager implements IManager {
 	 * @param binding binding to "fire" when the matched object is "clicked".
 	 * @returns whether the given binding applies to the given mesh.
 	 */
-	public isMatching(item: Mesh | AnimationClip, binding: IBindingConfig): boolean {
+	public isMatching(item: {name: string}, binding: IBindingConfig): boolean {
 		switch (binding.matching) {
 			case "partial":
 				return item.name.indexOf(binding.name) > -1;
