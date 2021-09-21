@@ -206,7 +206,7 @@ export default class SceneManager implements IManager {
 				}
 			});
 		}
-		this.updateHoverAnimation(current, previous);
+		this.handleHoverAnimation(current, previous);
 
 		this.hovered = (current as Mesh);
 	}
@@ -238,10 +238,10 @@ export default class SceneManager implements IManager {
 	 * Function firing the hover animations defined in the animation bindings.
 	 * 
 	 */
-	public updateHoverAnimation(currentHover: Mesh | Object3D | null, prevHover: Mesh | Object3D | null) {
-		if (currentHover instanceof Mesh) {
+	public handleHoverAnimation(current: Mesh | Object3D | null, previous: Mesh | Object3D | null) {
+		if (current instanceof Mesh) {
 			this.bindings.animation.forEach(binding => {		
-				if (this.hasAnimation(currentHover, binding, "hover")) {
+				if (this.hasAnimation(current, binding, "hover")) {
 					const animations = this.scene.animations.filter(animation => this.isMatching(animation, binding));
 					animations.forEach(animation => {
 						const action = this.mixer.clipAction(animation);
@@ -252,9 +252,9 @@ export default class SceneManager implements IManager {
 			});
 		}
 
-		if (prevHover instanceof Mesh) {
+		if (previous instanceof Mesh) {
 			this.bindings.animation.forEach(binding => {		
-				if (this.hasAnimation(prevHover, binding, "hover")) {
+				if (this.hasAnimation(previous, binding, "hover")) {
 					const animations = this.scene.animations.filter(animation => this.isMatching(animation, binding));
 					animations.forEach(animation => {
 						const action = this.mixer.clipAction(animation);
