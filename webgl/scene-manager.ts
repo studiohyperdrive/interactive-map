@@ -9,8 +9,7 @@ import InteractiveMap from './assets/scene-subjects/interactive-map/interactive-
 import GlobalIllumination from './assets/scene-subjects/global-illumination/global-illumination';
 import Controls from "./assets/scene-subjects/controls/controls";
 
-import { IAnimationBindingConfig, IBindingConfig, IClickBindingConfig, IHoverBindingConfig, IManager, ISize, IUpdates } from "./types";
-import animation from "../bindings/animation";
+import { IBindingConfig, IClickBindingConfig, IHoverBindingConfig, IManager, ISize, IUpdates } from "./types";
 
 export default class SceneManager implements IManager {
 	public sizes: ISize;
@@ -18,8 +17,7 @@ export default class SceneManager implements IManager {
 	public bindings: {
 		click: IClickBindingConfig[],
 		hover: IHoverBindingConfig[],
-		animation: IAnimationBindingConfig[],
-	} = { click: [], hover: [], animation: [] };
+	} = { click: [], hover: [] };
 
 	public scene: Scene;
 	public renderer: WebGLRenderer;
@@ -153,10 +151,6 @@ export default class SceneManager implements IManager {
 		}
 	}
 
-	public hasAnimation(item: Mesh, binding: IAnimationBindingConfig, type: "click" | "hover") {
-		return binding.trigger.includes(type) && binding.mesh.some(mesh => this.isMatching(item, mesh))
-	}
-
 	/**
 	 * Function firing the onClick handlers defined in the click bindings.
 	 * 
@@ -173,11 +167,21 @@ export default class SceneManager implements IManager {
 			this.bindings.click.forEach(binding => {
 				if (this.isMatching(clicked, binding)) {
 					binding.onClick(clicked);
+
+					if (binding.animate) {
+						binding.animate.forEach((animationBinding) => {
+							this.scene.animations.forEach(animation => {
+								if (this.isMatching(animation, animationBinding)) {
+									const action = this.mixer.clipAction(animation);
+									action.loop = animationBinding.loop;
+									action.play();
+								}
+							});
+						});
+					}
 				}
 			});
 		}
-
-		this.handleClickAnimation();
 	}
 
 	/**
@@ -192,77 +196,45 @@ export default class SceneManager implements IManager {
 		}
 
 		if (current instanceof Mesh) {
-			this.bindings.hover.forEach(hover => {
-				if (this.isMatching(current, hover)) {
-					hover.onHoverStart(current);
+			this.bindings.hover.forEach(binding => {
+				if (this.isMatching(current, binding)) {
+					binding.onHoverStart(current);
+
+					if (binding.animate) {
+						binding.animate.forEach((animationBinding) => {
+							this.scene.animations.forEach(animation => {
+								if (this.isMatching(animation, animationBinding)) {
+									const action = this.mixer.clipAction(animation);
+									action.loop = animationBinding.loop;
+									action.play();
+								}
+							});
+						});
+					}
 				}
 			});
 		}
 
 		if (previous instanceof Mesh) {
-			this.bindings.hover.forEach(hover => {
-				if (this.isMatching(previous, hover)) {
-					hover.onHoverEnd(previous);
+			this.bindings.hover.forEach(binding => {
+				if (this.isMatching(previous, binding)) {
+					binding.onHoverEnd(previous);
+
+					if (binding.animate) {
+						binding.animate.forEach((animationBinding) => {
+							this.scene.animations.forEach(animation => {
+								if (this.isMatching(animation, animationBinding)) {
+									const action = this.mixer.clipAction(animation);
+									action.loop = LoopOnce;
+								}
+							});
+						});
+					}
 				}
 			});
 		}
-		this.handleHoverAnimation(current, previous);
 
 		this.hovered = (current as Mesh);
-	}
-
-	/**
-	 * Function firing the onClick animations defined in the animation bindings.
-	 * 
-	 */
-	public handleClickAnimation(): void {
-		if (!getFirstIntersectionObject(this.intersections)) return;
-
-		const clicked = getFirstIntersectionObject(this.intersections);
-
-		if (clicked instanceof Mesh) {
-			this.bindings.animation.forEach(binding => {					
-				if (this.hasAnimation(clicked, binding, "click")) {
-					const animations = this.scene.animations.filter(animation => this.isMatching(animation, binding));
-					animations.forEach(animation => {
-						const action = this.mixer.clipAction(animation);
-						action.loop = binding.loop;
-						action.play();
-					})
-				}
-			});
-		}
-	}
-
-	/**
-	 * Function firing the hover animations defined in the animation bindings.
-	 * 
-	 */
-	public handleHoverAnimation(current: Mesh | Object3D | null, previous: Mesh | Object3D | null) {
-		if (current instanceof Mesh) {
-			this.bindings.animation.forEach(binding => {		
-				if (this.hasAnimation(current, binding, "hover")) {
-					const animations = this.scene.animations.filter(animation => this.isMatching(animation, binding));
-					animations.forEach(animation => {
-						const action = this.mixer.clipAction(animation);
-						action.loop = binding.loop;
-						action.play();
-					})
-				}
-			});
-		}
-
-		if (previous instanceof Mesh) {
-			this.bindings.animation.forEach(binding => {		
-				if (this.hasAnimation(previous, binding, "hover")) {
-					const animations = this.scene.animations.filter(animation => this.isMatching(animation, binding));
-					animations.forEach(animation => {
-						const action = this.mixer.clipAction(animation);
-						action.loop = LoopOnce;
-					})
-				}
-			});
-		}
 	}
 
 	/**
@@ -281,14 +253,5 @@ export default class SceneManager implements IManager {
 	 */
 	public setHoverBindings(bindings: IHoverBindingConfig[]) {
 		this.bindings.hover = bindings;
-	}
-
-	/**
-	 * Register animation bindings for the managed scene
-	 * 
-	 * @param bindings The bindings that should be accounted for during render cycles.
-	 */
-	 public setAnimationBindings(bindings: IAnimationBindingConfig[]) {
-		this.bindings.animation = bindings;
 	}
 };

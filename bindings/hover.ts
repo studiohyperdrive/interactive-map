@@ -1,4 +1,4 @@
-import { Material, Mesh, MeshPhysicalMaterial, MeshStandardMaterial } from "three";
+import { LoopRepeat, Mesh, MeshPhysicalMaterial, MeshStandardMaterial } from "three";
 import { IHoverBindingConfig } from "../webgl/types";
 
 export default ([
@@ -35,5 +35,37 @@ export default ([
             });
             mesh.material = random;
         },
-    }
+    },
+    {
+        name: 'tower',
+        matching: 'exact',
+        onHoverStart: () => {},
+        onHoverEnd: () => {},
+        animate: [
+            {
+                name: 'penthouseAction',
+                matching: 'partial',
+                loop: LoopRepeat,
+            },
+        ]
+    },
+    {
+        name: 'ring',
+        matching: 'partial',
+        onHoverStart: () => {},
+        onHoverEnd: () => {},
+        animate: [
+            {
+                name: 'roofAction',
+                matching: 'exact',
+                loop: LoopRepeat,
+            },
+            
+            {
+                name: 'ringAction.001',
+                matching: 'exact',
+                loop: LoopRepeat,
+            },
+        ]
+    },
 ] as IHoverBindingConfig[]);

@@ -27,15 +27,15 @@ export interface IBindingConfig {
 
 export interface IClickBindingConfig extends IBindingConfig{
     onClick: Function,
+    animate?: IAnimate[],
 }
 
 export interface IHoverBindingConfig extends IBindingConfig{
     onHoverStart: Function,
     onHoverEnd: Function,
+    animate?: IAnimate[],
 }
 
-export interface IAnimationBindingConfig extends IBindingConfig{
-    trigger: Array<"click" | "hover">,
+export interface IAnimate extends IBindingConfig {
     loop: AnimationActionLoopStyles,
-    mesh: IBindingConfig[]
 }
