@@ -38,13 +38,13 @@ const WebGL: FC<WebGLProps> = ({ three }) => {
 
       <div className="webgl__rotate-buttons">
         <div className="webgl__rotate-button" onClick={() => {
-          const manager = store.getState().three?.manager;
+          const manager = three?.manager;
           manager?.controls?.handleClickRotateLeft();
           manager?.update();
         }}>{"<-"}</div>
 
         <div className="webgl__rotate-button" onClick={() => {
-          const manager = store.getState().three?.manager;
+          const manager = three?.manager;
           manager?.controls?.handleClickRotateRight();
           manager?.update();
         }}>{"->"}</div>
