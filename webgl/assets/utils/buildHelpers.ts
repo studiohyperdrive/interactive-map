@@ -9,7 +9,7 @@ export const buildScene = (): Scene => {
 };
 
 export const buildRenderer = (canvas: HTMLCanvasElement, sizes: ISize): WebGLRenderer => {
-    const renderer: WebGLRenderer = new WebGLRenderer({ canvas: canvas });
+    const renderer: WebGLRenderer = new WebGLRenderer({ canvas: canvas, antialias: true });
     renderer.setSize(sizes.width, sizes.height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
