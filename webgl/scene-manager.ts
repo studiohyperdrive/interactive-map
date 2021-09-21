@@ -115,7 +115,6 @@ export default class SceneManager implements IManager {
 			return c instanceof Mesh;
 		}) as Mesh[]);
 
-		// Only keep track of 5 closest intersections to avoid memory overflow
 		this.intersections = this.raycaster.intersectObjects(children);
 	}
 
