@@ -2,16 +2,16 @@ import type { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
 import Head from "next/head";
 
-const Tower: NextPage = () => {
+const Ring: NextPage = () => {
   const router = useRouter();
 
   return (
     <div>
       <Head>
-        <title>Interactive map | Tower</title>
+        <title>Interactive map | Ring</title>
       </Head>
 
-      <h1>🗼 Tower page</h1>
+      <h1>💍 Ring page</h1>
 
       <button onClick={() => {router.back()}}>Back</button>
       
@@ -38,4 +38,4 @@ const Tower: NextPage = () => {
   )
 }
 
-export default Tower
+export default Ring

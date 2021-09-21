@@ -11,6 +11,7 @@ import store from "../redux/store";
 
 import WebGL from "../components/webgl/webgl";
 import Tooltip from "../components/tooltip/tooltip";
+import RingDialog from "../components/dialogs/ring/ring";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const shouldShowMap = (url: string) => { return url === "/" };
@@ -37,6 +38,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         {map && <WebGL />}
 
         <Component {...pageProps} />
+        <RingDialog />
       </main>
     </Provider>
   )

@@ -22,7 +22,7 @@ const WebGL: FC<WebGLProps> = ({ three }) => {
           type: actions.three.set,
           payload: new ThreeEntryPoint(
             threeRootElement.current,
-            createClickBindings(router),
+            createClickBindings(store, router),
             createHoverBindings(store),
           )
         });
