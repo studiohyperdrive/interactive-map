@@ -38,10 +38,12 @@ export default function reducer(state = initialState, action: AnyAction) {
     // Dialogs
 
     case actions.dialogs.ring.open: {
+      (state.three as any)?.unbindEventListeners();
       return { ...state, dialogs: { ...state.dialogs, ring: { ...state.dialogs.ring, open: true } } };
     }
 
     case actions.dialogs.ring.close: {
+      (state.three as any)?.bindEventListeners((state.three as any).click, (state.three as any).hover);
       return { ...state, dialogs: { ...state.dialogs, ring: { ...state.dialogs.ring, open: false } } };
     }
 

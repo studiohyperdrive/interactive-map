@@ -11,7 +11,7 @@ import store from "../../redux/store";
 
 import { WebGLProps } from "./webgl.types";
 
-const WebGL: FC<WebGLProps> = ({ three }) => {
+const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   const threeRootElement = useRef<HTMLCanvasElement | null>(null);
   const router = useRouter();
 
@@ -31,6 +31,14 @@ const WebGL: FC<WebGLProps> = ({ three }) => {
       }
     }
   }, [router, three]);
+
+  if (three) {
+    if (disabled) {
+      three.unbindEventListeners();
+    } else if (!three.interactive) {
+      three.bindEventListeners(three.click, three.hover);
+    }
+  }
 
   return (
     <div>

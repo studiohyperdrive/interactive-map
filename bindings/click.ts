@@ -28,6 +28,7 @@ export default function createClickBindings(store: Store, router: NextRouter) {
             matching: "exact",
             onClick: (mesh: Mesh) => {
                 store.dispatch({ type: actions.dialogs.ring.open });
+                store.dispatch({ type: actions.tooltip.reset });
             }
         }
     ] as IClickBindingConfig[]);
