@@ -1,4 +1,3 @@
-import { debounce } from "./assets/utils/eventHelpers";
 import SceneManager from "./scene-manager";
 
 import { IClickBindingConfig, IHoverBindingConfig } from "./types";
@@ -21,11 +20,11 @@ export default class ThreeEntryPoint {
 			onresize: () => {
 				this.resizeCanvas()
 			},
-			onmousemove: debounce((e: MouseEvent) => {
+			onmousemove: (e: MouseEvent) => {
 				this.manager.updateMouse(e);
 				this.manager.updateIntersections();
 				this.manager.handleHover(e);
-			}, 8),
+			},
 			onclick: (e: MouseEvent) => {
 				this.manager.updateMouse(e);
 				this.manager.updateIntersections();

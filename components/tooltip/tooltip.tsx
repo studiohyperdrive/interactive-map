@@ -4,14 +4,12 @@ import { connect } from "react-redux";
 
 import { TooltipProps } from "./tooltip.types";
 
-import { debounce } from "../../webgl/assets/utils/eventHelpers";
-
 const Tooltip: React.FC<TooltipProps> = ({ title }) => {
   const [coords, setCoords] = useState({ x: 0, y: 0 });
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const listener = debounce((e: MouseEvent) => {
+    const listener = (e: MouseEvent) => {
       const coords = {x: 0, y: 0};
 
       // Adapted from https://stackoverflow.com/questions/7790725/javascript-track-mouse-position
@@ -39,7 +37,7 @@ const Tooltip: React.FC<TooltipProps> = ({ title }) => {
       });
 
       setOpen(true);
-    }, 8);
+    };
 
     document.addEventListener("mousemove", listener);
 
