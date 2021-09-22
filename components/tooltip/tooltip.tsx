@@ -49,7 +49,7 @@ const Tooltip: React.FC<TooltipProps> = ({ title }) => {
   }, []);
 
   const getStyle = (): object => {
-    const top = coords.y + 1 + 'px'; // avoid click capturing
+    const top = coords.y + 'px';
     const left = coords.x + 'px';
 
     return {
