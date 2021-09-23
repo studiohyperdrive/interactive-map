@@ -1,4 +1,4 @@
-# The name of my project
+# Studio Hyperdrive - Interactive Map - Next
 
 ## General
 
