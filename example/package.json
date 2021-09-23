@@ -7,7 +7,8 @@
     "dev": "npm run next dev",
     "build": "npm run next build",
     "start": "npm run next start",
-    "lint": "npm run next lint"
+    "lint": "npm run next lint",
+    "symlink": "cd ../package && npm link && cd ../example && npm link @shd-developer/interactive-map"
   },
   "dependencies": {
     "@emotion/react": "^11.4.1",
@@ -19,8 +20,7 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-redux": "^7.2.5",
-    "redux": "^4.1.1",
-    "three": "^0.132.2"
+    "redux": "^4.1.1"
   },
   "devDependencies": {
     "@types/three": "^0.132.0",
