@@ -15,14 +15,12 @@ const Tooltip: React.FC<TooltipProps> = ({ title }) => {
       const coords = {x: 0, y: 0};
 
       // Adapted from https://stackoverflow.com/questions/7790725/javascript-track-mouse-position
-      let ed, doc, body;
-
       e = e || window.event; // IE-ism
 
       if (e.pageX == null && e.clientX != null) {
-        ed = (e.target && (e.target as EventTarget & {ownerDocument: Document}).ownerDocument) || document;
-        doc = ed.documentElement;
-        body = ed.body;
+        const target = (e.target && (e.target as EventTarget & {ownerDocument: Document}).ownerDocument) || document;
+        const doc = target.documentElement;
+        const body = target.body;
 
         coords.x = e.clientX +
           (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
