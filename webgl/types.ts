@@ -39,3 +39,7 @@ export interface IHoverBindingConfig extends IBindingConfig{
 export interface IAnimate extends IBindingConfig {
     loop: AnimationActionLoopStyles,
 }
+
+export interface IAnimationConfig extends IBindingConfig, IAnimate {
+    startAnimation: Function;
+}

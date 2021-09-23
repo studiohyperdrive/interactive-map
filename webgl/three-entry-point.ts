@@ -1,15 +1,15 @@
 import { debounce } from "./assets/utils/eventHelpers";
 import SceneManager from "./scene-manager";
 
-import { IClickBindingConfig, IHoverBindingConfig } from "./types";
+import { IAnimationConfig, IClickBindingConfig, IHoverBindingConfig } from "./types";
 
 export default class ThreeEntryPoint {
 	public canvas;
 	public manager;
 
-	constructor(canvas: HTMLCanvasElement, click: IClickBindingConfig[] = [], hover: IHoverBindingConfig[] = []) {
+	constructor(canvas: HTMLCanvasElement, click: IClickBindingConfig[] = [], hover: IHoverBindingConfig[] = [], animation: IAnimationConfig[] = []) {
 		this.canvas = canvas;
-		this.manager = new SceneManager(canvas);
+		this.manager = new SceneManager(canvas, animation);
 
 		this.bindEventListeners(click, hover);
 		this.render();

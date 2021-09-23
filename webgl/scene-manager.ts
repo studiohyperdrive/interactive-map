@@ -9,7 +9,7 @@ import InteractiveMap from './assets/scene-subjects/interactive-map/interactive-
 import GlobalIllumination from './assets/scene-subjects/global-illumination/global-illumination';
 import Controls from "./assets/scene-subjects/controls/controls";
 
-import { IBindingConfig, IClickBindingConfig, IHoverBindingConfig, IManager, ISize, IUpdates } from "./types";
+import { IAnimationConfig, IBindingConfig, IClickBindingConfig, IHoverBindingConfig, IManager, ISize, IUpdates } from "./types";
 
 export default class SceneManager implements IManager {
 	public sizes: ISize;
@@ -18,6 +18,8 @@ export default class SceneManager implements IManager {
 		click: IClickBindingConfig[],
 		hover: IHoverBindingConfig[],
 	} = { click: [], hover: [] };
+
+	public animationConfig: IAnimationConfig[];
 
 	public scene: Scene;
 	public renderer: WebGLRenderer;
@@ -34,11 +36,13 @@ export default class SceneManager implements IManager {
 	public deltaTime: number;
 	public previousTime: number;
 
-	constructor(canvas: HTMLCanvasElement) {
+	constructor(canvas: HTMLCanvasElement, animation: IAnimationConfig[] = []) {
 		this.sizes = {
 			width: window.innerWidth,
 			height: window.innerHeight,
 		};
+
+		this.animationConfig = animation;
 
 		this.deltaTime = 0;
 		this.previousTime = 0;
@@ -50,7 +54,7 @@ export default class SceneManager implements IManager {
 		this.raycaster = buildRaycaster();
 		this.mixer = buildAnimationMixer(this.scene);
 
-		this.subjects = this.createSubjects(canvas, this.scene, this.camera, this.clock);
+		this.subjects = this.createSubjects(canvas, this.scene, this.camera, this.animationConfig);
 	}
 
 	//
@@ -84,20 +88,32 @@ export default class SceneManager implements IManager {
 	}
 
 	/**
+	 * Functions that fires when the model is fully loaded
+	 * 
+	 * @param animations an array of all animations in the scene
+	 * @param animationConfig configuration bindings for autoplaying animations
+	 */
+	public onModelLoaded(animations: AnimationClip[], animationConfig: IAnimationConfig[]): void {
+		this.startAnimations(animations, animationConfig);
+	}
+
+	/**
 	 * Create the initial elements in the given Scene
 	 * @param scene scene object the subjects will be created in
 	 * @returns an array of subjects that have update functions
 	 */
-	public createSubjects(canvas: HTMLCanvasElement, scene: Scene, camera: PerspectiveCamera, clock: Clock): IUpdates[] {
+	public createSubjects(canvas: HTMLCanvasElement, scene: Scene, camera: PerspectiveCamera, animationConfig: IAnimationConfig[]): IUpdates[] {
 		return [
-			new InteractiveMap(scene, "/models/interactive-map_v2.7-draco.glb"),
+			new InteractiveMap(scene, "/models/interactive-map_v2.8-draco.glb", (animations: AnimationClip[] = []) => this.onModelLoaded(animations, animationConfig)),
 			new GlobalIllumination(scene),
 			new Controls(camera, canvas),
 		];
 	}
 
+
+
 	//
-	// Click Events
+	// Click and hover Events
 	//
 
 	/**
@@ -174,7 +190,7 @@ export default class SceneManager implements IManager {
 								if (this.isMatching(animation, animationBinding)) {
 									const action = this.mixer.clipAction(animation);
 									action.loop = animationBinding.loop;
-									action.play();
+									action.reset().play();
 								}
 							});
 						});
@@ -206,7 +222,7 @@ export default class SceneManager implements IManager {
 								if (this.isMatching(animation, animationBinding)) {
 									const action = this.mixer.clipAction(animation);
 									action.loop = animationBinding.loop;
-									action.play();
+									action.reset().play();
 								}
 							});
 						});
@@ -253,5 +269,27 @@ export default class SceneManager implements IManager {
 	 */
 	public setHoverBindings(bindings: IHoverBindingConfig[]) {
 		this.bindings.hover = bindings;
+	}
+
+	//
+	// Animation
+	//
+
+	/**
+	 * Function that matches the animation clips to their correct bindings
+	 * 
+	 * @param animations an array of all animations in the scene
+	 * @param animationConfig configuration bindings for autoplaying animations
+	 */
+	public startAnimations(animations: AnimationClip[], animationConfig: IAnimationConfig[]) {
+		animationConfig.forEach(animationData => {
+			animations.forEach((animationClip, i) => {
+				if (this.isMatching(animationClip, animationData)) {
+					const action = this.mixer.clipAction(animationClip);
+					action.loop = animationData.loop;
+					animationData.startAnimation(action, i);
+				}
+			})
+		});
 	}
 };
