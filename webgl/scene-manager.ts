@@ -9,7 +9,7 @@ import InteractiveMap from './assets/scene-subjects/interactive-map/interactive-
 import GlobalIllumination from './assets/scene-subjects/global-illumination/global-illumination';
 import Controls from "./assets/scene-subjects/controls/controls";
 
-import { IAnimationConfig, IBindingConfig, IClickBindingConfig, IHoverBindingConfig, IManager, ISize, IUpdates } from "./types";
+import { IAnimate, IAnimationConfig, IBindingConfig, IClickBindingConfig, IHoverBindingConfig, IManager, ISize, IUpdates } from "./types";
 
 export default class SceneManager implements IManager {
 	public sizes: ISize;
@@ -184,18 +184,13 @@ export default class SceneManager implements IManager {
 			this.bindings.click.forEach(binding => {
 				if (this.isMatching(clicked, binding)) {
 					binding.onClick(clicked);
-
-					if (binding.animate) {
-						binding.animate.forEach((animationBinding) => {
-							this.scene.animations.forEach(animation => {
-								if (this.isMatching(animation, animationBinding)) {
-									const action = this.mixer.clipAction(animation);
-									action.loop = animationBinding.loop;
-									action.reset().play();
-								}
-							});
-						});
-					}
+					this.handleBindingAnimation(binding, (animation: AnimationClip, animationBinding: IAnimate) => {
+						const action = this.mixer.clipAction(animation);
+						action.loop = animationBinding.loop;
+						if (!action.isRunning()) {
+							action.reset().play();
+						}
+					});
 				}
 			});
 		}
@@ -216,17 +211,10 @@ export default class SceneManager implements IManager {
 			this.bindings.hover.forEach(binding => {
 				if (this.isMatching(previous, binding)) {
 					binding.onHoverEnd(previous);
-
-					if (binding.animate) {
-						binding.animate.forEach((animationBinding) => {
-							this.scene.animations.forEach(animation => {
-								if (this.isMatching(animation, animationBinding)) {
-									const action = this.mixer.clipAction(animation);
-									action.loop = LoopOnce;
-								}
-							});
-						});
-					}
+					this.handleBindingAnimation(binding, (animation: AnimationClip, animationBinding: IAnimate) => {
+						const action = this.mixer.clipAction(animation);
+						action.loop = LoopOnce;
+					});
 				}
 			});
 		}
@@ -235,18 +223,13 @@ export default class SceneManager implements IManager {
 			this.bindings.hover.forEach(binding => {
 				if (this.isMatching(current, binding)) {
 					binding.onHoverStart(current);
-
-					if (binding.animate) {
-						binding.animate.forEach((animationBinding) => {
-							this.scene.animations.forEach(animation => {
-								if (this.isMatching(animation, animationBinding)) {
-									const action = this.mixer.clipAction(animation);
-									action.loop = animationBinding.loop;
-									action.reset().play();
-								}
-							});
-						});
-					}
+					this.handleBindingAnimation(binding, (animation: AnimationClip, animationBinding: IAnimate) => {
+						const action = this.mixer.clipAction(animation);
+						action.loop = animationBinding.loop;
+						if (!action.isRunning()) {
+							action.reset().play();
+						}
+					});
 				}
 			});
 		}
@@ -275,6 +258,18 @@ export default class SceneManager implements IManager {
 	//
 	// Animation
 	//
+
+	public handleBindingAnimation(binding: IClickBindingConfig | IHoverBindingConfig, callback: (animation: AnimationClip, animationBinding: IAnimate) => void) {
+		if (binding.animate) {
+			binding.animate.forEach((animationBinding) => {
+				this.scene.animations.forEach(animation => {
+					if (this.isMatching(animation, animationBinding)) {
+						callback(animation, animationBinding);
+					}
+				});
+			});
+		}
+	}
 
 	/**
 	 * Function that matches the animation clips to their correct bindings
