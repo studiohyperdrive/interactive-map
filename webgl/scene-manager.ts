@@ -87,7 +87,7 @@ export default class SceneManager implements IManager {
 	//
 
 	/**
-	 * Function used to create the initial Vector2 object for the mouse and keep it in sync. Fires debounced.
+	 * Function used to create the initial Vector2 object for the mouse and keep it in sync.
 	 * 
 	 * @param e OnMouseMove event.
 	 */

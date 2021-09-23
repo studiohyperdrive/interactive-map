@@ -16,12 +16,3 @@ export const onWindowResize = (renderer: WebGLRenderer, camera: PerspectiveCamer
 
     return sizes;
 };
-
-export const debounce = (func: Function, timeout = 50) => {
-    let timer: NodeJS.Timeout;
-
-    return (...args: any) => {
-        clearTimeout(timer);
-        timer = setTimeout(() => { func.apply(this, args); }, timeout);
-    };
-}
