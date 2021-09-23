@@ -1,7 +1,8 @@
 import "../styles/globals.css";
 import "../styles/styles.css";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Provider } from "react-redux";
 
 import { useRouter } from "next/dist/client/router";
 import type { AppProps } from "next/app";
@@ -9,16 +10,17 @@ import type { AppProps } from "next/app";
 import store from "../redux/store";
 
 import WebGL from "../components/webgl/webgl";
+import Tooltip from "../components/tooltip/tooltip";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const router = useRouter();
   const shouldShowMap = (url: string) => { return url === "/" };
 
-  let map = shouldShowMap(router.pathname);
+  const router = useRouter();
+  const [map, setMap] = useState(shouldShowMap(router.pathname));
 
   useEffect(() => {
     const handleStart = (url: string) => {
-      map = shouldShowMap(url);
+      setMap(shouldShowMap(url));
     };
 
     router.events.on("routeChangeStart", handleStart)
@@ -26,18 +28,18 @@ function MyApp({ Component, pageProps }: AppProps) {
     return () => {
       router.events.off("routeChangeStart", handleStart)
     }
-  }, []);
+  }, [router]);
 
-  return map ? (
-    <main>
-      <WebGL three={store.getState().three}/>
-      <Component {...pageProps} />
-    </main>
-  ) : (
-    <main>
-      <Component {...pageProps} />
-    </main>
-  );
+  return (
+    <Provider store={store}>
+      <main>
+        {map && <Tooltip />}
+        {map && <WebGL />}
+
+        <Component {...pageProps} />
+      </main>
+    </Provider>
+  )
 }
 
 export default MyApp

@@ -115,8 +115,7 @@ export default class SceneManager implements IManager {
 			return c instanceof Mesh;
 		}) as Mesh[]);
 
-		// Only keep track of 5 closest intersections to avoid memory overflow
-		this.intersections = this.raycaster.intersectObjects(children).slice(0, 4);
+		this.intersections = this.raycaster.intersectObjects(children);
 	}
 
 	/**
@@ -169,18 +168,18 @@ export default class SceneManager implements IManager {
 			return
 		}
 
-		if (current instanceof Mesh) {
-			this.bindings.hover.forEach(hover => {
-				if (this.isMatching(current, hover)) {
-					hover.onHoverStart(current);
-				}
-			});
-		}
-
 		if (previous instanceof Mesh) {
 			this.bindings.hover.forEach(hover => {
 				if (this.isMatching(previous, hover)) {
 					hover.onHoverEnd(previous);
+				}
+			});
+		}
+
+		if (current instanceof Mesh) {
+			this.bindings.hover.forEach(hover => {
+				if (this.isMatching(current, hover)) {
+					hover.onHoverStart(current);
 				}
 			});
 		}
