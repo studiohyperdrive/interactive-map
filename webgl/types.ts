@@ -1,3 +1,5 @@
+import { AnimationActionLoopStyles } from "three";
+
 export interface ISize {
     width: number;
     height: number;
@@ -25,9 +27,19 @@ export interface IBindingConfig {
 
 export interface IClickBindingConfig extends IBindingConfig{
     onClick: Function,
+    animate?: IAnimate[],
 }
 
 export interface IHoverBindingConfig extends IBindingConfig{
     onHoverStart: Function,
     onHoverEnd: Function,
+    animate?: IAnimate[],
+}
+
+export interface IAnimate extends IBindingConfig {
+    loop: AnimationActionLoopStyles,
+}
+
+export interface IAnimationConfig extends IBindingConfig, IAnimate {
+    startAnimation: Function;
 }

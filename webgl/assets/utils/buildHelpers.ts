@@ -1,4 +1,4 @@
-import { Clock, PerspectiveCamera, Raycaster, Scene, Vector2, Vector3, WebGLRenderer } from "three";
+import { AnimationMixer, Clock, PerspectiveCamera, Raycaster, Scene, Vector2, Vector3, WebGLRenderer } from "three";
 
 import { ISize, IPosition } from "../../types";
 
@@ -40,4 +40,8 @@ export const buildMouse = (e: MouseEvent): Vector2 => {
 
 export const buildRaycaster = (): Raycaster => {
     return new Raycaster();
+}
+
+export const buildAnimationMixer = (scene: Scene): AnimationMixer => {
+    return new AnimationMixer(scene);
 }

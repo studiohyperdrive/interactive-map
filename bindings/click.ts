@@ -1,7 +1,7 @@
 import { NextRouter } from "next/dist/client/router";
 import { Store } from "redux";
 
-import { Mesh } from "three";
+import { Mesh, MeshStandardMaterial, LoopOnce } from "three";
 
 import actions from "../redux/actions";
 
@@ -30,6 +30,23 @@ export default function createClickBindings(store: Store, router: NextRouter) {
                 store.dispatch({ type: actions.dialogs.ring.open });
                 store.dispatch({ type: actions.tooltip.reset });
             }
+        },
+        {
+            name: 'small-house',
+            matching: 'exact',
+            onClick: (mesh: Mesh) => {
+                const material = (mesh.material as MeshStandardMaterial).clone();
+                material.color.setHex(Math.random() * 0xffffff);
+    
+                mesh.material = material;
+            },
+            animate: [
+                {
+                    name: 'small-houseAction',
+                    matching: 'exact',
+                    loop: LoopOnce,
+                }
+            ]
         }
     ] as IClickBindingConfig[]);
 }

@@ -5,6 +5,7 @@ import { useRouter } from "next/dist/client/router";
 import ThreeEntryPoint from "../../webgl/three-entry-point";
 import createClickBindings from "../../bindings/click";
 import createHoverBindings from "../../bindings/hover";
+import animation from '../../bindings/animation';
 
 import actions from "../../redux/actions";
 import store from "../../redux/store";
@@ -24,6 +25,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
             threeRootElement.current,
             createClickBindings(store, router),
             createHoverBindings(store),
+            animation,
           )
         });
       } else {

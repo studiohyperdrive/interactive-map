@@ -9,7 +9,7 @@ export default class InteractiveMap implements IInteractiveMap {
     public loader: GLTFLoader;
     public instance: Group | null = null;
 
-    constructor(scene: Scene, path: string) {
+    constructor(scene: Scene, path: string, onModelLoaded: Function) {
         // Add draco loader
         this.dracoLoader = new DRACOLoader();
         this.dracoLoader.setDecoderPath('decoder/');
@@ -21,7 +21,11 @@ export default class InteractiveMap implements IInteractiveMap {
         // Add map to schene
         this.loader.load(path, (gltf) => {
             this.instance = gltf.scene;
+            
+            scene.animations = gltf.animations;            
             scene.add(gltf.scene);
+
+            onModelLoaded(scene.animations);
         });
     }
 

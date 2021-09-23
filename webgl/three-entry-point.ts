@@ -1,6 +1,6 @@
 import SceneManager from "./scene-manager";
 
-import { IClickBindingConfig, IHoverBindingConfig } from "./types";
+import { IAnimationConfig, IClickBindingConfig, IHoverBindingConfig } from "./types";
 
 export default class ThreeEntryPoint {
 	public canvas;
@@ -12,9 +12,9 @@ export default class ThreeEntryPoint {
 
 	public interactive: boolean = true;
 
-	constructor(canvas: HTMLCanvasElement, click: IClickBindingConfig[] = [], hover: IHoverBindingConfig[] = []) {
+	constructor(canvas: HTMLCanvasElement, click: IClickBindingConfig[] = [], hover: IHoverBindingConfig[] = [], animation: IAnimationConfig[] = []) {
 		this.canvas = canvas;
-		this.manager = new SceneManager(canvas);
+		this.manager = new SceneManager(canvas, animation);
 
 		this.listeners = {
 			onresize: () => {
