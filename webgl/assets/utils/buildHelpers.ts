@@ -43,9 +43,5 @@ export const buildRaycaster = (): Raycaster => {
 }
 
 export const buildAnimationMixer = (scene: Scene): AnimationMixer => {
-    const animationMixer = new AnimationMixer(scene);
-    animationMixer.addEventListener('finished', ({action}) => {
-        action.stop();
-    });
-    return animationMixer;
+    return new AnimationMixer(scene);
 }
