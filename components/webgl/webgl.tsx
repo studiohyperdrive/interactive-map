@@ -1,35 +1,68 @@
-import React, { useEffect, useRef } from 'react';
+import { FC, useEffect, useRef } from "react";
+import { connect } from "react-redux";
+import { useRouter } from "next/dist/client/router";
 
-import ThreeEntryPoint from '../../webgl/three-entry-point';
-import click from '../../bindings/click';
-import hover from '../../bindings/hover';
+import ThreeEntryPoint from "../../webgl/three-entry-point";
+import createClickBindings from "../../bindings/click";
+import createHoverBindings from "../../bindings/hover";
 import animation from '../../bindings/animation';
 
-import { WebGLProps } from './webgl.types';
+import actions from "../../redux/actions";
+import store from "../../redux/store";
 
-const WebGL: React.FC<WebGLProps> = () => {
-	const threeRootElement = useRef<HTMLCanvasElement | null>(null);
+import { WebGLProps } from "./webgl.types";
 
-	useEffect(() => {
-		if (threeRootElement.current) {
-			new ThreeEntryPoint(
-				threeRootElement.current,
-				click,
-				hover,
-				animation,
-			);
-		}
-	}, []);
+const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
+  const threeRootElement = useRef<HTMLCanvasElement | null>(null);
+  const router = useRouter();
 
-	return (
-        <div>
-		    <canvas ref={threeRootElement} />
-            <div className="webgl__rotate-buttons">
-                <div className="webgl__rotate-button" id="webgl__rotate-left">{'<-'}</div>
-                <div className="webgl__rotate-button" id="webgl__rotate-right">{'->'}</div>
-            </div>
-        </div>
-	);
+  useEffect(() => {
+    if (threeRootElement.current) {
+      if (three === undefined) {
+        store.dispatch({
+          type: actions.three.set,
+          payload: new ThreeEntryPoint(
+            threeRootElement.current,
+            createClickBindings(store, router),
+            createHoverBindings(store),
+            animation,
+          )
+        });
+      } else {
+        threeRootElement.current?.replaceWith(three.canvas);
+      }
+    }
+  }, [router, three]);
+
+  if (three) {
+    if (disabled) {
+      three.unbindEventListeners();
+    } else if (!three.interactive) {
+      three.bindEventListeners(three.click, three.hover);
+    }
+  }
+
+  return (
+    <div>
+      <canvas ref={threeRootElement} />
+
+      <div className="webgl__rotate-buttons">
+        <div className="webgl__rotate-button" onClick={() => {
+          const manager = three?.manager;
+          manager?.controls?.handleClickRotateLeft();
+          manager?.update();
+        }}>{"<-"}</div>
+
+        <div className="webgl__rotate-button" onClick={() => {
+          const manager = three?.manager;
+          manager?.controls?.handleClickRotateRight();
+          manager?.update();
+        }}>{"->"}</div>
+      </div>
+    </div>
+  );
 };
 
-export default WebGL;
+export default connect((state: {three?: ThreeEntryPoint}) => {
+  return {three: state.three};
+})(WebGL);

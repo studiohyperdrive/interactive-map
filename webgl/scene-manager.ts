@@ -1,4 +1,4 @@
-import { AnimationClip, AnimationMixer, Clock, Intersection, LoopOnce, Mesh, Object3D, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer } from "three";
+import { AnimationClip, AnimationMixer, Clock, Intersection, LoopOnce, Mesh, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer } from "three";
 
 import { buildScene, buildRenderer, buildCamera, buildClock, buildMouse, buildRaycaster, buildAnimationMixer } from "./assets/utils/buildHelpers";
 import { onWindowResize } from "./assets/utils/eventHelpers";
@@ -28,6 +28,7 @@ export default class SceneManager implements IManager {
 	public mixer: AnimationMixer;
 	public mouse?: Vector2;
 
+	public controls: Controls;
 	public subjects: IUpdates[] = [];
 	public intersections: Intersection[] = [];
 	public hovered: THREE.Mesh | null = null;
@@ -54,6 +55,7 @@ export default class SceneManager implements IManager {
 		this.raycaster = buildRaycaster();
 		this.mixer = buildAnimationMixer(this.scene);
 
+		this.controls = new Controls(this.camera, canvas);
 		this.subjects = this.createSubjects(canvas, this.scene, this.camera, this.animationConfig);
 	}
 
@@ -106,7 +108,7 @@ export default class SceneManager implements IManager {
 		return [
 			new InteractiveMap(scene, "/models/interactive-map_v2.8-draco.glb", (animations: AnimationClip[] = []) => this.onModelLoaded(animations, animationConfig)),
 			new GlobalIllumination(scene),
-			new Controls(camera, canvas),
+			this.controls
 		];
 	}
 
@@ -117,7 +119,7 @@ export default class SceneManager implements IManager {
 	//
 
 	/**
-	 * Function used to create the initial Vector2 object for the mouse and keep it in sync. Fires debounced.
+	 * Function used to create the initial Vector2 object for the mouse and keep it in sync.
 	 * 
 	 * @param e OnMouseMove event.
 	 */
@@ -145,8 +147,7 @@ export default class SceneManager implements IManager {
 			return c instanceof Mesh;
 		}) as Mesh[]);
 
-		// Only keep track of 5 closest intersections to avoid memory overflow
-		this.intersections = this.raycaster.intersectObjects(children).slice(0, 4);
+		this.intersections = this.raycaster.intersectObjects(children);
 	}
 
 	/**
@@ -211,6 +212,25 @@ export default class SceneManager implements IManager {
 			return
 		}
 
+		if (previous instanceof Mesh) {
+			this.bindings.hover.forEach(binding => {
+				if (this.isMatching(previous, binding)) {
+					binding.onHoverEnd(previous);
+
+					if (binding.animate) {
+						binding.animate.forEach((animationBinding) => {
+							this.scene.animations.forEach(animation => {
+								if (this.isMatching(animation, animationBinding)) {
+									const action = this.mixer.clipAction(animation);
+									action.loop = LoopOnce;
+								}
+							});
+						});
+					}
+				}
+			});
+		}
+
 		if (current instanceof Mesh) {
 			this.bindings.hover.forEach(binding => {
 				if (this.isMatching(current, binding)) {
@@ -223,25 +243,6 @@ export default class SceneManager implements IManager {
 									const action = this.mixer.clipAction(animation);
 									action.loop = animationBinding.loop;
 									action.reset().play();
-								}
-							});
-						});
-					}
-				}
-			});
-		}
-
-		if (previous instanceof Mesh) {
-			this.bindings.hover.forEach(binding => {
-				if (this.isMatching(previous, binding)) {
-					binding.onHoverEnd(previous);
-
-					if (binding.animate) {
-						binding.animate.forEach((animationBinding) => {
-							this.scene.animations.forEach(animation => {
-								if (this.isMatching(animation, animationBinding)) {
-									const action = this.mixer.clipAction(animation);
-									action.loop = LoopOnce;
 								}
 							});
 						});
