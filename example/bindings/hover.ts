@@ -1,6 +1,6 @@
 import { IHoverBindingConfig } from "@shd-developer/interactive-map";
-import mutateRandomColor from "@shd-developer/interactive-map/dist/utils/random-color";
-import mutatePlainColor from "@shd-developer/interactive-map/dist/utils/plain-color";
+import { mutateRandomColor } from "@shd-developer/interactive-map/dist/utils/random-color";
+import { mutatePlainColor } from "@shd-developer/interactive-map/dist/utils/plain-color";
 import { Store } from "redux";
 
 import { LoopRepeat, Mesh } from "three";
@@ -24,8 +24,8 @@ export default function createHoverBindings(store: Store) {
         {
             name: 'tower',
             matching: 'exact',
-            onHoverStart: () => {},
-            onHoverEnd: () => {},
+            onHoverStart: () => { },
+            onHoverEnd: () => { },
             animate: [
                 {
                     name: 'penthouseAction',
@@ -37,15 +37,15 @@ export default function createHoverBindings(store: Store) {
         {
             name: 'ring',
             matching: 'partial',
-            onHoverStart: () => {},
-            onHoverEnd: () => {},
+            onHoverStart: () => { },
+            onHoverEnd: () => { },
             animate: [
                 {
                     name: 'roofAction',
                     matching: 'exact',
                     loop: LoopRepeat,
                 },
-                
+
                 {
                     name: 'ringAction.001',
                     matching: 'exact',

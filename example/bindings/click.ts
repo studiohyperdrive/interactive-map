@@ -1,5 +1,5 @@
 import { IClickBindingConfig } from "@shd-developer/interactive-map/dist/types";
-import mutateRandomColor from "@shd-developer/interactive-map/dist/utils/random-color";
+import { mutateRandomColor } from "@shd-developer/interactive-map/dist/utils/random-color";
 import { NextRouter } from "next/dist/client/router";
 import { Store } from "redux";
 
@@ -36,7 +36,7 @@ export default function createClickBindings(store: Store, router: NextRouter) {
             onClick: (mesh: Mesh) => {
                 const material = (mesh.material as MeshStandardMaterial).clone();
                 material.color.setHex(Math.random() * 0xffffff);
-    
+
                 mesh.material = material;
             },
             animate: [

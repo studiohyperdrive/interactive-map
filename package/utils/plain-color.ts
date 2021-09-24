@@ -1,6 +1,6 @@
 import { Mesh, MeshPhysicalMaterial } from "three";
 
-export default function mutatePlainColor (mesh: Mesh): void {
+export const mutatePlainColor = (mesh: Mesh): void => {
     const plain = new MeshPhysicalMaterial({ 
         color: 0xE7E7E7,
         metalness: 0.173,
