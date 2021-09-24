@@ -41,5 +41,26 @@ export interface IAnimate extends IBindingConfig {
 }
 
 export interface IAnimationConfig extends IBindingConfig, IAnimate {
-    startAnimation: Function;
+    startAnimation: Function,
+}
+
+export interface IPerspectiveCameraConfig {
+    fov: number,
+    near: number,
+    far: number,
+    position: IPosition,
+}
+
+export interface IOrthographicCameraConfig {
+    frustumSize: number,
+    near: number,
+    far: number,
+    position: IPosition,
+}
+
+export interface ISceneConfig {
+    camera: {
+        type: "orthographic" | "perspective",
+        config: IOrthographicCameraConfig | IPerspectiveCameraConfig,
+    }
 }

@@ -1,6 +1,6 @@
-import { AnimationMixer, Clock, PerspectiveCamera, Raycaster, Scene, Vector2, Vector3, WebGLRenderer } from "three";
+import { AnimationMixer, Clock, OrthographicCamera, PerspectiveCamera, Raycaster, Scene, Vector2, Vector3, WebGLRenderer } from "three";
 
-import { ISize, IPosition } from "../../types";
+import { ISize, IPosition, IOrthographicCameraConfig, IPerspectiveCameraConfig } from "../../types";
 
 import { calculateCursorX, calculateCursorY } from "./generalHelpers";
 
@@ -16,9 +16,19 @@ export const buildRenderer = (canvas: HTMLCanvasElement, sizes: ISize): WebGLRen
     return renderer;
 };
 
-export const buildCamera = (scene: Scene, sizes: ISize, position: IPosition): PerspectiveCamera => {
-    const camera: PerspectiveCamera = new PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
-    camera.position.set(position.x, position.y, position.z);
+export const buildPerspectiveCamera = (scene: Scene, sizes: ISize, config: IPerspectiveCameraConfig): PerspectiveCamera => {
+    const camera: PerspectiveCamera = new PerspectiveCamera(config.fov, sizes.width / sizes.height, 0.1, 100);
+    camera.position.set(config.position.x, config.position.y, config.position.z);
+    camera.lookAt(new Vector3);
+    scene.add(camera);
+
+    return camera;
+};
+
+export const buildOrthographicCamera = (scene: Scene, sizes: ISize, config: IOrthographicCameraConfig): OrthographicCamera => {
+    const aspectRatio = sizes.width / sizes.height
+    const camera: OrthographicCamera = new OrthographicCamera(config.frustumSize * aspectRatio / - 2, config.frustumSize * aspectRatio / 2, config.frustumSize / 2, config.frustumSize / - 2, config.near, config.far);
+    camera.position.set(config.position.x, config.position.y, config.position.z);
     camera.lookAt(new Vector3);
     scene.add(camera);
 

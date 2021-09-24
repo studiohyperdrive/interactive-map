@@ -1,6 +1,6 @@
-import { AnimationClip, AnimationMixer, Clock, Intersection, LoopOnce, Mesh, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer } from "three";
+import { AnimationClip, AnimationMixer, Camera, Clock, Intersection, LoopOnce, Mesh, OrthographicCamera, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer } from "three";
 
-import { buildScene, buildRenderer, buildCamera, buildClock, buildMouse, buildRaycaster, buildAnimationMixer } from "./assets/utils/buildHelpers";
+import { buildScene, buildRenderer, buildOrthographicCamera, buildClock, buildMouse, buildRaycaster, buildAnimationMixer, buildPerspectiveCamera } from "./assets/utils/buildHelpers";
 import { onWindowResize } from "./assets/utils/eventHelpers";
 import { calculateCursorX, calculateCursorY, getFirstIntersectionObject } from "./assets/utils/generalHelpers";
 import { flattenChildren } from "./assets/utils/gltfHelpers";
@@ -9,10 +9,12 @@ import InteractiveMap from './assets/scene-subjects/interactive-map/interactive-
 import GlobalIllumination from './assets/scene-subjects/global-illumination/global-illumination';
 import Controls from "./assets/scene-subjects/controls/controls";
 
-import { IAnimate, IAnimationConfig, IBindingConfig, IClickBindingConfig, IHoverBindingConfig, IManager, ISize, IUpdates } from "./types";
+import { IAnimate, IAnimationConfig, IBindingConfig, IClickBindingConfig, IHoverBindingConfig, IManager, IOrthographicCameraConfig, IPerspectiveCameraConfig, ISceneConfig, ISize, IUpdates } from "./types";
 
 export default class SceneManager implements IManager {
 	public sizes: ISize;
+
+	public sceneConfig: ISceneConfig;
 
 	public bindings: {
 		click: IClickBindingConfig[],
@@ -23,7 +25,7 @@ export default class SceneManager implements IManager {
 
 	public scene: Scene;
 	public renderer: WebGLRenderer;
-	public camera: PerspectiveCamera;
+	public camera: PerspectiveCamera | OrthographicCamera;
 	public raycaster: Raycaster;
 	public mixer: AnimationMixer;
 	public mouse?: Vector2;
@@ -37,11 +39,13 @@ export default class SceneManager implements IManager {
 	public deltaTime: number;
 	public previousTime: number;
 
-	constructor(canvas: HTMLCanvasElement, animation: IAnimationConfig[] = []) {
+	constructor(canvas: HTMLCanvasElement, sceneConfig: ISceneConfig, animation: IAnimationConfig[] = []) {
 		this.sizes = {
 			width: window.innerWidth,
 			height: window.innerHeight,
 		};
+
+		this.sceneConfig = sceneConfig;
 
 		this.animationConfig = animation;
 
@@ -50,7 +54,9 @@ export default class SceneManager implements IManager {
 
 		this.scene = buildScene();
 		this.renderer = buildRenderer(canvas, this.sizes);
-		this.camera = buildCamera(this.scene, this.sizes, { x: 0, y: 1, z: 3 });
+		this.camera = this.sceneConfig.camera.type === "orthographic" 
+			? buildOrthographicCamera(this.scene, this.sizes, this.sceneConfig.camera.config as IOrthographicCameraConfig) 
+			: buildPerspectiveCamera(this.scene, this.sizes, this.sceneConfig.camera.config as IPerspectiveCameraConfig);
 		this.clock = buildClock();
 		this.raycaster = buildRaycaster();
 		this.mixer = buildAnimationMixer(this.scene);
@@ -86,7 +92,7 @@ export default class SceneManager implements IManager {
 	 * Callback function responsible for keeping the sizes object up-to-date.
 	 */
 	public onWindowResizeCallback(): void {
-		this.sizes = onWindowResize(this.renderer, this.camera);
+		this.sizes = onWindowResize(this.renderer, this.camera, this.sceneConfig.camera.config);
 	}
 
 	/**
@@ -104,7 +110,7 @@ export default class SceneManager implements IManager {
 	 * @param scene scene object the subjects will be created in
 	 * @returns an array of subjects that have update functions
 	 */
-	public createSubjects(canvas: HTMLCanvasElement, scene: Scene, camera: PerspectiveCamera, animationConfig: IAnimationConfig[]): IUpdates[] {
+	public createSubjects(canvas: HTMLCanvasElement, scene: Scene, camera: Camera, animationConfig: IAnimationConfig[]): IUpdates[] {
 		return [
 			new InteractiveMap(scene, "/models/interactive-map_v2.8-draco.glb", (animations: AnimationClip[] = []) => this.onModelLoaded(animations, animationConfig)),
 			new GlobalIllumination(scene),
