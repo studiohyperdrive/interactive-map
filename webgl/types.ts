@@ -58,9 +58,10 @@ export interface IOrthographicCameraConfig {
     position: IPosition,
 }
 
+export interface ICameraConfig {
+    type: "orthographic" | "perspective",
+    config: IOrthographicCameraConfig | IPerspectiveCameraConfig,
+}
 export interface ISceneConfig {
-    camera: {
-        type: "orthographic" | "perspective",
-        config: IOrthographicCameraConfig | IPerspectiveCameraConfig,
-    }
+    camera: ICameraConfig,
 }
