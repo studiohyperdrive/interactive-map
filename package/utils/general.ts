@@ -18,7 +18,7 @@ export const visibleWidthAtZDepth = (depth: number, camera: PerspectiveCamera): 
     return height * camera.aspect;
 };
 
-export const rotateArountPoint = ( obj: THREE.Object3D, point: THREE.Vector3, axis: THREE.Vector3, theta: number, pointIsWorld: boolean = false ): void => {
+export const rotateAroundPoint = ( obj: THREE.Object3D, point: THREE.Vector3, axis: THREE.Vector3, theta: number, pointIsWorld: boolean = false ): void => {
     // compensate for world coordinate
     if(pointIsWorld && obj.parent) {
         obj.parent.localToWorld(obj.position);

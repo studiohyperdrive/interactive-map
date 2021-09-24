@@ -1,7 +1,7 @@
 import { Camera, Vector3 } from 'three';
 import { MapControls } from 'three/examples/jsm/controls/OrbitControls';
 
-import { rotateArountPoint } from '../../utils/general';
+import { rotateAroundPoint } from '../../utils/general';
 import IControls from './controls.types';
 
 export default class Controls implements IControls {
@@ -22,7 +22,7 @@ export default class Controls implements IControls {
 
         // Add damping to rotation
         this.mapControls.enabled = false;
-        rotateArountPoint(this.camera, this.mapControls.target, new Vector3(0, 1, 0), this.rotationDelta);
+        rotateAroundPoint(this.camera, this.mapControls.target, new Vector3(0, 1, 0), this.rotationDelta);
         this.rotationDelta *= (1 - 0.05);
         this.mapControls.enabled = true;
     };
