@@ -10,8 +10,12 @@ import GlobalIllumination from './subjects/global-illumination/global-illuminati
 import Controls from "./subjects/controls/controls";
 
 import { IAnimate, IAnimationConfig, IBindingConfig, IClickBindingConfig, IHoverBindingConfig, IManager, ISize, IUpdates } from "./types";
+import DataStore from "./data-store/data-store";
+import { IScenePlugin, ISceneProps } from "@shd-developer/interactive-map/dist/types";
 
 export default class SceneManager implements IManager {
+	public plugins: IScenePlugin[];
+
 	public sizes: ISize;
 
 	public bindings: {
@@ -21,6 +25,7 @@ export default class SceneManager implements IManager {
 
 	public animationConfig: IAnimationConfig[];
 
+	public sceneProps: ISceneProps
 	public scene: Scene;
 	public renderer: WebGLRenderer;
 	public camera: PerspectiveCamera;
@@ -37,26 +42,35 @@ export default class SceneManager implements IManager {
 	public deltaTime: number;
 	public previousTime: number;
 
-	constructor(canvas: HTMLCanvasElement, animation: IAnimationConfig[] = []) {
+	constructor(canvas: HTMLCanvasElement, animation: IAnimationConfig[] = [], dataStore: DataStore, plugins: IScenePlugin[]) {
 		this.sizes = {
 			width: window.innerWidth,
 			height: window.innerHeight,
 		};
-
+		
 		this.animationConfig = animation;
-
+		
 		this.deltaTime = 0;
 		this.previousTime = 0;
-
+		
 		this.scene = buildScene();
 		this.renderer = buildRenderer(canvas, this.sizes);
 		this.camera = buildCamera(this.scene, this.sizes, { x: 0, y: 1, z: 3 });
+		
+		this.sceneProps = {
+			scene: this.scene,
+			renderer: this.renderer,
+			camera: this.camera,
+		}
+		
 		this.clock = buildClock();
 		this.raycaster = buildRaycaster();
 		this.mixer = buildAnimationMixer(this.scene);
-
+		
 		this.controls = new Controls(this.camera, canvas);
 		this.subjects = this.createSubjects(canvas, this.scene, this.camera, this.animationConfig);
+		
+		this.plugins = plugins.map(Plugin => new Plugin(dataStore, this.sceneProps));
 	}
 
 	//
@@ -80,6 +94,10 @@ export default class SceneManager implements IManager {
 		}
 
 		this.renderer.render(this.scene, this.camera);
+
+		this.plugins.forEach(plugin => {
+			plugin.update();
+		});
 	}
 
 	/**

@@ -1,8 +1,13 @@
 import SceneManager from "./scene-manager";
+import DataStore from "./data-store/data-store";
 
 import { IAnimationConfig, IClickBindingConfig, IHoverBindingConfig } from "./types";
+import { IEventPlugin, IScenePlugin } from "@shd-developer/interactive-map/dist/types";
 
 export default class ThreeEntryPoint {
+	public plugins: IEventPlugin[];
+	public dataStore: DataStore;
+
 	public canvas;
 	public manager;
 
@@ -12,9 +17,12 @@ export default class ThreeEntryPoint {
 
 	public interactive: boolean = true;
 
-	constructor(canvas: HTMLCanvasElement, click: IClickBindingConfig[] = [], hover: IHoverBindingConfig[] = [], animation: IAnimationConfig[] = []) {
+	constructor(canvas: HTMLCanvasElement, click: IClickBindingConfig[] = [], hover: IHoverBindingConfig[] = [], animation: IAnimationConfig[] = [], plugins: IEventPlugin[], dataStore: DataStore, scenePlugins: IScenePlugin[]) {
+		this.plugins = plugins.map(Plugin => new Plugin(dataStore));
+		this.dataStore = dataStore;
+
 		this.canvas = canvas;
-		this.manager = new SceneManager(canvas, animation);
+		this.manager = new SceneManager(canvas, animation, dataStore, scenePlugins);
 
 		this.listeners = {
 			onresize: () => {
@@ -25,11 +33,11 @@ export default class ThreeEntryPoint {
 				this.manager.updateIntersections();
 				this.manager.handleHover(e);
 			},
-			onclick: (e: MouseEvent) => {
-				this.manager.updateMouse(e);
-				this.manager.updateIntersections();
-				this.manager.handleClick(e);
-			}
+			// onclick: (e: MouseEvent) => {
+			// 	this.manager.updateMouse(e);
+			// 	this.manager.updateIntersections();
+			// 	this.manager.handleClick(e);
+			// }
 		}
 
 		this.click = click;
@@ -42,7 +50,7 @@ export default class ThreeEntryPoint {
 	public bindEventListeners(click: IClickBindingConfig[], hover: IHoverBindingConfig[]): void {
 		window.addEventListener("resize", this.listeners.onresize);
 		window.addEventListener("mousemove", this.listeners.onmousemove);
-		window.addEventListener("click", this.listeners.onclick);
+		// window.addEventListener("click", this.listeners.onclick);
 
 		this.manager.setClickBindings(click);
 		this.manager.setHoverBindings(hover);
@@ -50,12 +58,16 @@ export default class ThreeEntryPoint {
 		this.resizeCanvas();
 
 		this.interactive = true;
+
+		this.plugins.forEach(plugin => {			
+			plugin.bindEventListener();
+		});
 	}
 
 	public unbindEventListeners(): void {
 		window.removeEventListener("resize", this.listeners.onresize);
 		window.removeEventListener("mousemove", this.listeners.onmousemove);
-		window.removeEventListener("click", this.listeners.onclick);
+		// window.removeEventListener("click", this.listeners.onclick);
 
 		this.manager.setClickBindings([]);
 		this.manager.setHoverBindings([]);
@@ -63,6 +75,10 @@ export default class ThreeEntryPoint {
 		this.resizeCanvas();
 
 		this.interactive = false;
+
+		this.plugins.forEach(plugin => {
+			plugin.unbindEventListener();
+		});
 	}
 
 	public resizeCanvas(): void {

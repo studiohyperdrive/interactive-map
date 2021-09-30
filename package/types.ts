@@ -1,4 +1,4 @@
-import { AnimationActionLoopStyles } from "three";
+import { AnimationActionLoopStyles, Camera, Renderer, Scene } from "three";
 
 export interface ISize {
     width: number;
@@ -42,4 +42,20 @@ export interface IAnimate extends IBindingConfig {
 
 export interface IAnimationConfig extends IBindingConfig, IAnimate {
     startAnimation: Function;
+}
+
+// POC types
+export interface IEventPlugin {
+    bindEventListener: () => void,
+    unbindEventListener: () => void,
+}
+
+export interface IScenePlugin {
+    update: () => void,
+}
+
+export interface ISceneProps {
+    scene: Scene,
+    renderer: Renderer,
+    camera: Camera,
 }

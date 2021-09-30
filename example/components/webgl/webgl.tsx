@@ -11,6 +11,10 @@ import store from "../../redux/store";
 
 import { WebGLProps } from "./webgl.types";
 import ThreeEntryPoint from "@shd-developer/interactive-map/dist/three-entry-point";
+import DataStore from "@shd-developer/interactive-map/dist/data-store/data-store";
+import ClickPlugin from "@shd-developer/interactive-map/dist/plugins/click-plugin/click-plugin";
+import MousePositionPlugin from "@shd-developer/interactive-map/dist/plugins/mouse-position-plugin/mouse-position-plugin";
+import RaycasterPlugin from "@shd-developer/interactive-map/dist/plugins/raycaster-plugin/raycaster-plugin";
 
 const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   const threeRootElement = useRef<HTMLCanvasElement | null>(null);
@@ -26,6 +30,15 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
             createClickBindings(store, router),
             createHoverBindings(store),
             animation,
+            [new ClickPlugin(
+              createClickBindings(store, router),
+              'click',
+            )],
+            new DataStore(),
+            [
+              new MousePositionPlugin,
+              new RaycasterPlugin,
+            ],
           )
         });
       } else {
