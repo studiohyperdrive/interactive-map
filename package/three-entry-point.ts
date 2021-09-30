@@ -27,16 +27,6 @@ export default class ThreeEntryPoint {
 			onresize: () => {
 				this.resizeCanvas()
 			},
-			// onmousemove: (e: MouseEvent) => {
-			// 	this.manager.updateMouse(e);
-			// 	this.manager.updateIntersections();
-			// 	this.manager.handleHover(e);
-			// },
-			// onclick: (e: MouseEvent) => {
-			// 	this.manager.updateMouse(e);
-			// 	this.manager.updateIntersections();
-			// 	this.manager.handleClick(e);
-			// }
 		}
 
 		this.click = click;
@@ -48,11 +38,6 @@ export default class ThreeEntryPoint {
 
 	public bindEventListeners(click: IClickBindingConfig[], hover: IHoverBindingConfig[]): void {
 		window.addEventListener("resize", this.listeners.onresize);
-		// window.addEventListener("mousemove", this.listeners.onmousemove);
-		// window.addEventListener("click", this.listeners.onclick);
-
-		this.manager.setClickBindings(click);
-		this.manager.setHoverBindings(hover);
 
 		this.resizeCanvas();
 
@@ -65,11 +50,6 @@ export default class ThreeEntryPoint {
 
 	public unbindEventListeners(): void {
 		window.removeEventListener("resize", this.listeners.onresize);
-		// window.removeEventListener("mousemove", this.listeners.onmousemove);
-		// window.removeEventListener("click", this.listeners.onclick);
-
-		this.manager.setClickBindings([]);
-		this.manager.setHoverBindings([]);
 
 		this.resizeCanvas();
 

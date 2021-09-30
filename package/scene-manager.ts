@@ -17,14 +17,10 @@ export default class SceneManager implements IManager {
 
 	public sizes: ISize;
 
-	public bindings: {
-		click: IClickBindingConfig[],
-		hover: IHoverBindingConfig[],
-	} = { click: [], hover: [] };
-
 	public animationConfig: IAnimationConfig[];
 
 	public sceneProps: ISceneProps
+
 	public scene: Scene;
 	public renderer: WebGLRenderer;
 	public camera: PerspectiveCamera;
@@ -34,8 +30,6 @@ export default class SceneManager implements IManager {
 
 	public controls: Controls;
 	public subjects: IUpdates[] = [];
-	public intersections: Intersection[] = [];
-	public hovered: Mesh | null = null;
 	
 	public clock: Clock;
 	public deltaTime: number;
@@ -129,44 +123,6 @@ export default class SceneManager implements IManager {
 		];
 	}
 
-
-
-	//
-	// Click and hover Events
-	//
-
-	/**
-	 * Function used to create the initial Vector2 object for the mouse and keep it in sync.
-	 * 
-	 * @param e OnMouseMove event.
-	 */
-	public updateMouse(e: MouseEvent): void {
-		if (this.mouse === undefined) {
-			this.mouse = buildMouse(e);
-		} else {
-			this.mouse.x = calculateCursorX(e);
-			this.mouse.y = calculateCursorY(e);
-		}
-	}
-
-	/**
-	 * Function used to instruct the raycaster to update the list of intersecting objects.
-	 * Intersections are only tracked if they"re a Mesh and have a corresponding binding.
-	 */
-	public updateIntersections(): void {
-		if (this.mouse === undefined) {
-			return
-		};
-
-		this.raycaster.setFromCamera(this.mouse, this.camera);
-
-		const children = (flattenChildren(this.scene.children).filter(c => {
-			return c instanceof Mesh;
-		}) as Mesh[]);
-
-		this.intersections = this.raycaster.intersectObjects(children);
-	}
-
 	/**
 	 * Function containing matching rules for click bindings, vaguely similar to QuerySelector.
 	 * 
@@ -185,108 +141,9 @@ export default class SceneManager implements IManager {
 		}
 	}
 
-	/**
-	 * Function firing the onClick handlers defined in the click bindings.
-	 * 
-	 * @param e event fired by DOM.
-	 */
-	public handleClick(e: MouseEvent): void {
-		if (!getFirstIntersectionObject(this.intersections)) {
-			return
-		};
-
-		const clicked = getFirstIntersectionObject(this.intersections);
-
-		if (clicked instanceof Mesh) {
-			this.bindings.click.forEach(binding => {
-				if (this.isMatching(clicked, binding)) {
-					binding.onClick(clicked);
-					this.handleBindingAnimation(binding, (animation: AnimationClip, animationBinding: IAnimate) => {
-						const action = this.mixer.clipAction(animation);
-						action.loop = animationBinding.loop;
-						if (!action.isRunning()) {
-							action.reset().play();
-						}
-					});
-				}
-			});
-		}
-	}
-
-	/**
-	 * Function that updates every frame and fires the onHover handlers defined in the hover bindings
-	 */
-	public handleHover(e: MouseEvent): void {
-		const previous = this.hovered;
-		const current = getFirstIntersectionObject(this.intersections);
-
-		if (previous === current) {
-			return
-		}
-
-		if (previous instanceof Mesh) {
-			this.bindings.hover.forEach(binding => {
-				if (this.isMatching(previous, binding)) {
-					binding.onHoverEnd(previous);
-					this.handleBindingAnimation(binding, (animation: AnimationClip, animationBinding: IAnimate) => {
-						const action = this.mixer.clipAction(animation);
-						action.loop = LoopOnce;
-					});
-				}
-			});
-		}
-
-		if (current instanceof Mesh) {
-			this.bindings.hover.forEach(binding => {
-				if (this.isMatching(current, binding)) {
-					binding.onHoverStart(current);
-					this.handleBindingAnimation(binding, (animation: AnimationClip, animationBinding: IAnimate) => {
-						const action = this.mixer.clipAction(animation);
-						action.loop = animationBinding.loop;
-						if (!action.isRunning()) {
-							action.reset().play();
-						}
-					});
-				}
-			});
-		}
-
-		this.hovered = (current as Mesh);
-	}
-
-	/**
-	 * Register click bindings for the managed scene
-	 * 
-	 * @param bindings The bindings that should be accounted for during render cycles.
-	 */
-	public setClickBindings(bindings: IClickBindingConfig[]) {
-		this.bindings.click = bindings;
-	}
-
-	/**
-	 * Register hover bindings for the managed scene
-	 * 
-	 * @param bindings The bindings that should be accounted for during render cycles.
-	 */
-	public setHoverBindings(bindings: IHoverBindingConfig[]) {
-		this.bindings.hover = bindings;
-	}
-
 	//
 	// Animation
 	//
-
-	public handleBindingAnimation(binding: IClickBindingConfig | IHoverBindingConfig, callback: (animation: AnimationClip, animationBinding: IAnimate) => void) {
-		if (binding.animate) {
-			binding.animate.forEach((animationBinding) => {
-				this.scene.animations.forEach(animation => {
-					if (this.isMatching(animation, animationBinding)) {
-						callback(animation, animationBinding);
-					}
-				});
-			});
-		}
-	}
 
 	/**
 	 * Function that matches the animation clips to their correct bindings
