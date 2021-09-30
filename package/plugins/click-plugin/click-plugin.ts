@@ -3,11 +3,13 @@ import { IClickBindingConfig } from "../../types";
 import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
 import { IClickPlugin } from "./click-plugin.types";
+import { IBindingConfig } from "../..";
 
 export default class ClickPlugin {
     constructor(bindings: IClickBindingConfig[], type: string) {
         return class implements IClickPlugin{
             private dataStore: IDataStore;
+
             constructor(dataStore: DataStore) {
                 this.dataStore = dataStore;
                 this.dataStore.set(`${type}Bindings`, bindings);
@@ -39,7 +41,7 @@ export default class ClickPlugin {
             }
 
             // Utils?
-            public isMatching(item: {name: string}, binding: IClickBindingConfig): boolean {
+            public isMatching(item: {name: string}, binding: IBindingConfig): boolean {
                 switch (binding.matching) {
                     case "partial":
                         return item.name.indexOf(binding.name) > -1;
