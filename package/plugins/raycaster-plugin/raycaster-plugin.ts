@@ -3,10 +3,10 @@ import { ISceneProps } from "../../types";
 import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
 import { flattenChildren } from "../../utils";
-import { IRacasterPlugin } from "./raycaster-plugin.types";
+import { IRacasterPlugin, IRaycasterConfig } from "./raycaster-plugin.types";
 
 export default class RaycasterPlugin {
-    constructor() {
+    constructor(config: IRaycasterConfig) {
         return class implements IRacasterPlugin {
             private dataStore: IDataStore;
             public sceneProps: ISceneProps;
@@ -18,7 +18,7 @@ export default class RaycasterPlugin {
                 this.raycaster = new Raycaster();
 
                 // This should come from config
-                window.addEventListener('click', this.handleClick);
+                window.addEventListener(config.trigger, this.handleClick);
             }
 
             public handleClick = () => {

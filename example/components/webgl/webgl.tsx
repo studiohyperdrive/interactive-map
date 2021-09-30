@@ -37,7 +37,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
             new DataStore(),
             [
               new MousePositionPlugin,
-              new RaycasterPlugin,
+              new RaycasterPlugin({trigger: "click"}),
             ],
           )
         });

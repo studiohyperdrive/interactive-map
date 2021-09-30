@@ -6,3 +6,7 @@ export interface IRacasterPlugin extends IScenePlugin {
     raycaster: Raycaster,
     handleClick: () => void,
 }
+
+export interface IRaycasterConfig {
+    trigger: "click" | "mousemove",
+}
