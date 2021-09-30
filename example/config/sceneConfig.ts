@@ -1,18 +1,18 @@
-import {MOUSE, TOUCH, Vector3 } from 'three';
+import { MOUSE, TOUCH, Vector3 } from 'three';
 
-import { ISceneConfig } from "../webgl/types";
+import { ISceneConfig } from '@shd-developer/interactive-map';
 
 export default {
     camera: {
         type: 'orthographic',
         config: {
-        frustumSize: 2, 
-        near: 0.0001, 
-        far: 5, 
-        position: 
+            frustumSize: 2,
+            near: 0.0001,
+            far: 5,
+            position:
             {
-                x: 2, 
-                y: 2, 
+                x: 2,
+                y: 2,
                 z: 2
             }
         }
