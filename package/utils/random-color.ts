@@ -1,4 +1,4 @@
-import { Mesh, Color, MeshStandardMaterial } from "three";
+import { Mesh, MeshStandardMaterial } from "three";
 
 export const mutateRandomColor = (mesh: Mesh): void => {
     const material = (mesh.material as MeshStandardMaterial).clone();    
