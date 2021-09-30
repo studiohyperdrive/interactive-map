@@ -113,6 +113,7 @@ export interface ICameraConfig {
     config: IOrthographicCameraConfig | IPerspectiveCameraConfig,
 }
 export interface ISceneConfig {
+    map: string,
     camera: ICameraConfig,
     controls: ISceneControlsConfig,
 }

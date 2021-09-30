@@ -3,8 +3,9 @@ import { MOUSE, TOUCH, Vector3 } from 'three';
 import { ISceneConfig } from '@shd-developer/interactive-map';
 
 export default {
+    map: "/models/interactive-map_v2.8-draco.glb",
     camera: {
-        type: 'orthographic',
+        type: "orthographic",
         config: {
             frustumSize: 2,
             near: 0.0001,
