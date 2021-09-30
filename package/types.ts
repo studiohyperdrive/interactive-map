@@ -1,4 +1,4 @@
-import { AnimationActionLoopStyles } from "three";
+import { AnimationActionLoopStyles, MOUSE, TOUCH, Vector3 } from "three";
 
 export interface ISize {
     width: number;
@@ -58,6 +58,56 @@ export interface IOrthographicCameraConfig {
     position: IPosition,
 }
 
+export interface IControlsMouseButtons {
+    LEFT: MOUSE,
+    MIDDLE: MOUSE,
+    RIGHT: MOUSE,
+}
+
+export interface IControlsTouches {
+    ONE: TOUCH,
+    TWO: TOUCH,
+}
+
+export interface IControlsRotationLimits {
+    minPolarAngle: number,
+    maxPolarAngle: number,
+    minAzimuthAngle: number,
+    maxAzimuthAngle: number,
+}
+
+export interface IControlsPanLimits {
+    minPan: Vector3,
+    maxPan: Vector3,
+}
+
+export interface IControlsDistanceLimits {
+    minDistance: number,
+    maxDistance: number,
+}
+
+export interface IControlsZoomLimits {
+    minZoom: number,
+    maxZoom: number,
+}
+
+export interface ISceneControlsConfig {
+    enableDamping?: boolean,
+    enableRotate?: boolean,
+    enablePan?: boolean,
+    enableZoom?: boolean,
+    dampingFactor?: number,
+    rotateSpeed?: number,
+    panSpeed?: number,
+    zoomSpeed?: number,
+    mouseButtons?: IControlsMouseButtons,
+    touches?: IControlsTouches,
+    rotationLimits?: IControlsRotationLimits,
+    panLimits?: IControlsPanLimits
+    distanceLimits?: IControlsDistanceLimits,
+    zoomLimits?: IControlsZoomLimits,
+}
+
 export interface ICameraConfig {
     type: "orthographic" | "perspective",
     config: IOrthographicCameraConfig | IPerspectiveCameraConfig,
@@ -65,4 +115,5 @@ export interface ICameraConfig {
 export interface ISceneConfig {
     map: string,
     camera: ICameraConfig,
+    controls: ISceneControlsConfig,
 }

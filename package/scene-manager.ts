@@ -61,7 +61,7 @@ export default class SceneManager implements IManager {
 		this.raycaster = buildRaycaster();
 		this.mixer = buildAnimationMixer(this.scene);
 
-		this.controls = new Controls(this.camera, canvas);
+		this.controls = new Controls(this.camera, canvas, this.sceneConfig.controls);
 		this.subjects = this.createSubjects(canvas, this.scene, this.camera, this.animationConfig);
 	}
 
