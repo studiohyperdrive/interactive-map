@@ -9,12 +9,11 @@ import InteractiveMap from './subjects/interactive-map/interactive-map';
 import GlobalIllumination from './subjects/global-illumination/global-illumination';
 import Controls from "./subjects/controls/controls";
 
-import { IAnimate, IAnimationConfig, IBindingConfig, IClickBindingConfig, IHoverBindingConfig, IManager, ISize, IUpdates } from "./types";
+import { IAnimate, IAnimationConfig, IBindingConfig, IClickBindingConfig, IHoverBindingConfig, IManager, ISize, IUpdates, IScenePlugin, ISceneProps } from "./types";
 import DataStore from "./data-store/data-store";
-import { IScenePlugin, ISceneProps } from "@shd-developer/interactive-map/dist/types";
 
 export default class SceneManager implements IManager {
-	public plugins: IScenePlugin[];
+	public plugins: any[];
 
 	public sizes: ISize;
 
@@ -42,7 +41,7 @@ export default class SceneManager implements IManager {
 	public deltaTime: number;
 	public previousTime: number;
 
-	constructor(canvas: HTMLCanvasElement, animation: IAnimationConfig[] = [], dataStore: DataStore, plugins: IScenePlugin[]) {
+	constructor(canvas: HTMLCanvasElement, animation: IAnimationConfig[] = [], dataStore: DataStore, plugins: any[]) {
 		this.sizes = {
 			width: window.innerWidth,
 			height: window.innerHeight,

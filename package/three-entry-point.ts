@@ -1,11 +1,10 @@
 import SceneManager from "./scene-manager";
 import DataStore from "./data-store/data-store";
 
-import { IAnimationConfig, IClickBindingConfig, IHoverBindingConfig } from "./types";
-import { IEventPlugin, IScenePlugin } from "@shd-developer/interactive-map/dist/types";
+import { IAnimationConfig, IClickBindingConfig, IHoverBindingConfig, IEventPlugin, IScenePlugin } from "./types";
 
 export default class ThreeEntryPoint {
-	public plugins: IEventPlugin[];
+	public plugins: any[];
 	public dataStore: DataStore;
 
 	public canvas;
@@ -17,7 +16,7 @@ export default class ThreeEntryPoint {
 
 	public interactive: boolean = true;
 
-	constructor(canvas: HTMLCanvasElement, click: IClickBindingConfig[] = [], hover: IHoverBindingConfig[] = [], animation: IAnimationConfig[] = [], plugins: IEventPlugin[], dataStore: DataStore, scenePlugins: IScenePlugin[]) {
+	constructor(canvas: HTMLCanvasElement, click: IClickBindingConfig[] = [], hover: IHoverBindingConfig[] = [], animation: IAnimationConfig[] = [], plugins: any[], dataStore: DataStore, scenePlugins: any[]) {
 		this.plugins = plugins.map(Plugin => new Plugin(dataStore));
 		this.dataStore = dataStore;
 
