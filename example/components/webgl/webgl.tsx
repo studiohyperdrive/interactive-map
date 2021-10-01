@@ -63,7 +63,9 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
 
   return (
     <div>
-      <canvas ref={threeRootElement} />
+      {/* <div className="im__webgl--container"> */}
+        <canvas ref={threeRootElement} />
+      {/* </div> */}
 
       <div className="webgl__rotate-buttons">
         <div className="webgl__rotate-button" onClick={() => {

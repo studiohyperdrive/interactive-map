@@ -1,15 +1,13 @@
-import { AnimationClip, AnimationMixer, Clock, Intersection, LoopOnce, Mesh, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer } from "three";
+import { AnimationClip, AnimationMixer, Clock, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer } from "three";
 
-import { buildScene, buildRenderer, buildCamera, buildClock, buildMouse, buildRaycaster, buildAnimationMixer } from "./utils/build";
+import { buildScene, buildRenderer, buildCamera, buildClock, buildRaycaster, buildAnimationMixer } from "./utils/build";
 import { onWindowResize } from "./utils/event";
-import { calculateCursorX, calculateCursorY, getFirstIntersectionObject } from "./utils/general";
-import { flattenChildren } from "./utils/gltf";
 
 import InteractiveMap from './subjects/interactive-map/interactive-map';
 import GlobalIllumination from './subjects/global-illumination/global-illumination';
 import Controls from "./subjects/controls/controls";
 
-import { IAnimate, IAnimationConfig, IBindingConfig, IClickBindingConfig, IHoverBindingConfig, IManager, ISize, IUpdates, IScenePlugin, ISceneProps } from "./types";
+import { IAnimationConfig, IBindingConfig, IManager, ISize, IUpdates, ISceneProps } from "./types";
 import DataStore from "./data-store/data-store";
 
 export default class SceneManager implements IManager {
@@ -51,6 +49,7 @@ export default class SceneManager implements IManager {
 		this.camera = buildCamera(this.scene, this.sizes, { x: 0, y: 1, z: 3 });
 		
 		this.sceneProps = {
+			canvas: canvas,
 			scene: this.scene,
 			renderer: this.renderer,
 			camera: this.camera,
@@ -97,7 +96,7 @@ export default class SceneManager implements IManager {
 	 * Callback function responsible for keeping the sizes object up-to-date.
 	 */
 	public onWindowResizeCallback(): void {
-		this.sizes = onWindowResize(this.renderer, this.camera);
+		this.sizes = onWindowResize(this.sceneProps.renderer, this.sceneProps.camera);
 	}
 
 	/**
