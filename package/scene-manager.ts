@@ -7,17 +7,16 @@ import InteractiveMap from './subjects/interactive-map/interactive-map';
 import GlobalIllumination from './subjects/global-illumination/global-illumination';
 import Controls from "./subjects/controls/controls";
 
-import { IAnimationConfig, IBindingConfig, IManager, ISize, IUpdates, ISceneProps } from "./types";
+import { IAnimationConfig, IBindingConfig, IManager, ISize, IUpdates } from "./types";
 import DataStore from "./data-store/data-store";
 
 export default class SceneManager implements IManager {
+	private dataStore: DataStore;
 	public plugins: any[];
 
 	public sizes: ISize;
 
 	public animationConfig: IAnimationConfig[];
-
-	public sceneProps: ISceneProps
 
 	public scene: Scene;
 	public renderer: WebGLRenderer;
@@ -34,6 +33,8 @@ export default class SceneManager implements IManager {
 	public previousTime: number;
 
 	constructor(canvas: HTMLCanvasElement, animation: IAnimationConfig[] = [], dataStore: DataStore, plugins: any[]) {
+		this.dataStore = dataStore;
+
 		this.sizes = {
 			width: window.innerWidth,
 			height: window.innerHeight,
@@ -48,21 +49,18 @@ export default class SceneManager implements IManager {
 		this.renderer = buildRenderer(canvas, this.sizes);
 		this.camera = buildCamera(this.scene, this.sizes, { x: 0, y: 1, z: 3 });
 		
-		this.sceneProps = {
-			canvas: canvas,
-			scene: this.scene,
-			renderer: this.renderer,
-			camera: this.camera,
-		}
-		
 		this.clock = buildClock();
 		this.raycaster = buildRaycaster();
 		this.mixer = buildAnimationMixer(this.scene);
 		
 		this.controls = new Controls(this.camera, canvas);
 		this.subjects = this.createSubjects(canvas, this.scene, this.camera, this.animationConfig);
+
+		dataStore.set("scene", this.scene);
+		dataStore.set("renderer", this.renderer);
+		dataStore.set("camera", this.camera);
 		
-		this.plugins = plugins.map(Plugin => new Plugin(dataStore, this.sceneProps));
+		this.plugins = plugins.map(Plugin => new Plugin(dataStore));
 	}
 
 	//
@@ -96,7 +94,7 @@ export default class SceneManager implements IManager {
 	 * Callback function responsible for keeping the sizes object up-to-date.
 	 */
 	public onWindowResizeCallback(): void {
-		this.sizes = onWindowResize(this.sceneProps.renderer, this.sceneProps.camera);
+		this.sizes = onWindowResize(this.renderer, this.camera);
 	}
 
 	/**

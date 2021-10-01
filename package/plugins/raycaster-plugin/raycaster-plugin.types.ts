@@ -1,9 +1,10 @@
-import { Raycaster } from "three";
-import { IScenePlugin, ISceneProps } from "../../types";
+import { Camera, Raycaster, Scene } from "three";
+import { IScenePlugin } from "../../types";
 
 export interface IRacasterPlugin extends IScenePlugin {
-    sceneProps: ISceneProps,
     raycaster: Raycaster,
+    camera: Camera,
+    scene: Scene,
     handleClick: () => void,
 }
 

@@ -1,4 +1,4 @@
-import { AnimationActionLoopStyles, Camera, Renderer, Scene } from "three";
+import { AnimationActionLoopStyles } from "three";
 
 export interface ISize {
     width: number;
@@ -52,10 +52,4 @@ export interface IEventPlugin {
 
 export interface IScenePlugin {
     update: () => void,
-}
-
-export interface ISceneProps {
-    scene: Scene,
-    renderer: Renderer,
-    camera: Camera,
 }

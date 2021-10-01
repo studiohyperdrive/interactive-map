@@ -1,5 +1,4 @@
-import { Mesh, Raycaster } from "three";
-import { ISceneProps } from "../../types";
+import { Camera, Mesh, Raycaster, Scene } from "three";
 import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
 import { flattenChildren } from "../../utils";
@@ -9,15 +8,18 @@ export default class RaycasterPlugin {
     constructor(config: IRaycasterConfig) {
         return class implements IRacasterPlugin {
             private dataStore: IDataStore;
-            public sceneProps: ISceneProps;
-            public raycaster: Raycaster;
 
-            constructor(dataStore: DataStore, sceneProps: any) {
+            public raycaster: Raycaster;
+            public camera: Camera;
+            public scene: Scene;
+
+            constructor(dataStore: DataStore) {
                 this.dataStore = dataStore;
-                this.sceneProps = sceneProps;
                 this.raycaster = new Raycaster();
 
-                // This should come from config
+                this.camera = dataStore.get("camera");
+                this.scene = dataStore.get("scene");
+
                 window.addEventListener(config.trigger, this.handleClick);
             }
 
@@ -27,9 +29,9 @@ export default class RaycasterPlugin {
                     return
                 };
         
-                this.raycaster.setFromCamera(pos, this.sceneProps.camera);
+                this.raycaster.setFromCamera(pos, this.camera);
         
-                const children = (flattenChildren(this.sceneProps.scene.children).filter(c => {
+                const children = (flattenChildren(this.scene.children).filter(c => {
                     return c instanceof Mesh;
                 }) as Mesh[]);
         

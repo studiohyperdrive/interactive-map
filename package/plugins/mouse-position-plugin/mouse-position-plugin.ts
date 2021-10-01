@@ -2,16 +2,13 @@ import { calculateCursorX, calculateCursorY } from "../../utils";
 import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
 import { IMousePositionPlugin } from "./mouse-position-plugin.types";
-import { ISceneProps } from "../../types";
 
 export default class MousePositionPlugin {
     constructor() {
         return class implements IMousePositionPlugin {
-            public dataStore: IDataStore;
-            public sceneProps: ISceneProps;
-            constructor(dataStore: DataStore, sceneProps: ISceneProps) {
+            private dataStore: IDataStore;
+            constructor(dataStore: DataStore) {
                 this.dataStore = dataStore;
-                this.sceneProps = sceneProps;
                 
                 window.addEventListener('mousemove', this.handleMouseMove);
             }
