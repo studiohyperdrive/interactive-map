@@ -115,7 +115,6 @@ export default class SceneManager implements IManager {
 	 */
 	public createSubjects(canvas: HTMLCanvasElement, scene: Scene, camera: PerspectiveCamera, animationConfig: IAnimationConfig[]): IUpdates[] {
 		return [
-			new InteractiveMap(scene, "/models/interactive-map_v2.8-draco.glb", (animations: AnimationClip[] = []) => this.onModelLoaded(animations, animationConfig)),
 			new GlobalIllumination(scene),
 			this.controls
 		];

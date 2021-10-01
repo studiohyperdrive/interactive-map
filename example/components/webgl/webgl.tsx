@@ -16,6 +16,7 @@ import ClickPlugin from "@shd-developer/interactive-map/dist/plugins/click-plugi
 import HoverPlugin from "@shd-developer/interactive-map/dist/plugins/hover-plugin/hover-plugin";
 import MousePositionPlugin from "@shd-developer/interactive-map/dist/plugins/mouse-position-plugin/mouse-position-plugin";
 import RaycasterPlugin from "@shd-developer/interactive-map/dist/plugins/raycaster-plugin/raycaster-plugin";
+import GltfDracoLoaderPlugin from "@shd-developer/interactive-map/dist/plugins/gltf-draco-loader-plugin/gltf-draco-loader-plugin";
 
 const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   const threeRootElement = useRef<HTMLCanvasElement | null>(null);
@@ -41,6 +42,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
               ),
             ],
             [
+              new GltfDracoLoaderPlugin("/models/interactive-map_v2.8-draco.glb"),
               new MousePositionPlugin,
               new RaycasterPlugin({trigger: "mousemove"}),
             ],
