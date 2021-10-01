@@ -40,7 +40,6 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
                 createHoverBindings(store),
               ),
             ],
-            new DataStore(),
             [
               new MousePositionPlugin,
               new RaycasterPlugin({trigger: "mousemove"}),

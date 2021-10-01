@@ -16,12 +16,13 @@ export default class ThreeEntryPoint {
 
 	public interactive: boolean = true;
 
-	constructor(canvas: HTMLCanvasElement, click: IClickBindingConfig[] = [], hover: IHoverBindingConfig[] = [], animation: IAnimationConfig[] = [], plugins: any[], dataStore: DataStore, scenePlugins: any[]) {
-		this.plugins = plugins.map(Plugin => new Plugin(dataStore));
-		this.dataStore = dataStore;
+	constructor(canvas: HTMLCanvasElement, click: IClickBindingConfig[] = [], hover: IHoverBindingConfig[] = [], animation: IAnimationConfig[] = [], plugins: any[], scenePlugins: any[]) {
+		this.dataStore = new DataStore;
 
+		this.plugins = plugins.map(Plugin => new Plugin(this.dataStore));
+		
 		this.canvas = canvas;
-		this.manager = new SceneManager(canvas, animation, dataStore, scenePlugins);
+		this.manager = new SceneManager(canvas, animation, this.dataStore, scenePlugins);
 
 		this.listeners = {
 			onresize: () => {
