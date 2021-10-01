@@ -11,16 +11,14 @@ export default class ThreeEntryPoint {
 	public manager;
 
 	public listeners;
-	public click;
-	public hover;
 
 	public interactive: boolean = true;
 
-	constructor(canvas: HTMLCanvasElement, click: IClickBindingConfig[] = [], hover: IHoverBindingConfig[] = [], animation: IAnimationConfig[] = [], plugins: any[], scenePlugins: any[]) {
+	constructor(canvas: HTMLCanvasElement, plugins: any[], scenePlugins: any[]) {
 		this.dataStore = new DataStore;
 
 		this.canvas = canvas;
-		this.manager = new SceneManager(canvas, animation, this.dataStore, scenePlugins);
+		this.manager = new SceneManager(canvas, this.dataStore, scenePlugins);
 		
 		this.plugins = plugins.map(Plugin => new Plugin(this.dataStore));
 
@@ -30,14 +28,11 @@ export default class ThreeEntryPoint {
 			},
 		}
 
-		this.click = click;
-		this.hover = hover;
-
-		this.bindEventListeners(click, hover);
+		this.bindEventListeners();
 		this.render();
 	}
 
-	public bindEventListeners(click: IClickBindingConfig[], hover: IHoverBindingConfig[]): void {
+	public bindEventListeners(): void {
 		window.addEventListener("resize", this.listeners.onresize);
 
 		this.resizeCanvas();

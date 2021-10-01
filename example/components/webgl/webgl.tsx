@@ -29,9 +29,6 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
           type: actions.three.set,
           payload: new ThreeEntryPoint(
             threeRootElement.current,
-            createClickBindings(store, router),
-            createHoverBindings(store),
-            animation,
             [
               new ClickPlugin(
                 createClickBindings(store, router),
@@ -58,7 +55,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
     if (disabled) {
       three.unbindEventListeners();
     } else if (!three.interactive) {
-      three.bindEventListeners(three.click, three.hover);
+      three.bindEventListeners();
     }
   }
 

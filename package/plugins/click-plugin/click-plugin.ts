@@ -1,4 +1,4 @@
-import { AnimationClip, AnimationMixer, Mesh, Scene } from "three";
+import { AnimationClip, AnimationMixer, Mesh } from "three";
 import { IAnimate, IClickBindingConfig } from "../../types";
 import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
@@ -10,13 +10,13 @@ export default class ClickPlugin {
         return class implements IClickPlugin{
             private dataStore: IDataStore;
 
-            public scene: Scene;
+            public animations: AnimationClip[];
             public mixer: AnimationMixer;
 
             constructor(dataStore: DataStore) {
                 this.dataStore = dataStore;
 
-                this.scene = dataStore.get("scene");
+                this.animations = dataStore.get("animations");
                 this.mixer = dataStore.get("animationMixer");
 
                 this.dataStore.set(`${type}Bindings`, bindings);
@@ -31,7 +31,7 @@ export default class ClickPlugin {
             }
 
             handleClick = (e: MouseEvent): void => {
-                const intersection = this.dataStore.get('intersection');
+                const intersection = this.dataStore.get("intersection");
                 if (!intersection) {
                     return;
                 }
@@ -42,7 +42,7 @@ export default class ClickPlugin {
                     bindings.forEach(binding => {
                         if (this.isMatching(clicked, binding)) {``
                             binding.onClick(clicked);
-                            
+
                             this.handleBindingAnimation(binding, (animation: AnimationClip, animationBinding: IAnimate) => {
                                 const action = this.mixer.clipAction(animation);
                                 action.loop = animationBinding.loop;
@@ -69,8 +69,10 @@ export default class ClickPlugin {
 
             public handleBindingAnimation(binding: IBindingConfig, callback: (animation: AnimationClip, animationBinding: IAnimate) => void) {
                 if (binding.animate) {
+                    this.animations = this.dataStore.get("animations")
+                    
                     binding.animate.forEach((animationBinding) => {
-                        this.scene.animations.forEach(animation => {
+                        this.animations.forEach(animation => {
                             if (this.isMatching(animation, animationBinding)) {
                                 callback(animation, animationBinding);
                             }

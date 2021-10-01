@@ -1,9 +1,9 @@
-import { Mesh } from "three";
-import { IBindingConfig } from "../..";
-import { IDataStore } from "../../data-store/data-store.types";
-import { IEventPlugin, IHoverBindingConfig } from "../../types";
+import { AnimationClip, AnimationMixer, Mesh } from "three";
+import { IEventPlugin, IBindingConfig } from "../../types";
 
 export interface IHoverPlugin extends IEventPlugin {
+    animations: AnimationClip[],
+    mixer: AnimationMixer,
     hovered: Mesh | null,
     handleHover: (e: MouseEvent) => void,
     isMatching: (item: {name: string}, binding: IBindingConfig) => boolean,

@@ -16,8 +16,6 @@ export default class SceneManager implements IManager {
 
 	public sizes: ISize;
 
-	public animationConfig: IAnimationConfig[];
-
 	public scene: Scene;
 	public renderer: WebGLRenderer;
 	public camera: PerspectiveCamera;
@@ -32,15 +30,13 @@ export default class SceneManager implements IManager {
 	public deltaTime: number;
 	public previousTime: number;
 
-	constructor(canvas: HTMLCanvasElement, animation: IAnimationConfig[] = [], dataStore: DataStore, plugins: any[]) {
+	constructor(canvas: HTMLCanvasElement, dataStore: DataStore, plugins: any[]) {
 		this.dataStore = dataStore;
 
 		this.sizes = {
 			width: window.innerWidth,
 			height: window.innerHeight,
 		};
-		
-		this.animationConfig = animation;
 		
 		this.deltaTime = 0;
 		this.previousTime = 0;
@@ -54,7 +50,7 @@ export default class SceneManager implements IManager {
 		this.mixer = buildAnimationMixer(this.scene);
 		
 		this.controls = new Controls(this.camera, canvas);
-		this.subjects = this.createSubjects(canvas, this.scene, this.camera, this.animationConfig);
+		this.subjects = this.createSubjects(canvas, this.scene, this.camera);
 
 		dataStore.set("scene", this.scene);
 		dataStore.set("renderer", this.renderer);
@@ -113,7 +109,7 @@ export default class SceneManager implements IManager {
 	 * @param scene scene object the subjects will be created in
 	 * @returns an array of subjects that have update functions
 	 */
-	public createSubjects(canvas: HTMLCanvasElement, scene: Scene, camera: PerspectiveCamera, animationConfig: IAnimationConfig[]): IUpdates[] {
+	public createSubjects(canvas: HTMLCanvasElement, scene: Scene, camera: PerspectiveCamera): IUpdates[] {
 		return [
 			new GlobalIllumination(scene),
 			this.controls
