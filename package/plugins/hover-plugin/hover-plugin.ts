@@ -1,5 +1,5 @@
-import { Mesh } from "three";
-import { IHoverBindingConfig } from "../../types";
+import { AnimationClip, AnimationMixer, LoopOnce, Mesh, Scene } from "three";
+import { IAnimate, IHoverBindingConfig } from "../../types";
 import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
 import { IHoverPlugin } from "./hover-plugin.types";
@@ -10,9 +10,15 @@ export default class HoverPlugin {
         return class implements IHoverPlugin{
             private dataStore: IDataStore;
 
+            public scene: Scene;
+            public mixer: AnimationMixer;
             public hovered: Mesh | null = null;
+
             constructor(dataStore: DataStore) {
                 this.dataStore = dataStore;
+
+                this.scene = dataStore.get("scene");
+                this.mixer = dataStore.get("animationMixer");
             }
 
             bindEventListener(): void {
@@ -35,6 +41,10 @@ export default class HoverPlugin {
                     bindings.forEach(binding => {
                         if (this.isMatching(previous, binding)) {
                             binding.onHoverEnd(previous);
+                            this.handleBindingAnimation(binding, (animation: AnimationClip, animationBinding: IAnimate) => {
+                                const action = this.mixer.clipAction(animation);
+                                action.loop = LoopOnce;
+                            });
                         }
                     });
                 }
@@ -43,6 +53,13 @@ export default class HoverPlugin {
                     bindings.forEach(binding => {
                         if (this.isMatching(current, binding)) {
                             binding.onHoverStart(current);
+                            this.handleBindingAnimation(binding, (animation: AnimationClip, animationBinding: IAnimate) => {
+                                const action = this.mixer.clipAction(animation);
+                                action.loop = animationBinding.loop;
+                                if (!action.isRunning()) {
+                                    action.reset().play();
+                                }
+                            });
                         }
                     });
                 }
@@ -59,6 +76,18 @@ export default class HoverPlugin {
                     case "exact":
                     default:
                         return item.name === binding.name;
+                }
+            }
+
+            public handleBindingAnimation(binding: IBindingConfig, callback: (animation: AnimationClip, animationBinding: IAnimate) => void) {
+                if (binding.animate) {
+                    binding.animate.forEach((animationBinding) => {
+                        this.scene.animations.forEach(animation => {
+                            if (this.isMatching(animation, animationBinding)) {
+                                callback(animation, animationBinding);
+                            }
+                        });
+                    });
                 }
             }
         }

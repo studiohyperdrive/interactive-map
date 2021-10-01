@@ -1,5 +1,5 @@
-import { Mesh } from "three";
-import { IClickBindingConfig } from "../../types";
+import { AnimationClip, AnimationMixer, Mesh, Scene } from "three";
+import { IAnimate, IClickBindingConfig } from "../../types";
 import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
 import { IClickPlugin } from "./click-plugin.types";
@@ -10,8 +10,15 @@ export default class ClickPlugin {
         return class implements IClickPlugin{
             private dataStore: IDataStore;
 
+            public scene: Scene;
+            public mixer: AnimationMixer;
+
             constructor(dataStore: DataStore) {
                 this.dataStore = dataStore;
+
+                this.scene = dataStore.get("scene");
+                this.mixer = dataStore.get("animationMixer");
+
                 this.dataStore.set(`${type}Bindings`, bindings);
             }
 
@@ -33,8 +40,16 @@ export default class ClickPlugin {
 
                 if (clicked instanceof Mesh) {
                     bindings.forEach(binding => {
-                        if (this.isMatching(clicked, binding)) {
+                        if (this.isMatching(clicked, binding)) {``
                             binding.onClick(clicked);
+                            
+                            this.handleBindingAnimation(binding, (animation: AnimationClip, animationBinding: IAnimate) => {
+                                const action = this.mixer.clipAction(animation);
+                                action.loop = animationBinding.loop;
+                                if (!action.isRunning()) {
+                                    action.reset().play();
+                                }
+                            });
                         }
                     });
                 }
@@ -49,6 +64,18 @@ export default class ClickPlugin {
                     case "exact":
                     default:
                         return item.name === binding.name;
+                }
+            }
+
+            public handleBindingAnimation(binding: IBindingConfig, callback: (animation: AnimationClip, animationBinding: IAnimate) => void) {
+                if (binding.animate) {
+                    binding.animate.forEach((animationBinding) => {
+                        this.scene.animations.forEach(animation => {
+                            if (this.isMatching(animation, animationBinding)) {
+                                callback(animation, animationBinding);
+                            }
+                        });
+                    });
                 }
             }
         }

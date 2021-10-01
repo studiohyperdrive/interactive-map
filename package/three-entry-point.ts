@@ -19,10 +19,10 @@ export default class ThreeEntryPoint {
 	constructor(canvas: HTMLCanvasElement, click: IClickBindingConfig[] = [], hover: IHoverBindingConfig[] = [], animation: IAnimationConfig[] = [], plugins: any[], scenePlugins: any[]) {
 		this.dataStore = new DataStore;
 
-		this.plugins = plugins.map(Plugin => new Plugin(this.dataStore));
-		
 		this.canvas = canvas;
 		this.manager = new SceneManager(canvas, animation, this.dataStore, scenePlugins);
+		
+		this.plugins = plugins.map(Plugin => new Plugin(this.dataStore));
 
 		this.listeners = {
 			onresize: () => {

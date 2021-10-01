@@ -59,6 +59,7 @@ export default class SceneManager implements IManager {
 		dataStore.set("scene", this.scene);
 		dataStore.set("renderer", this.renderer);
 		dataStore.set("camera", this.camera);
+		dataStore.set("animationMixer", this.mixer);
 		
 		this.plugins = plugins.map(Plugin => new Plugin(dataStore));
 	}
