@@ -17,6 +17,8 @@ import MousePositionPlugin from "@shd-developer/interactive-map/dist/plugins/mou
 import RaycasterPlugin from "@shd-developer/interactive-map/dist/plugins/raycaster-plugin/raycaster-plugin";
 import AnimationPlugin from "@shd-developer/interactive-map/dist/plugins/animation-plugin/animation-plugin";
 import GltfDracoLoaderPlugin from "@shd-developer/interactive-map/dist/plugins/gltf-draco-loader-plugin/gltf-draco-loader-plugin";
+import ClockPlugin from "@shd-developer/interactive-map/dist/plugins/clock-plugin/clock-plugin";
+import AnimationMixerPlugin from "@shd-developer/interactive-map/dist/plugins/animation-mixer-plugin/animation-mixer-plugin";
 
 const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   const threeRootElement = useRef<HTMLCanvasElement | null>(null);
@@ -40,6 +42,8 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
             ],
             [
               new GltfDracoLoaderPlugin("/models/interactive-map_v2.8-draco.glb"),
+              new ClockPlugin,
+              new AnimationMixerPlugin,
               new MousePositionPlugin,
               new RaycasterPlugin({trigger: "mousemove"}),
               new AnimationPlugin(animationConfig),

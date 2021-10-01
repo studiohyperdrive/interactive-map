@@ -4,13 +4,13 @@ import DataStore from "./data-store/data-store";
 import { IAnimationConfig, IClickBindingConfig, IHoverBindingConfig, IEventPlugin, IScenePlugin } from "./types";
 
 export default class ThreeEntryPoint {
-	public plugins: any[];
 	public dataStore: DataStore;
 
 	public canvas;
 	public manager;
-
 	public listeners;
+	
+	public plugins: any[];
 
 	public interactive: boolean = true;
 
@@ -19,14 +19,13 @@ export default class ThreeEntryPoint {
 
 		this.canvas = canvas;
 		this.manager = new SceneManager(canvas, this.dataStore, scenePlugins);
-		
-		this.plugins = plugins.map(Plugin => new Plugin(this.dataStore));
-
 		this.listeners = {
 			onresize: () => {
 				this.resizeCanvas()
 			},
 		}
+		
+		this.plugins = plugins.map(Plugin => new Plugin(this.dataStore));
 
 		this.bindEventListeners();
 		this.render();
