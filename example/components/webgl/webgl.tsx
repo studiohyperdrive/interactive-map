@@ -4,7 +4,7 @@ import { useRouter } from "next/dist/client/router";
 
 import createClickBindings from "../../bindings/click";
 import createHoverBindings from "../../bindings/hover";
-import animation from '../../bindings/animation';
+import animationConfig from '../../bindings/animation';
 
 import actions from "../../redux/actions";
 import store from "../../redux/store";
@@ -15,6 +15,7 @@ import ClickPlugin from "@shd-developer/interactive-map/dist/plugins/click-plugi
 import HoverPlugin from "@shd-developer/interactive-map/dist/plugins/hover-plugin/hover-plugin";
 import MousePositionPlugin from "@shd-developer/interactive-map/dist/plugins/mouse-position-plugin/mouse-position-plugin";
 import RaycasterPlugin from "@shd-developer/interactive-map/dist/plugins/raycaster-plugin/raycaster-plugin";
+import AnimationPlugin from "@shd-developer/interactive-map/dist/plugins/animation-plugin/animation-plugin";
 import GltfDracoLoaderPlugin from "@shd-developer/interactive-map/dist/plugins/gltf-draco-loader-plugin/gltf-draco-loader-plugin";
 
 const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
@@ -41,6 +42,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
               new GltfDracoLoaderPlugin("/models/interactive-map_v2.8-draco.glb"),
               new MousePositionPlugin,
               new RaycasterPlugin({trigger: "mousemove"}),
+              new AnimationPlugin(animationConfig),
             ],
           )
         });
