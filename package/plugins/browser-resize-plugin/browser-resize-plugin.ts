@@ -1,7 +1,8 @@
-import { PerspectiveCamera, WebGLRenderer } from "three";
+import { OrthographicCamera, PerspectiveCamera, WebGLRenderer } from "three";
 import { onWindowResize } from "../../utils";
 import { IDataStore } from "../../data-store/data-store.types";
 import { IBrowserResizePlugin } from "./browser-resize-plugin.types";
+import { IPerspectiveCameraConfig, IOrthographicCameraConfig } from "../../types";
 
 export default class BrowserResizePlugin {
     constructor() {
@@ -9,12 +10,14 @@ export default class BrowserResizePlugin {
             private dataStore: IDataStore;
 
             public renderer: WebGLRenderer;
-            public camera: PerspectiveCamera;
+            public camera: PerspectiveCamera | OrthographicCamera;
+            public cameraConfig: IPerspectiveCameraConfig | IOrthographicCameraConfig;
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
-                this.renderer = this.dataStore.get("renderer");
-                this.camera = this.dataStore.get("camera");
+                this.renderer = dataStore.get("renderer");
+                this.camera = dataStore.get("camera");
+                this.cameraConfig = dataStore.get("cameraConfig");
             }
 
             public bindEventListener(): void {
@@ -26,7 +29,7 @@ export default class BrowserResizePlugin {
             }
 
             public handleResize(e: UIEvent) {
-                this.dataStore.set("sizes", onWindowResize(this.renderer, this.camera));
+                this.dataStore.set("sizes", onWindowResize(this.renderer, this.camera, this.cameraConfig));
             }
         }
     }

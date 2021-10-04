@@ -1,21 +1,24 @@
 import SceneManager from "./scene-manager";
 import DataStore from "./data-store/data-store";
 
-import { IAnimationConfig, IClickBindingConfig, IHoverBindingConfig, IEventPlugin, IScenePlugin } from "./types";
+import { ISceneConfig } from "./types";
+import { Scene } from "three";
 
 export default class ThreeEntryPoint {
 	public dataStore: DataStore;
 
-	public canvas;
-	public manager;
+	public canvas: HTMLCanvasElement;
+	public manager: SceneManager;
+	public sceneConfig: ISceneConfig;
 	public plugins: any[];
 	public interactive: boolean = true;
 
-	constructor(canvas: HTMLCanvasElement, plugins: any[], scenePlugins: any[]) {
+	constructor(canvas: HTMLCanvasElement, sceneConfig: ISceneConfig, plugins: any[], scenePlugins: any[]) {
 		this.dataStore = new DataStore;
 
 		this.canvas = canvas;
-		this.manager = new SceneManager(canvas, this.dataStore, scenePlugins);
+		this.sceneConfig = sceneConfig;
+		this.manager = new SceneManager(canvas, sceneConfig, this.dataStore, scenePlugins);
 		this.plugins = plugins.map(Plugin => new Plugin(this.dataStore));
 
 		this.bindEventListeners();

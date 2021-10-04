@@ -51,3 +51,41 @@ export interface IEventPlugin {
 export interface IScenePlugin {
     update: () => void,
 }
+
+export interface IPerspectiveCameraConfig {
+    fov: number,
+    near: number,
+    far: number,
+    position: IPosition,
+}
+
+export interface IOrthographicCameraConfig {
+    frustumSize: number,
+    near: number,
+    far: number,
+    position: IPosition,
+}
+
+export interface IPerspectiveCameraConfig {
+    fov: number,
+    near: number,
+    far: number,
+    position: IPosition,
+}
+
+export interface IOrthographicCameraConfig {
+    frustumSize: number,
+    near: number,
+    far: number,
+    position: IPosition,
+}
+
+export interface ICameraConfig {
+    type: "orthographic" | "perspective",
+    config: IOrthographicCameraConfig | IPerspectiveCameraConfig,
+}
+
+
+export interface ISceneConfig {
+    camera: ICameraConfig,
+}

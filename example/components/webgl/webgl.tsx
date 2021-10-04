@@ -10,6 +10,7 @@ import actions from "../../redux/actions";
 import store from "../../redux/store";
 
 import { WebGLProps } from "./webgl.types";
+import sceneConfig from "../../config/sceneConfig";
 import ThreeEntryPoint from "@shd-developer/interactive-map/dist/three-entry-point";
 import ClickPlugin from "@shd-developer/interactive-map/dist/plugins/click-plugin/click-plugin";
 import HoverPlugin from "@shd-developer/interactive-map/dist/plugins/hover-plugin/hover-plugin";
@@ -34,6 +35,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
           type: actions.three.set,
           payload: new ThreeEntryPoint(
             threeRootElement.current,
+            sceneConfig,
             [
               new BrowserResizePlugin,
               new ClickPlugin(
@@ -75,20 +77,6 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
       {/* <div className="im__webgl--container"> */}
         <canvas ref={threeRootElement} />
       {/* </div> */}
-
-      <div className="webgl__rotate-buttons">
-        <div className="webgl__rotate-button" onClick={() => {
-          const manager = three?.manager;
-          manager?.controls?.handleClickRotateLeft();
-          manager?.update();
-        }}>{"<-"}</div>
-
-        <div className="webgl__rotate-button" onClick={() => {
-          const manager = three?.manager;
-          manager?.controls?.handleClickRotateRight();
-          manager?.update();
-        }}>{"->"}</div>
-      </div>
     </div>
   );
 };
