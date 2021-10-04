@@ -1,11 +1,13 @@
 import { AnimationClip, AnimationMixer, LoopOnce, Mesh } from "three";
-import { IAnimate, IHoverBindingConfig } from "../../types";
+
+import { IAnimate, IBindingConfig, IHoverBindingConfig } from "../../types";
+
 import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
-import { IHoverPlugin } from "./hover-plugin.types";
-import { IBindingConfig } from "../..";
 
-export default class HoverPlugin {
+import { IHoverPlugin } from "./hover-plugin.types";
+
+export class HoverPlugin {
     constructor(bindings: IHoverBindingConfig[]) {
         return class implements IHoverPlugin{
             private dataStore: IDataStore;

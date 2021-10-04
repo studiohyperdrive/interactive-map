@@ -1,4 +1,5 @@
 import { AnimationClip, AnimationMixer } from "three";
+
 import { IBindingConfig, IEventPlugin } from "../../types";
 
 export interface IClickPlugin extends IEventPlugin {

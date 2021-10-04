@@ -1,4 +1,5 @@
 import { AnimationClip, AnimationMixer, Mesh } from "three";
+
 import { IEventPlugin, IBindingConfig } from "../../types";
 
 export interface IHoverPlugin extends IEventPlugin {

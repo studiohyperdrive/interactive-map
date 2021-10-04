@@ -1,4 +1,5 @@
-import { AnimationClip, AnimationMixer, Scene } from "three";
+import { AnimationClip, AnimationMixer } from "three";
+
 import { IAnimationConfig, IBindingConfig, IScenePlugin } from "../../types";
 
 export interface IAnimationPlugin extends IScenePlugin {

@@ -1,12 +1,13 @@
-import { AnimationClip, AnimationMixer, Scene } from "three";
-import { IBindingConfig, IAnimationConfig } from "../../types";
-import DataStore from "../../data-store/data-store";
-import { IDataStore } from "../../data-store/data-store.types";
-import { IGltfDracoLoaderPlugin } from "./gltf-draco-loader-plugin.types";
+import { Scene } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 
-export default class GltfDracoLoaderPlugin {
+import DataStore from "../../data-store/data-store";
+import { IDataStore } from "../../data-store/data-store.types";
+
+import { IGltfDracoLoaderPlugin } from "./gltf-draco-loader-plugin.types";
+
+export class GltfDracoLoaderPlugin {
     constructor(path: string) {
         return class implements IGltfDracoLoaderPlugin{
             private dataStore: IDataStore;

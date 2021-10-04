@@ -2,6 +2,9 @@ import { FC, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { useRouter } from "next/dist/client/router";
 
+import ThreeEntryPoint from "@shd-developer/interactive-map/dist/three-entry-point";
+import { ClickPlugin, HoverPlugin, MousePositionPlugin, RaycasterPlugin, AnimationPlugin, GltfDracoLoaderPlugin, ClockPlugin, AnimationMixerPlugin } from "@shd-developer/interactive-map/dist/plugins";
+
 import createClickBindings from "../../bindings/click";
 import createHoverBindings from "../../bindings/hover";
 import animationConfig from '../../bindings/animation';
@@ -11,15 +14,6 @@ import actions from "../../redux/actions";
 import store from "../../redux/store";
 
 import { WebGLProps } from "./webgl.types";
-import ThreeEntryPoint from "@shd-developer/interactive-map/dist/three-entry-point";
-import ClickPlugin from "@shd-developer/interactive-map/dist/plugins/click-plugin/click-plugin";
-import HoverPlugin from "@shd-developer/interactive-map/dist/plugins/hover-plugin/hover-plugin";
-import MousePositionPlugin from "@shd-developer/interactive-map/dist/plugins/mouse-position-plugin/mouse-position-plugin";
-import RaycasterPlugin from "@shd-developer/interactive-map/dist/plugins/raycaster-plugin/raycaster-plugin";
-import AnimationPlugin from "@shd-developer/interactive-map/dist/plugins/animation-plugin/animation-plugin";
-import GltfDracoLoaderPlugin from "@shd-developer/interactive-map/dist/plugins/gltf-draco-loader-plugin/gltf-draco-loader-plugin";
-import ClockPlugin from "@shd-developer/interactive-map/dist/plugins/clock-plugin/clock-plugin";
-import AnimationMixerPlugin from "@shd-developer/interactive-map/dist/plugins/animation-mixer-plugin/animation-mixer-plugin";
 
 const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   const threeRootElement = useRef<HTMLCanvasElement | null>(null);
@@ -43,7 +37,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
         new ClockPlugin,
         new AnimationMixerPlugin,
         new MousePositionPlugin,
-        new RaycasterPlugin({trigger: "mousemove"}),
+        new RaycasterPlugin({ trigger: "mousemove" }),
         new AnimationPlugin(animationConfig),
       ],
     ) : null;
@@ -73,7 +67,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   return (
     <div>
       {/* <div className="im__webgl--container"> */}
-        <canvas ref={threeRootElement} />
+      <canvas ref={threeRootElement} />
       {/* </div> */}
 
       <div className="webgl__rotate-buttons">
@@ -93,6 +87,6 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   );
 };
 
-export default connect((state: {three?: ThreeEntryPoint}) => {
-  return {three: state.three};
+export default connect((state: { three?: ThreeEntryPoint }) => {
+  return { three: state.three };
 })(WebGL);

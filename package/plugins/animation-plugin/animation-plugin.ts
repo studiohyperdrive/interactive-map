@@ -1,10 +1,13 @@
-import { AnimationClip, AnimationMixer, Scene } from "three";
+import { AnimationClip, AnimationMixer } from "three";
+
 import { IBindingConfig, IAnimationConfig } from "../../types";
+
 import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
+
 import { IAnimationPlugin } from "./animation-plugin.types";
 
-export default class AnimationPlugin {
+export class AnimationPlugin {
     constructor(config: IAnimationConfig[]) {
         return class implements IAnimationPlugin{
             private dataStore: IDataStore;

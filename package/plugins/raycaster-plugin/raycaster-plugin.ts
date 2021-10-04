@@ -1,10 +1,13 @@
 import { Camera, Mesh, Raycaster, Scene } from "three";
+
 import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
+
 import { flattenChildren } from "../../utils";
+
 import { IRacasterPlugin, IRaycasterConfig } from "./raycaster-plugin.types";
 
-export default class RaycasterPlugin {
+export class RaycasterPlugin {
     constructor(config: IRaycasterConfig) {
         return class implements IRacasterPlugin {
             private dataStore: IDataStore;

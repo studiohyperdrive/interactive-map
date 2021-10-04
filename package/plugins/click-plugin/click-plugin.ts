@@ -1,11 +1,13 @@
 import { AnimationClip, AnimationMixer, Mesh } from "three";
-import { IAnimate, IClickBindingConfig } from "../../types";
+
+import { IAnimate, IBindingConfig, IClickBindingConfig } from "../../types";
+
 import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
-import { IClickPlugin } from "./click-plugin.types";
-import { IBindingConfig } from "../..";
 
-export default class ClickPlugin {
+import { IClickPlugin } from "./click-plugin.types";
+
+export class ClickPlugin {
     constructor(bindings: IClickBindingConfig[], type: string) {
         return class implements IClickPlugin{
             private dataStore: IDataStore;
