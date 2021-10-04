@@ -3,6 +3,7 @@ import { onWindowResize } from "../../utils";
 import { IDataStore } from "../../data-store/data-store.types";
 import { IBrowserResizePlugin } from "./browser-resize-plugin.types";
 import { IPerspectiveCameraConfig, IOrthographicCameraConfig } from "../../types";
+import { ICameraConfig } from "../..";
 
 export default class BrowserResizePlugin {
     constructor() {
@@ -11,7 +12,7 @@ export default class BrowserResizePlugin {
 
             public renderer: WebGLRenderer;
             public camera: PerspectiveCamera | OrthographicCamera;
-            public cameraConfig: IPerspectiveCameraConfig | IOrthographicCameraConfig;
+            public cameraConfig: ICameraConfig;
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
