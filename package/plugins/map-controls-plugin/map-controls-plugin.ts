@@ -1,10 +1,11 @@
 import { Camera, Vector3 } from "three";
-import { IDataStore } from "../../data-store/data-store.types";
 import { MapControls } from "three/examples/jsm/controls/OrbitControls";
-import { IMapControlsPlugin } from "./map-controls-plugin.types";
-import { IMapControlsConfig } from "./map-controls-plugin.types";
 
-export default class MapControlsPlugin {
+import { IDataStore } from "../../data-store/data-store.types";
+
+import { IMapControlsPlugin, IMapControlsConfig } from "./map-controls-plugin.types";
+
+export class MapControlsPlugin {
     constructor(config: IMapControlsConfig) {
         return class implements IMapControlsPlugin {
             private dataStore: IDataStore;

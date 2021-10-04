@@ -1,9 +1,7 @@
-import { Camera, Mesh, Raycaster, Scene } from "three";
+import { Camera, Raycaster, Scene } from "three";
 
 import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
-
-import { flattenChildren } from "../../utils";
 
 import { IRaycasterPlugin, IRaycasterConfig } from "./raycaster-plugin.types";
 

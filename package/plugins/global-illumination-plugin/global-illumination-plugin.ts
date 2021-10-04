@@ -1,8 +1,10 @@
 import { AmbientLight, DirectionalLight, Scene } from "three";
+
 import { IDataStore } from "../../data-store/data-store.types";
+
 import { IGlobalIlluminationPlugin } from "./global-illumination-plugin.types";
 
-export default class GlobalIlluminationPlugin {
+export class GlobalIlluminationPlugin {
     constructor() {
         return class implements IGlobalIlluminationPlugin {
             private dataStore: IDataStore;
