@@ -20,6 +20,7 @@ import GltfDracoLoaderPlugin from "@shd-developer/interactive-map/dist/plugins/g
 import ClockPlugin from "@shd-developer/interactive-map/dist/plugins/clock-plugin/clock-plugin";
 import AnimationMixerPlugin from "@shd-developer/interactive-map/dist/plugins/animation-mixer-plugin/animation-mixer-plugin";
 import BrowserResizePlugin from "@shd-developer/interactive-map/dist/plugins/browser-resize-plugin/browser-resize-plugin";
+import GlobalIlluminationPlugin from "@shd-developer/interactive-map/dist/plugins/global-illumination-plugin/global-illumination-plugin";
 
 const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   const threeRootElement = useRef<HTMLCanvasElement | null>(null);
@@ -44,6 +45,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
             ],
             [
               new GltfDracoLoaderPlugin("/models/interactive-map_v2.8-draco.glb"),
+              new GlobalIlluminationPlugin,
               new ClockPlugin,
               new AnimationMixerPlugin,
               new MousePositionPlugin,

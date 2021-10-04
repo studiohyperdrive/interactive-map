@@ -81,7 +81,6 @@ export default class SceneManager implements IManager {
 	 */
 	public createSubjects(canvas: HTMLCanvasElement, scene: Scene, camera: PerspectiveCamera): IUpdates[] {
 		return [
-			new GlobalIllumination(scene),
 			this.controls
 		];
 	}
