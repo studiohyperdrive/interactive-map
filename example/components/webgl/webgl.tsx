@@ -19,6 +19,7 @@ import AnimationPlugin from "@shd-developer/interactive-map/dist/plugins/animati
 import GltfDracoLoaderPlugin from "@shd-developer/interactive-map/dist/plugins/gltf-draco-loader-plugin/gltf-draco-loader-plugin";
 import ClockPlugin from "@shd-developer/interactive-map/dist/plugins/clock-plugin/clock-plugin";
 import AnimationMixerPlugin from "@shd-developer/interactive-map/dist/plugins/animation-mixer-plugin/animation-mixer-plugin";
+import BrowserResizePlugin from "@shd-developer/interactive-map/dist/plugins/browser-resize-plugin/browser-resize-plugin";
 
 const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   const threeRootElement = useRef<HTMLCanvasElement | null>(null);
@@ -32,6 +33,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
           payload: new ThreeEntryPoint(
             threeRootElement.current,
             [
+              new BrowserResizePlugin,
               new ClickPlugin(
                 createClickBindings(store, router),
                 'click',

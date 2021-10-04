@@ -8,10 +8,7 @@ export default class ThreeEntryPoint {
 
 	public canvas;
 	public manager;
-	public listeners;
-	
 	public plugins: any[];
-
 	public interactive: boolean = true;
 
 	constructor(canvas: HTMLCanvasElement, plugins: any[], scenePlugins: any[]) {
@@ -19,12 +16,6 @@ export default class ThreeEntryPoint {
 
 		this.canvas = canvas;
 		this.manager = new SceneManager(canvas, this.dataStore, scenePlugins);
-		this.listeners = {
-			onresize: () => {
-				this.resizeCanvas()
-			},
-		}
-		
 		this.plugins = plugins.map(Plugin => new Plugin(this.dataStore));
 
 		this.bindEventListeners();
@@ -32,10 +23,6 @@ export default class ThreeEntryPoint {
 	}
 
 	public bindEventListeners(): void {
-		window.addEventListener("resize", this.listeners.onresize);
-
-		this.resizeCanvas();
-
 		this.interactive = true;
 
 		this.plugins.forEach(plugin => {			
@@ -44,19 +31,11 @@ export default class ThreeEntryPoint {
 	}
 
 	public unbindEventListeners(): void {
-		window.removeEventListener("resize", this.listeners.onresize);
-
-		this.resizeCanvas();
-
 		this.interactive = false;
 
 		this.plugins.forEach(plugin => {
 			plugin.unbindEventListener();
 		});
-	}
-
-	public resizeCanvas(): void {
-		this.manager.onWindowResizeCallback();
 	}
 
 	public render(): void {
