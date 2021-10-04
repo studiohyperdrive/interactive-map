@@ -7,8 +7,6 @@ export default ([
         matching: 'partial',
         loop: LoopOnce,
         startAnimation: (animationAction: AnimationAction, i: number) => {         
-            console.log('start');
-            
             setTimeout(() => {
                 animationAction
                 .reset()
