@@ -1,6 +1,7 @@
 import { AnimationClip, AnimationMixer, Mesh } from "three";
 
 import { IAnimate, IBindingConfig, IClickBindingConfig } from "../../types";
+import { isMatching } from "../../utils";
 
 import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
@@ -42,7 +43,7 @@ export class ClickPlugin {
 
                 if (clicked instanceof Mesh) {
                     bindings.forEach(binding => {
-                        if (this.isMatching(clicked, binding)) {``
+                        if (isMatching(clicked, binding)) {``
                             binding.onClick(clicked);
 
                             this.handleBindingAnimation(binding, (animation: AnimationClip, animationBinding: IAnimate) => {
@@ -57,25 +58,13 @@ export class ClickPlugin {
                 }
             }
 
-            // Utils?
-            public isMatching(item: {name: string}, binding: IBindingConfig): boolean {
-                switch (binding.matching) {
-                    case "partial":
-                        return item.name.indexOf(binding.name) > -1;
-        
-                    case "exact":
-                    default:
-                        return item.name === binding.name;
-                }
-            }
-
             public handleBindingAnimation(binding: IBindingConfig, callback: (animation: AnimationClip, animationBinding: IAnimate) => void) {
                 if (binding.animate) {
                     this.animations = this.dataStore.get("animations")
                     
                     binding.animate.forEach((animationBinding) => {
                         this.animations.forEach(animation => {
-                            if (this.isMatching(animation, animationBinding)) {
+                            if (isMatching(animation, animationBinding)) {
                                 callback(animation, animationBinding);
                             }
                         });

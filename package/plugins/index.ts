@@ -21,3 +21,6 @@ export * from "./mouse-position-plugin/mouse-position-plugin.types";
 
 export * from "./raycaster-plugin/raycaster-plugin";
 export * from "./raycaster-plugin/raycaster-plugin.types";
+
+export * from "./tab-navigation-plugin/tab-navigation-plugin";
+export * from "./tab-navigation-plugin/tab-navigation-plugin.types";

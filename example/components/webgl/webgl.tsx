@@ -3,11 +3,13 @@ import { connect } from "react-redux";
 import { useRouter } from "next/dist/client/router";
 
 import ThreeEntryPoint from "@shd-developer/interactive-map/dist/three-entry-point";
-import { ClickPlugin, HoverPlugin, MousePositionPlugin, RaycasterPlugin, AnimationPlugin, GltfDracoLoaderPlugin, ClockPlugin, AnimationMixerPlugin } from "@shd-developer/interactive-map/dist/plugins";
+import { ClickPlugin, HoverPlugin, MousePositionPlugin, RaycasterPlugin, AnimationPlugin, GltfDracoLoaderPlugin, ClockPlugin, AnimationMixerPlugin, TabNavigationPlugin } from "@shd-developer/interactive-map/dist/plugins";
 
+import animationConfig from '../../bindings/animation';
 import createClickBindings from "../../bindings/click";
 import createHoverBindings from "../../bindings/hover";
-import animationConfig from '../../bindings/animation';
+import createTabNavigationBindings from "../../bindings/tab-navigation";
+
 import sceneConfig from "../../config/sceneConfig";
 
 import actions from "../../redux/actions";
@@ -31,6 +33,9 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
         new HoverPlugin(
           createHoverBindings(store),
         ),
+        new TabNavigationPlugin(
+          createTabNavigationBindings(),
+        )
       ],
       [
         new GltfDracoLoaderPlugin("/models/interactive-map_v2.8-draco.glb"),

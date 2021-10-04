@@ -36,7 +36,7 @@ export class GltfDracoLoaderPlugin {
 
             public loadGltf(path: string) {
                 this.gltfLoader.load(path, (gltf) => {                    
-                    this.dataStore.set("animations", gltf.animations);            
+                    this.dataStore.set("animations", gltf.animations);
                     this.scene.add(gltf.scene);
                     this.dataStore.set("mapLoaded", true);                      
                 });
