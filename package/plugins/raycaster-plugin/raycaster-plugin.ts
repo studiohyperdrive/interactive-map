@@ -5,11 +5,11 @@ import { IDataStore } from "../../data-store/data-store.types";
 
 import { flattenChildren } from "../../utils";
 
-import { IRacasterPlugin, IRaycasterConfig } from "./raycaster-plugin.types";
+import { IRaycasterPlugin, IRaycasterConfig } from "./raycaster-plugin.types";
 
 export class RaycasterPlugin {
     constructor(config: IRaycasterConfig) {
-        return class implements IRacasterPlugin {
+        return class implements IRaycasterPlugin {
             private dataStore: IDataStore;
 
             public raycaster: Raycaster;
