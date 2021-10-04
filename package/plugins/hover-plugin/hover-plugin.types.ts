@@ -5,6 +5,8 @@ export interface IHoverPlugin extends IEventPlugin {
     animations: AnimationClip[],
     mixer: AnimationMixer,
     hovered: Mesh | null,
+    bindEventListener: () => void,
+    unbindEventListener: () => void,
     handleHover: (e: MouseEvent) => void,
     isMatching: (item: {name: string}, binding: IBindingConfig) => boolean,
 }

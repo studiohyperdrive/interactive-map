@@ -21,11 +21,11 @@ export default class HoverPlugin {
                 this.mixer = dataStore.get("animationMixer");
             }
 
-            bindEventListener(): void {
+            public bindEventListener(): void {
                 window.addEventListener("mousemove", e => this.handleHover(e as MouseEvent));
             }
 
-            unbindEventListener(): void {
+            public unbindEventListener(): void {
                 window.removeEventListener("mousemove", e => this.handleHover(e as MouseEvent));
             }
 

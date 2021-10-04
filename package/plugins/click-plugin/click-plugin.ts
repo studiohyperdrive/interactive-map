@@ -22,15 +22,15 @@ export default class ClickPlugin {
                 this.dataStore.set(`${type}Bindings`, bindings);
             }
 
-            bindEventListener(): void {
+            public bindEventListener(): void {
                 window.addEventListener(type, e => this.handleClick(e as MouseEvent));
             }
 
-            unbindEventListener(): void {
+            public unbindEventListener(): void {
                 window.removeEventListener(type, e => this.handleClick(e as MouseEvent));
             }
 
-            handleClick = (e: MouseEvent): void => {
+            public handleClick = (e: MouseEvent): void => {
                 const intersection = this.dataStore.get("intersection");
                 if (!intersection) {
                     return;
