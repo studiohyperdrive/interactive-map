@@ -11,6 +11,7 @@ import store from "../../redux/store";
 
 import { WebGLProps } from "./webgl.types";
 import sceneConfig from "../../config/sceneConfig";
+import controlsConfig from "../../config/controlsConfig";
 import ThreeEntryPoint from "@shd-developer/interactive-map/dist/three-entry-point";
 import ClickPlugin from "@shd-developer/interactive-map/dist/plugins/click-plugin/click-plugin";
 import HoverPlugin from "@shd-developer/interactive-map/dist/plugins/hover-plugin/hover-plugin";
@@ -54,7 +55,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
               new MousePositionPlugin,
               new RaycasterPlugin({trigger: "mousemove"}),
               new AnimationPlugin(animationConfig),
-              new MapControlsPlugin,
+              new MapControlsPlugin(controlsConfig),
             ],
           )
         });

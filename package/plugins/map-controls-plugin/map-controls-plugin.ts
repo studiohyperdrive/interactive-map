@@ -1,11 +1,11 @@
 import { Camera, Vector3 } from "three";
-import { rotateAroundPoint } from "../../utils";
 import { IDataStore } from "../../data-store/data-store.types";
 import { MapControls } from "three/examples/jsm/controls/OrbitControls";
 import { IMapControlsPlugin } from "./map-controls-plugin.types";
+import { IMapControlsConfig } from "./map-controls-plugin.types";
 
 export default class MapControlsPlugin {
-    constructor() {
+    constructor(config: IMapControlsConfig) {
         return class implements IMapControlsPlugin {
             private dataStore: IDataStore;
 
@@ -30,32 +30,77 @@ export default class MapControlsPlugin {
         
             public createMapControls(camera: Camera, canvas: HTMLCanvasElement): MapControls {
                 const mapControls = new MapControls(camera, canvas);
-                mapControls.enableDamping = true;
-                mapControls.enableRotate = false;
-                
-                mapControls.dampingFactor = 0.1;
-                mapControls.panSpeed = 0.5;
-                mapControls.zoomSpeed = 0.3;
-                
-                // Vertical rotation limits
-                mapControls.minPolarAngle = Math.PI / 2 + camera.rotation.x
-                mapControls.maxPolarAngle = Math.PI / 2 + camera.rotation.x
-            
-                // Dolly (zoom) limits
-                mapControls.minDistance = 2;
-                mapControls.maxDistance = 4;
+                if (config.enableDamping) {
+                    mapControls.enableDamping = config.enableDamping;
+                }
+                if (config.enableRotate) {
+                    mapControls.enableRotate = config.enableRotate;
+                }
+                if (config.enablePan) {
+                    mapControls.enablePan = config.enablePan;
+                }
+                if (config.enableZoom) {
+                    mapControls.enableZoom = config.enableZoom;
+                }
+                if (config.dampingFactor) {
+                    mapControls.dampingFactor = config.dampingFactor;
+                }
+                if (config.rotateSpeed) {
+                    mapControls.rotateSpeed = config.rotateSpeed;
+                }
+                if (config.panSpeed) {
+                    mapControls.panSpeed = config.panSpeed;
+                }
+                if (config.zoomSpeed) {
+                    mapControls.zoomSpeed = config.zoomSpeed
+                }
+                if (config.mouseButtons) {
+                    mapControls.mouseButtons = config.mouseButtons
+                }
+                if (config.touches) {
+                    mapControls.touches = config.touches
+                }
+                if (config.rotationLimits) {
+                    const limits = config.rotationLimits;
         
-                // Panning limits
-                const minPan = new Vector3(-1, 0, -2);
-                const maxPan = new Vector3(1, 0, 0);
-                const _v = new Vector3();
-                
-                mapControls.addEventListener("change", () => {
-                    _v.copy(mapControls.target);
-                    mapControls.target.clamp(minPan, maxPan);
-                    _v.sub(mapControls.target);
-                    camera.position.sub(_v);
-                })
+                    // Vertical rotation limits
+                    mapControls.minPolarAngle = limits.minPolarAngle? limits.minPolarAngle : Infinity;
+                    mapControls.maxPolarAngle = limits.maxPolarAngle? limits.maxPolarAngle : Infinity;
+        
+                    // Horizontal rotation limits
+                    mapControls.minAzimuthAngle = limits.minAzimuthAngle? limits.minAzimuthAngle : Infinity;
+                    mapControls.maxAzimuthAngle = limits.maxAzimuthAngle? limits.maxAzimuthAngle : Infinity;
+                }
+                if (config.panLimits) {
+                    const limits = config.panLimits;
+        
+                    // Panning limits
+                    const minPan = limits.minPan? limits.minPan : new Vector3(Infinity, Infinity, Infinity);
+                    const maxPan = limits.maxPan? limits.maxPan : new Vector3(Infinity, Infinity, Infinity);
+                    const _v = new Vector3();
+                    
+                    mapControls.addEventListener("change", () => {
+                        _v.copy(mapControls.target);
+                        mapControls.target.clamp(minPan, maxPan);
+                        _v.sub(mapControls.target);
+                        camera.position.sub(_v);
+                    })
+                }
+                if (config.distanceLimits) {
+                    const limits = config.distanceLimits;
+        
+                    // Dolly (distance) limits
+                    mapControls.minDistance = limits.minDistance? limits.minDistance : 0;
+                    mapControls.maxDistance = limits.maxDistance? limits.maxDistance : Infinity;
+                }
+                if (config.zoomLimits) {
+                    const limits = config.zoomLimits;
+        
+                    // Dolly (zoom) limits
+                    mapControls.minZoom = limits.minZoom? limits.minZoom : 0;
+                    mapControls.maxZoom = limits.maxZoom? limits.maxZoom : Infinity;
+                }
+        
         
                 return mapControls
             }
