@@ -26,7 +26,7 @@ export default class BrowserResizePlugin {
             }
 
             public handleResize(e: UIEvent) {
-                onWindowResize(this.renderer, this.camera);
+                this.dataStore.set("sizes", onWindowResize(this.renderer, this.camera));
             }
         }
     }
