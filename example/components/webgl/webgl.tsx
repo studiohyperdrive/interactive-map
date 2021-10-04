@@ -5,6 +5,7 @@ import { useRouter } from "next/dist/client/router";
 import createClickBindings from "../../bindings/click";
 import createHoverBindings from "../../bindings/hover";
 import animationConfig from '../../bindings/animation';
+import sceneConfig from "../../config/sceneConfig";
 
 import actions from "../../redux/actions";
 import store from "../../redux/store";
@@ -24,38 +25,43 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   const threeRootElement = useRef<HTMLCanvasElement | null>(null);
   const router = useRouter();
 
+  const buildThree = (): ThreeEntryPoint | null => {
+    return threeRootElement.current ? new ThreeEntryPoint(
+      threeRootElement.current,
+      sceneConfig,
+      [
+        new ClickPlugin(
+          createClickBindings(store, router),
+          'click',
+        ),
+        new HoverPlugin(
+          createHoverBindings(store),
+        ),
+      ],
+      [
+        new GltfDracoLoaderPlugin("/models/interactive-map_v2.8-draco.glb"),
+        new ClockPlugin,
+        new AnimationMixerPlugin,
+        new MousePositionPlugin,
+        new RaycasterPlugin({trigger: "mousemove"}),
+        new AnimationPlugin(animationConfig),
+      ],
+    ) : null;
+  }
+
+  // Run once
   useEffect(() => {
-    if (threeRootElement.current) {
-      if (three === undefined) {
-        store.dispatch({
-          type: actions.three.set,
-          payload: new ThreeEntryPoint(
-            threeRootElement.current,
-            [
-              new ClickPlugin(
-                createClickBindings(store, router),
-                'click',
-              ),
-              new HoverPlugin(
-                createHoverBindings(store),
-              ),
-            ],
-            [
-              new GltfDracoLoaderPlugin("/models/interactive-map_v2.8-draco.glb"),
-              new ClockPlugin,
-              new AnimationMixerPlugin,
-              new MousePositionPlugin,
-              new RaycasterPlugin({trigger: "mousemove"}),
-              new AnimationPlugin(animationConfig),
-            ],
-          )
-        });
-      } else {
-        threeRootElement.current?.replaceWith(three.canvas);
-      }
+    if (three === undefined) {
+      store.dispatch({
+        type: actions.three.set,
+        payload: buildThree()
+      });
+    } else {
+      threeRootElement.current?.replaceWith(three.canvas);
     }
   }, [router, three]);
 
+  // Check if three should be disabled
   if (three) {
     if (disabled) {
       three.unbindEventListeners();
