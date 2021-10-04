@@ -21,6 +21,7 @@ import ClockPlugin from "@shd-developer/interactive-map/dist/plugins/clock-plugi
 import AnimationMixerPlugin from "@shd-developer/interactive-map/dist/plugins/animation-mixer-plugin/animation-mixer-plugin";
 import BrowserResizePlugin from "@shd-developer/interactive-map/dist/plugins/browser-resize-plugin/browser-resize-plugin";
 import GlobalIlluminationPlugin from "@shd-developer/interactive-map/dist/plugins/global-illumination-plugin/global-illumination-plugin";
+import MapControlsPlugin from "@shd-developer/interactive-map/dist/plugins/map-controls-plugin/map-controls-plugin";
 
 const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   const threeRootElement = useRef<HTMLCanvasElement | null>(null);
@@ -51,6 +52,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
               new MousePositionPlugin,
               new RaycasterPlugin({trigger: "mousemove"}),
               new AnimationPlugin(animationConfig),
+              new MapControlsPlugin,
             ],
           )
         });
