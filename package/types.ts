@@ -7,7 +7,6 @@ export interface ISize {
 
 export interface IManager {
     update: Function;
-    onWindowResizeCallback: Function;
 }
 
 export interface IPosition {
