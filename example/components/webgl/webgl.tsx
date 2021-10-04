@@ -40,8 +40,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
             [
               new BrowserResizePlugin,
               new ClickPlugin(
-                createClickBindings(store, router),
-                'click',
+                createClickBindings(store, router)
               ),
               new HoverPlugin(
                 createHoverBindings(store),

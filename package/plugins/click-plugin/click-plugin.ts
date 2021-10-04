@@ -6,7 +6,7 @@ import { IClickPlugin } from "./click-plugin.types";
 import { IBindingConfig } from "../..";
 
 export default class ClickPlugin {
-    constructor(bindings: IClickBindingConfig[], type: string) {
+    constructor(bindings: IClickBindingConfig[]) {
         return class implements IClickPlugin{
             private dataStore: IDataStore;
 
@@ -19,15 +19,15 @@ export default class ClickPlugin {
                 this.animations = dataStore.get("animations");
                 this.mixer = dataStore.get("animationMixer");
 
-                this.dataStore.set(`${type}Bindings`, bindings);
+                this.dataStore.set(`clickBindings`, bindings);
             }
 
             public bindEventListener(): void {
-                window.addEventListener(type, e => this.handleClick(e as MouseEvent));
+                window.addEventListener("click", e => this.handleClick(e as MouseEvent));
             }
 
             public unbindEventListener(): void {
-                window.removeEventListener(type, e => this.handleClick(e as MouseEvent));
+                window.removeEventListener("click", e => this.handleClick(e as MouseEvent));
             }
 
             public handleClick = (e: MouseEvent): void => {
