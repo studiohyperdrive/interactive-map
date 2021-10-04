@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { useRouter } from "next/dist/client/router";
 
 import ThreeEntryPoint from "@shd-developer/interactive-map/dist/three-entry-point";
-import { ClickPlugin, HoverPlugin, MousePositionPlugin, RaycasterPlugin, AnimationPlugin, GltfDracoLoaderPlugin, ClockPlugin, AnimationMixerPlugin, TabNavigationPlugin } from "@shd-developer/interactive-map/dist/plugins";
+import { ClickPlugin, HoverPlugin, MousePositionPlugin, RaycasterPlugin, AnimationPlugin, GltfDracoLoaderPlugin, ClockPlugin, AnimationMixerPlugin, TabNavigationPlugin, BrowserResizePlugin, GlobalIlluminationPlugin, MapControlsPlugin } from "@shd-developer/interactive-map/dist/plugins";
 
 import animationConfig from '../../bindings/animation';
 import createClickBindings from "../../bindings/click";
@@ -11,6 +11,7 @@ import createHoverBindings from "../../bindings/hover";
 import createTabNavigationBindings from "../../bindings/tab-navigation";
 
 import sceneConfig from "../../config/sceneConfig";
+import controlsConfig from "../../config/controlsConfig";
 
 import actions from "../../redux/actions";
 import store from "../../redux/store";
@@ -26,9 +27,9 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
       threeRootElement.current,
       sceneConfig,
       [
+        new BrowserResizePlugin,
         new ClickPlugin(
           createClickBindings(store, router),
-          'click',
         ),
         new HoverPlugin(
           createHoverBindings(store),
@@ -39,11 +40,13 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
       ],
       [
         new GltfDracoLoaderPlugin("/models/interactive-map_v2.8-draco.glb"),
+        new GlobalIlluminationPlugin,
         new ClockPlugin,
         new AnimationMixerPlugin,
         new MousePositionPlugin,
-        new RaycasterPlugin({ trigger: "mousemove" }),
+        new RaycasterPlugin({trigger: "mousemove"}),
         new AnimationPlugin(animationConfig),
+        new MapControlsPlugin(controlsConfig),
       ],
     ) : null;
   }
@@ -74,20 +77,6 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
       {/* <div className="im__webgl--container"> */}
       <canvas ref={threeRootElement} />
       {/* </div> */}
-
-      <div className="webgl__rotate-buttons">
-        <div className="webgl__rotate-button" onClick={() => {
-          const manager = three?.manager;
-          manager?.controls?.handleClickRotateLeft();
-          manager?.update();
-        }}>{"<-"}</div>
-
-        <div className="webgl__rotate-button" onClick={() => {
-          const manager = three?.manager;
-          manager?.controls?.handleClickRotateRight();
-          manager?.update();
-        }}>{"->"}</div>
-      </div>
     </div>
   );
 };

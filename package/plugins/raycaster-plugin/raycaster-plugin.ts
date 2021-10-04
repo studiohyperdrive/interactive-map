@@ -34,11 +34,7 @@ export class RaycasterPlugin {
         
                 this.raycaster.setFromCamera(pos, this.camera);
         
-                const children = (flattenChildren(this.scene.children).filter(c => {
-                    return c instanceof Mesh;
-                }) as Mesh[]);
-        
-                this.dataStore.set('intersection', this.raycaster.intersectObjects(children)[0]);                
+                this.dataStore.set('intersection', this.raycaster.intersectObjects(this.scene.children, true)[0]);                
             }
 
             public update() {}

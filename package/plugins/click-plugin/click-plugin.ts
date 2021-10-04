@@ -9,7 +9,7 @@ import { IDataStore } from "../../data-store/data-store.types";
 import { IClickPlugin } from "./click-plugin.types";
 
 export class ClickPlugin {
-    constructor(bindings: IClickBindingConfig[], type: string) {
+    constructor(bindings: IClickBindingConfig[]) {
         return class implements IClickPlugin{
             private dataStore: IDataStore;
 
@@ -22,15 +22,15 @@ export class ClickPlugin {
                 this.animations = dataStore.get("animations");
                 this.mixer = dataStore.get("animationMixer");
 
-                this.dataStore.set(`${type}Bindings`, bindings);
+                this.dataStore.set(`clickBindings`, bindings);
             }
 
             public bindEventListener(): void {
-                window.addEventListener(type, e => this.handleClick(e as MouseEvent));
+                window.addEventListener("click", e => this.handleClick(e as MouseEvent));
             }
 
             public unbindEventListener(): void {
-                window.removeEventListener(type, e => this.handleClick(e as MouseEvent));
+                window.removeEventListener("click", e => this.handleClick(e as MouseEvent));
             }
 
             public handleClick = (e: MouseEvent): void => {
