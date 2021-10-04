@@ -1,10 +1,11 @@
 import { PerspectiveCamera, WebGLRenderer } from "three";
 import { onWindowResize } from "../../utils";
 import { IDataStore } from "../../data-store/data-store.types";
+import { IBrowserResizePlugin } from "./browser-resize-plugin.types";
 
 export default class BrowserResizePlugin {
     constructor() {
-        return class {
+        return class implements IBrowserResizePlugin {
             private dataStore: IDataStore;
 
             public renderer: WebGLRenderer;

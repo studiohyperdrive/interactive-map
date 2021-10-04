@@ -6,5 +6,5 @@ export interface IBrowserResizePlugin extends IEventPlugin {
     camera: PerspectiveCamera,
     bindEventListener: () => void,
     unbindEventListener: () => void,
-    handleResize: () => void,
+    handleResize: (e:UIEvent) => void,
 }
