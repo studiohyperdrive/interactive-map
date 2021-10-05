@@ -5,25 +5,27 @@ import { useRouter } from "next/dist/client/router";
 import createClickBindings from "../../bindings/click";
 import createHoverBindings from "../../bindings/hover";
 import animationConfig from '../../bindings/animation';
+import sceneConfig from "../../config/sceneConfig";
+import controlsConfig from "../../config/controlsConfig";
 
 import actions from "../../redux/actions";
 import store from "../../redux/store";
 
 import { WebGLProps } from "./webgl.types";
-import sceneConfig from "../../config/sceneConfig";
-import controlsConfig from "../../config/controlsConfig";
 import ThreeEntryPoint from "@shd-developer/interactive-map/dist/three-entry-point";
-import ClickPlugin from "@shd-developer/interactive-map/dist/plugins/click-plugin/click-plugin";
-import HoverPlugin from "@shd-developer/interactive-map/dist/plugins/hover-plugin/hover-plugin";
-import MousePositionPlugin from "@shd-developer/interactive-map/dist/plugins/mouse-position-plugin/mouse-position-plugin";
-import RaycasterPlugin from "@shd-developer/interactive-map/dist/plugins/raycaster-plugin/raycaster-plugin";
-import AnimationPlugin from "@shd-developer/interactive-map/dist/plugins/animation-plugin/animation-plugin";
-import GltfDracoLoaderPlugin from "@shd-developer/interactive-map/dist/plugins/gltf-draco-loader-plugin/gltf-draco-loader-plugin";
-import ClockPlugin from "@shd-developer/interactive-map/dist/plugins/clock-plugin/clock-plugin";
-import AnimationMixerPlugin from "@shd-developer/interactive-map/dist/plugins/animation-mixer-plugin/animation-mixer-plugin";
-import BrowserResizePlugin from "@shd-developer/interactive-map/dist/plugins/browser-resize-plugin/browser-resize-plugin";
-import GlobalIlluminationPlugin from "@shd-developer/interactive-map/dist/plugins/global-illumination-plugin/global-illumination-plugin";
-import MapControlsPlugin from "@shd-developer/interactive-map/dist/plugins/map-controls-plugin/map-controls-plugin";
+import {
+  ClickPlugin,
+  HoverPlugin,
+  MousePositionPlugin,
+  RaycasterPlugin,
+  AnimationPlugin,
+  GltfDracoLoaderPlugin,
+  ClockPlugin,
+  AnimationMixerPlugin,
+  BrowserResizePlugin,
+  GlobalIlluminationPlugin,
+  MapControlsPlugin,
+} from "@shd-developer/interactive-map/dist/plugins";
 
 const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   const threeRootElement = useRef<HTMLCanvasElement | null>(null);
