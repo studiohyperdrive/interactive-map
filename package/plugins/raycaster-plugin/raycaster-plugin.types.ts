@@ -1,4 +1,5 @@
 import { Camera, Raycaster, Scene } from "three";
+
 import { IScenePlugin } from "../../types";
 
 export interface IRacasterPlugin extends IScenePlugin {
@@ -7,6 +8,8 @@ export interface IRacasterPlugin extends IScenePlugin {
     scene: Scene,
     handleClick: () => void,
 }
+
+// Config
 
 export interface IRaycasterConfig {
     trigger: "click" | "mousemove",

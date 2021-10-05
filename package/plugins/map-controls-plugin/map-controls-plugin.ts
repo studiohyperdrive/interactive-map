@@ -1,6 +1,7 @@
 import { Camera, Vector3 } from "three";
-import { IDataStore } from "../../data-store/data-store.types";
 import { MapControls } from "three/examples/jsm/controls/OrbitControls";
+
+import { IDataStore } from "../../data-store/data-store.types";
 import { IMapControlsPlugin } from "./map-controls-plugin.types";
 import { IMapControlsConfig } from "./map-controls-plugin.types";
 

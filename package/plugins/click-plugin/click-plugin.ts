@@ -1,9 +1,9 @@
 import { AnimationClip, AnimationMixer, Mesh } from "three";
-import { IAnimate, IClickBindingConfig } from "../../types";
-import DataStore from "../../data-store/data-store";
+
 import { IDataStore } from "../../data-store/data-store.types";
+import { IAnimate, IClickBindingConfig, IBindingConfig } from "../../types";
 import { IClickPlugin } from "./click-plugin.types";
-import { IBindingConfig } from "../..";
+import { isMatching } from "../../utils/bindings";
 
 export default class ClickPlugin {
     constructor(bindings: IClickBindingConfig[]) {
@@ -13,7 +13,7 @@ export default class ClickPlugin {
             public animations: AnimationClip[];
             public mixer: AnimationMixer;
 
-            constructor(dataStore: DataStore) {
+            constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
                 this.animations = dataStore.get("animations");
@@ -40,7 +40,7 @@ export default class ClickPlugin {
 
                 if (clicked instanceof Mesh) {
                     bindings.forEach(binding => {
-                        if (this.isMatching(clicked, binding)) {``
+                        if (isMatching(clicked, binding)) {``
                             binding.onClick(clicked);
 
                             this.handleBindingAnimation(binding, (animation: AnimationClip, animationBinding: IAnimate) => {
@@ -55,27 +55,13 @@ export default class ClickPlugin {
                 }
             }
 
-            // Utils?
-            public isMatching(item: { name: string, parent?: any }, binding: IBindingConfig): boolean {
-                const parentName = item.parent?.type === "Group"? item.parent.name : undefined;
-                
-                switch (binding.matching) {
-                    case "partial":
-                        return item.name.indexOf(binding.name) > -1 || parentName && parentName.indexOf(binding.name) > -1;
-        
-                    case "exact":
-                    default:
-                        return item.name === binding.name || parentName && parentName === binding.name;
-                }
-            }
-
             public handleBindingAnimation(binding: IBindingConfig, callback: (animation: AnimationClip, animationBinding: IAnimate) => void) {
                 if (binding.animate) {
                     this.animations = this.dataStore.get("animations")
                     
                     binding.animate.forEach((animationBinding) => {
                         this.animations.forEach(animation => {
-                            if (this.isMatching(animation, animationBinding)) {
+                            if (isMatching(animation, animationBinding)) {
                                 callback(animation, animationBinding);
                             }
                         });

@@ -1,8 +1,9 @@
-import { AnimationClip, AnimationMixer, Scene } from "three";
-import { IBindingConfig, IAnimationConfig } from "../../types";
-import DataStore from "../../data-store/data-store";
+import { AnimationClip, AnimationMixer } from "three";
+
+import { IAnimationConfig } from "../../types";
 import { IDataStore } from "../../data-store/data-store.types";
 import { IAnimationPlugin } from "./animation-plugin.types";
+import { isMatching } from "../../utils/bindings";
 
 export default class AnimationPlugin {
     constructor(config: IAnimationConfig[]) {
@@ -12,7 +13,7 @@ export default class AnimationPlugin {
             public mixer: AnimationMixer;
             public animationsStarted: boolean;
 
-            constructor(dataStore: DataStore) {
+            constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
                 this.mixer = dataStore.get("animationMixer");
@@ -27,7 +28,7 @@ export default class AnimationPlugin {
 
                 config.forEach(animationData => {
                     animations.forEach((animationClip, i) => {
-                        if (this.isMatching(animationClip, animationData)) {
+                        if (isMatching(animationClip, animationData)) {
                             const action = this.mixer.clipAction(animationClip);
                             action.loop = animationData.loop;
                             animationData.startAnimation(action, i);
@@ -35,19 +36,6 @@ export default class AnimationPlugin {
                     })
                 });
             }
-
-            // Utils?
-            public isMatching(item: {name: string}, binding: IBindingConfig): boolean {
-                switch (binding.matching) {
-                    case "partial":
-                        return item.name.indexOf(binding.name) > -1;
-        
-                    case "exact":
-                    default:
-                        return item.name === binding.name;
-                }
-            }
-
 
             public update() {
                 if (this.dataStore.get("mapLoaded") && !this.animationsStarted) {

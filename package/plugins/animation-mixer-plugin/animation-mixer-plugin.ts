@@ -1,4 +1,5 @@
 import { AnimationMixer, Scene } from "three";
+
 import { IDataStore } from "../../data-store/data-store.types"
 import { IAnimationMixerPlugin } from "./animation-mixer-plugin.types";
 
