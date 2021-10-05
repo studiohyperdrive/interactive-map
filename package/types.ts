@@ -1,12 +1,31 @@
-import { AnimationActionLoopStyles } from "three";
+import { AnimationActionLoopStyles, OrthographicCamera, PerspectiveCamera, Scene, WebGLRenderer } from "three";
+
+// Base
+
+export interface IEntryPoint {
+    canvas: HTMLCanvasElement;
+	manager: IManager;
+	sceneConfig: ISceneConfig;
+	plugins: any[];
+	interactive: boolean;
+    bindEventListeners: () => void;
+    unbindEventListeners: () => void;
+    render: () => void;
+}
+
+export interface IManager {
+    sizes: ISize;
+	sceneConfig: ISceneConfig;
+	scene: Scene;
+	renderer: WebGLRenderer;
+	camera: PerspectiveCamera | OrthographicCamera;
+	plugins: any[];
+    update: Function;
+}
 
 export interface ISize {
     width: number;
     height: number;
-}
-
-export interface IManager {
-    update: Function;
 }
 
 export interface IPosition {
@@ -15,9 +34,7 @@ export interface IPosition {
     z: number,
 }
 
-export interface IUpdates {
-    update: Function;
-}
+// Bindings
 
 export interface IBindingConfig {
     name: string,
@@ -42,29 +59,7 @@ export interface IAnimationConfig extends IBindingConfig, IAnimate {
     startAnimation: Function;
 }
 
-// POC types
-export interface IEventPlugin {
-    bindEventListener: () => void,
-    unbindEventListener: () => void,
-}
-
-export interface IScenePlugin {
-    update: () => void,
-}
-
-export interface IPerspectiveCameraConfig {
-    fov: number,
-    near: number,
-    far: number,
-    position: IPosition,
-}
-
-export interface IOrthographicCameraConfig {
-    frustumSize: number,
-    near: number,
-    far: number,
-    position: IPosition,
-}
+// Configs
 
 export interface IPerspectiveCameraConfig {
     fov: number,
@@ -85,7 +80,17 @@ export interface ICameraConfig {
     config: IOrthographicCameraConfig | IPerspectiveCameraConfig,
 }
 
-
 export interface ISceneConfig {
     camera: ICameraConfig,
+}
+
+// Plugins
+
+export interface IEventPlugin {
+    bindEventListener: () => void,
+    unbindEventListener: () => void,
+}
+
+export interface IScenePlugin {
+    update: () => void,
 }
