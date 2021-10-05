@@ -1,7 +1,6 @@
 import { OrthographicCamera, PerspectiveCamera, WebGLRenderer } from "three";
-import { IOrthographicCameraConfig, IPerspectiveCameraConfig } from "../types";
 
-import { ISize } from "../types";
+import { ISize, IOrthographicCameraConfig, IPerspectiveCameraConfig } from "../types";
 
 export const onWindowResize = (renderer: WebGLRenderer, camera: PerspectiveCamera | OrthographicCamera, cameraConfig: IPerspectiveCameraConfig | IOrthographicCameraConfig): ISize => {
     const canvas = renderer.domElement
@@ -31,7 +30,6 @@ export const onWindowResize = (renderer: WebGLRenderer, camera: PerspectiveCamer
         camera.bottom = (cameraConfig as IOrthographicCameraConfig).frustumSize / - 2;
     }
 
-    
     camera.updateProjectionMatrix();
     renderer.setSize(sizes.width, sizes.height, false);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
