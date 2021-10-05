@@ -11,6 +11,7 @@
   },
   "scripts": {
     "build": "rm -rf dist && node node_modules/typescript/lib/tsc.js",
+    "build:watch": "rm -rf dist && node node_modules/typescript/lib/tsc.js --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "prepublish": "npm run build",

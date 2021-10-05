@@ -27,7 +27,7 @@ export default class ThreeEntryPoint implements IEntryPoint {
 	public bindEventListeners(): void {
 		this.interactive = true;
 
-		this.plugins.forEach(plugin => {			
+		this.plugins.forEach(plugin => {
 			plugin.bindEventListener();
 		});
 	}

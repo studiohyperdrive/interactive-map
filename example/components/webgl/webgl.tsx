@@ -1,18 +1,18 @@
-import { FC, useEffect, useRef } from "react";
-import { connect } from "react-redux";
-import { useRouter } from "next/dist/client/router";
+import { FC, useEffect, useRef } from 'react';
+import { connect } from 'react-redux';
+import { useRouter } from 'next/dist/client/router';
 
-import createClickBindings from "../../bindings/click";
-import createHoverBindings from "../../bindings/hover";
+import createClickBindings from '../../bindings/click';
+import createHoverBindings from '../../bindings/hover';
 import animationConfig from '../../bindings/animation';
-import sceneConfig from "../../config/sceneConfig";
-import controlsConfig from "../../config/controlsConfig";
+import sceneConfig from '../../config/sceneConfig';
+import controlsConfig from '../../config/controlsConfig';
 
-import actions from "../../redux/actions";
-import store from "../../redux/store";
+import actions from '../../redux/actions';
+import store from '../../redux/store';
 
-import { WebGLProps } from "./webgl.types";
-import ThreeEntryPoint from "@shd-developer/interactive-map/dist/three-entry-point";
+import { WebGLProps } from './webgl.types';
+import ThreeEntryPoint from '@shd-developer/interactive-map/dist/three-entry-point';
 import {
   ClickPlugin,
   HoverPlugin,
@@ -25,7 +25,7 @@ import {
   BrowserResizePlugin,
   GlobalIlluminationPlugin,
   MapControlsPlugin,
-} from "@shd-developer/interactive-map/dist/plugins";
+} from '@shd-developer/interactive-map/dist/plugins';
 
 const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   const threeRootElement = useRef<HTMLCanvasElement | null>(null);
@@ -40,25 +40,21 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
             threeRootElement.current,
             sceneConfig,
             [
-              new BrowserResizePlugin,
-              new ClickPlugin(
-                createClickBindings(store, router)
-              ),
-              new HoverPlugin(
-                createHoverBindings(store),
-              ),
+              new BrowserResizePlugin(),
+              new ClickPlugin(createClickBindings(store, router)),
+              //new HoverPlugin(createHoverBindings(store)),
             ],
             [
-              new GltfDracoLoaderPlugin("/models/interactive-map_v2.8-draco.glb"),
-              new GlobalIlluminationPlugin,
-              new ClockPlugin,
-              new AnimationMixerPlugin,
-              new MousePositionPlugin,
-              new RaycasterPlugin({trigger: "mousemove"}),
+              new GltfDracoLoaderPlugin('/models/boerderleren.gltf'),
+              //new GlobalIlluminationPlugin(),
+              new ClockPlugin(),
+              new AnimationMixerPlugin(),
+              new MousePositionPlugin(),
+              new RaycasterPlugin({ trigger: 'mousemove' }),
               new AnimationPlugin(animationConfig),
               new MapControlsPlugin(controlsConfig),
-            ],
-          )
+            ]
+          ),
         });
       } else {
         threeRootElement.current?.replaceWith(three.canvas);
@@ -74,15 +70,9 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
     }
   }
 
-  return (
-    <div>
-      {/* <div className="im__webgl--container"> */}
-        <canvas ref={threeRootElement} />
-      {/* </div> */}
-    </div>
-  );
+  return <canvas ref={threeRootElement} />;
 };
 
-export default connect((state: {three?: ThreeEntryPoint}) => {
-  return {three: state.three};
+export default connect((state: { three?: ThreeEntryPoint }) => {
+  return { three: state.three };
 })(WebGL);
