@@ -12,6 +12,206 @@ The package is built with:
 
 For a complete list of packages and version check out the `package.json` file.
 
+## Usage
+
+Basic usage of this package requires at least:
+- A reference to an HTMLCanvasElement
+- The path to a local GLTF & DRACO compatible mesh file
+- Basic camera configuration
+
+```
+new ThreeEntryPoint(
+    // Canvas element
+    canvas,
+
+    // Config
+    {
+        map: "/models/interactive-map_v2.8-draco.glb",
+        camera: {
+            type: "orthographic",
+            config: {
+                frustumSize: 2,
+                near: 0.0001,
+                far: 5,
+                position:
+                {
+                    x: 2,
+                    y: 2,
+                    z: 2
+                }
+            }
+        },
+        controls: {
+            enableDamping: true
+        }
+    },
+
+    // Clicks
+    [],
+
+    // Hover
+    [],
+
+    // Animations
+    [],
+)
+```
+
+## Clicks
+
+To respond to click events in the scene you should first ensure clear naming is applied in the mesh file. Using either the `exact` or `partial` matching rules you can emulate behaviour similar to `document.querySelector`.
+
+The example below will change the color of any mesh with `skyscraper` in its name. 
+
+```
+{
+    name: "skyscraper",
+    matching: "partial",
+
+    onClick: (mesh: Mesh) => {
+        const material = (mesh.material as MeshStandardMaterial).clone();    
+        material.color.setHex(Math.random() * 0xffffff);
+        mesh.material = material;
+    };
+}
+```
+
+You can use any framework or custom functions in the `onClick` callback function provided you can supply a reference to them. A simple way of doing this is by wrapping the click bindings in a function that takes the necessary services / instances / objects and returns an array of click bindings.
+
+The example below uses the Next router to navigate to a dedicated page when clicking the `tower` mesh.
+
+```
+function createClickBindings(router: NextRouter) {
+    return [
+        {
+            name: "tower",
+            matching: "partial",
+
+            onClick: () => {
+                router.push("/tower");
+            }
+        },
+    ];
+}
+```
+
+## Hover
+
+Similar to click bindings explained above you can define the same interaction for hover events. This example will randomly change the color of a `skyscraper` mesh when first hovering over the mesh and then revert it when hovering away.
+
+```
+{
+    name: 'skyscraper',
+    matching: 'partial',
+
+    onHoverStart: (mesh: Mesh) => {
+        const material = (mesh.material as MeshStandardMaterial).clone();    
+        material.color.setHex(Math.random() * 0xffffff);
+        mesh.material = material;
+    },
+
+    onHoverEnd: (mesh: Mesh) => {
+        const material = (mesh.material as MeshStandardMaterial).clone();
+        material.color.setHex(0xcbcbcb);
+        mesh.material = material;
+    }
+}
+```
+
+Exactly like the `Click` bindings, references to other framework features can be included. The following example implements a basic redux store and writes the name of the hovered mesh to state.
+
+That state is then read by a separate `Tooltip` component to be shown to the user.
+
+```
+function createHoverBindings(store: Store) {
+    return [
+        {
+            name: "",
+            matching: "partial",
+
+            onHoverStart: (mesh: Mesh) => {
+                store.dispatch({
+                    type: actions.tooltip.set,
+                    payload: mesh.name
+                });
+            },
+
+            onHoverEnd: () => {
+                store.dispatch({
+                    type: actions.tooltip.reset
+                });
+            }
+        }
+    ];
+}
+```
+
+## Animation
+
+Consistent animations can be defined in the last array passed to the `ThreeEntryPoint` constructor. The example below will start the associated `AnimationAction` at a random time and repeat that animation at a random interval.
+
+```
+{
+    name: 'small-house',
+    matching: 'partial',
+    
+    loop: LoopOnce,
+    startAnimation: (animationAction: AnimationAction, i: number) => {         
+        setTimeout(() => {
+            animationAction
+            .reset()
+            .play();
+            setInterval(() => {
+                animationAction
+                .reset()
+                .play();
+            }, MathUtils.randInt(5000, 10000));
+        }, MathUtils.randInt(1000, 5000))
+    }
+}
+```
+
+Animations that occur in response to an event are triggered from that event's optional `animate` property. Again, it's important to have clear nomenclature in place to ensure maintainability.
+
+```
+{
+    name: 'small-house',
+    matching: 'exact',
+
+    onClick: () => {},
+
+    animate: [
+        {
+            name: 'small-houseAction',
+            matching: 'exact',
+            loop: LoopOnce
+        }
+    ]
+}
+```
+
+The example above, implemented as a `Click` binding, will perform the `small-houseAction` animation once on any `small-house` that gets clicked.
+
+This can also be done for `Hover` bindings.
+
+```
+{
+    name: 'tower',
+    matching: 'exact',
+
+    onHoverStart: () => { },
+    onHoverEnd: () => { },
+
+    animate: [
+        {
+            name: 'penthouseAction',
+            matching: 'partial',
+            loop: LoopRepeat,
+        },
+    ]
+}
+```
+
 ## Setup
 
 - Navigate to the package root `cd package`
