@@ -2,7 +2,7 @@ import { OrthographicCamera, PerspectiveCamera, Scene, WebGLRenderer } from "thr
 
 import DataStore from "./data-store/data-store";
 import { buildScene, buildRenderer, buildPerspectiveCamera, buildOrthographicCamera } from "./utils/build";
-import { IManager, ISize, ISceneConfig, IOrthographicCameraConfig, IPerspectiveCameraConfig, IIlluminationConfig } from "./types";
+import { IManager, ISize, ISceneConfig, IOrthographicCameraConfig, IPerspectiveCameraConfig } from "./types";
 
 export default class SceneManager implements IManager {
 	private dataStore: DataStore;

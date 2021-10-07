@@ -1,20 +1,42 @@
+import { Mesh } from "three";
+import { flattenChildren } from "@shd-developer/interactive-map";
 import { IClickBindingConfig } from "@shd-developer/interactive-map/dist/types";
-import { mutateRandomColor } from "@shd-developer/interactive-map/dist/utils/random-color";
+import { setOpacity } from "@shd-developer/interactive-map/dist/utils/opacity";
 import { NextRouter } from "next/dist/client/router";
 import { Store } from "redux";
 
-import { Mesh, MeshStandardMaterial, LoopOnce } from "three";
-
-import actions from "../redux/actions";
+const barns = [
+    "livestock-farm",
+    "agriculture",
+    "dairy-farm",
+    "horticulture"
+]
 
 export default function createClickBindings(store: Store, router: NextRouter) {
+    const handleOpacity = (mesh: Mesh) => {
+        const parent = mesh.parent ? mesh.parent.parent ? mesh.parent.parent : mesh.parent : null;
+        const { three } = store.getState();
+        const scene = three.manager.scene;
+
+        const children = flattenChildren(scene.children, Infinity).filter((c) => c.type !== "Object3D" && c.type !== "OrthographicCamera" && c.name !== "Scene");
+
+        parent && children.forEach((c) => {
+            if (c.parent.name !== parent.name && c.parent.parent.name !== parent.name) {
+                setOpacity(c, 0.3);
+            } else {
+                //console.log(c)
+                setOpacity(parent, 1);
+            }
+        });
+    }
+
     return ([
         {
-            name: "skyscraper",
+            name: "farm",
             matching: "partial",
-            onClick: mutateRandomColor
+            onClick: handleOpacity
         },
-        {
+        /* {
             name: "tower",
             matching: "partial",
             onClick: (mesh: Mesh) => {
@@ -46,6 +68,6 @@ export default function createClickBindings(store: Store, router: NextRouter) {
                     loop: LoopOnce,
                 }
             ]
-        }
+        } */
     ] as IClickBindingConfig[]);
 }

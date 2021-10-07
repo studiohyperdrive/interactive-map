@@ -1,7 +1,7 @@
-import { LoopOnce, MathUtils, AnimationAction } from "three";
-import { IAnimationConfig } from "@shd-developer/interactive-map/dist/types";
+import { LoopOnce, MathUtils, AnimationAction } from 'three';
+import { IAnimationConfig } from '@shd-developer/interactive-map/dist/types';
 
-export default ([
+export default [
     {
         name: 'chicken',
         matching: 'partial',
@@ -25,16 +25,12 @@ export default ([
         loop: LoopOnce,
         startAnimation: (animationAction: AnimationAction, i: number) => {
             setTimeout(() => {
-                animationAction
-                    .reset()
-                    .play();
+                animationAction.reset().play();
                 setInterval(() => {
-                    animationAction
-                        .reset()
-                        .play();
+                    animationAction.reset().play();
                 }, MathUtils.randInt(5000, 10000));
-            }, MathUtils.randInt(1000, 5000))
-        }
+            }, MathUtils.randInt(1000, 5000));
+        },
     },
     {
         name: 'goat',
@@ -42,16 +38,12 @@ export default ([
         loop: LoopOnce,
         startAnimation: (animationAction: AnimationAction, i: number) => {
             setTimeout(() => {
-                animationAction
-                    .reset()
-                    .play();
+                animationAction.reset().play();
                 setInterval(() => {
-                    animationAction
-                        .reset()
-                        .play();
+                    animationAction.reset().play();
                 }, MathUtils.randInt(5000, 10000));
-            }, MathUtils.randInt(1000, 5000))
-        }
+            }, MathUtils.randInt(1000, 5000));
+        },
     },
     {
         name: 'sheep',
@@ -59,15 +51,11 @@ export default ([
         loop: LoopOnce,
         startAnimation: (animationAction: AnimationAction, i: number) => {
             setTimeout(() => {
-                animationAction
-                    .reset()
-                    .play();
+                animationAction.reset().play();
                 setInterval(() => {
-                    animationAction
-                        .reset()
-                        .play();
+                    animationAction.reset().play();
                 }, MathUtils.randInt(5000, 10000));
-            }, MathUtils.randInt(1000, 5000))
-        }
+            }, MathUtils.randInt(1000, 5000));
+        },
     },
-] as IAnimationConfig[]);
+] as IAnimationConfig[];
