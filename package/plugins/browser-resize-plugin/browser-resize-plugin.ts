@@ -38,4 +38,4 @@ export class BrowserResizePlugin {
     }
 }
 
-export default BrowserResizePlugin
+export default BrowserResizePlugin;
