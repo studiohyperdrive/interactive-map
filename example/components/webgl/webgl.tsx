@@ -45,7 +45,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
               //new HoverPlugin(createHoverBindings(store)),
             ],
             [
-              new GltfDracoLoaderPlugin('/models/boerderleren.gltf'),
+              new GltfDracoLoaderPlugin('/models/boerderleren-draco.gltf'),
               //new GlobalIlluminationPlugin(),
               new ClockPlugin(),
               new AnimationMixerPlugin(),

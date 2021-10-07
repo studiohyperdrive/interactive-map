@@ -18,13 +18,12 @@ export default function createClickBindings(store: Store, router: NextRouter) {
         const { three } = store.getState();
         const scene = three.manager.scene;
 
-        const children = flattenChildren(scene.children, Infinity).filter((c) => c.type !== "Object3D" && c.type !== "OrthographicCamera" && c.name !== "Scene");
+        const children = flattenChildren(scene.children, Infinity);
 
         parent && children.forEach((c) => {
-            if (c.parent.name !== parent.name && c.parent.parent.name !== parent.name) {
+            if (c.parent && c.parent.name !== parent.name && c.parent.parent && c.parent.parent.name !== parent.name) {
                 setOpacity(c, 0.3);
             } else {
-                //console.log(c)
                 setOpacity(parent, 1);
             }
         });
@@ -36,6 +35,11 @@ export default function createClickBindings(store: Store, router: NextRouter) {
             matching: "partial",
             onClick: handleOpacity
         },
+        /* {
+            name: "lake",
+            matching: "partial",
+            onClick: handleOpacity
+        }, */
         /* {
             name: "tower",
             matching: "partial",
