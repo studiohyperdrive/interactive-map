@@ -340,6 +340,12 @@ This can also be done for `Hover` bindings. (see [`HoverPlugin`](docs/PLUGINS.md
 
 #
 
+## 3D
+
+[This slite doc](https://studiohyperdrive.slite.com/api/s/note/AcyJqGtRBUoT88mcrUFudY/3D-naar-Three-js) documents a basic Blender to Three.js workflow. 
+
+#
+
 ## Setup
 
 - Navigate to the package root `cd package`
