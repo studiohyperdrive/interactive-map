@@ -40,37 +40,7 @@ new AnimationMixerPlugin();
 
 ### Source
 
-<details>
-
-<summary>Code</summary>
-
-```js
-class AnimationMixerPlugin {
-    constructor() {
-        return class implements IAnimationMixerPlugin {
-            private dataStore: IDataStore;
-
-            public scene: Scene;
-            public mixer: AnimationMixer;
-
-            constructor(dataStore: IDataStore) {
-                this.dataStore = dataStore;
-
-                this.scene = dataStore.get("scene");
-                this.mixer = new AnimationMixer(this.scene);
-
-                dataStore.set("animationMixer", this.mixer);
-            }
-
-            public update() {
-                const deltaTime = this.dataStore.get("deltaTime");
-                this.mixer.update(deltaTime);
-            }
-        }
-    }
-}
-```
-</details> 
+[Code](../plugins/animation-mixer-plugin/animation-mixer-plugin.ts)
 
 ## `AnimationPlugin` [ScenePlugin]
 
@@ -108,54 +78,7 @@ new AnimationPlugin([
 
 ### Source
 
-<details>
-
-<summary>Code</summary>
-
-```js
-class AnimationPlugin {
-    constructor(config: IAnimationConfig[]) {
-        return class implements IAnimationPlugin{
-            private dataStore: IDataStore;
-
-            public mixer: AnimationMixer;
-            public animationsStarted: boolean;
-
-            constructor(dataStore: IDataStore) {
-                this.dataStore = dataStore;
-
-                this.mixer = dataStore.get("animationMixer");
-
-                this.dataStore.set("animationConfig", config);
-
-                this.animationsStarted = false;
-            }
-
-            public startAnimations() {
-                const animations: AnimationClip[] = this.dataStore.get("animations");
-
-                config.forEach(animationData => {
-                    animations.forEach((animationClip, i) => {
-                        if (isMatching(animationClip, animationData)) {
-                            const action = this.mixer.clipAction(animationClip);
-                            action.loop = animationData.loop;
-                            animationData.startAnimation(action, i);
-                        }
-                    })
-                });
-            }
-
-            public update() {
-                if (this.dataStore.get("mapLoaded") && !this.animationsStarted) {
-                    this.startAnimations();
-                    this.animationsStarted = true;
-                }
-            }
-        }
-    }
-}
-```
-</details> 
+[Code](../plugins/animation-plugin/animation-plugin.ts) 
 
 ## `BrowserResizePlugin` [EventPlugin]
 
@@ -180,43 +103,7 @@ This plugin has no dependencies.
 
 ### Source
 
-<details>
-
-<summary>Code</summary>
-
-```js
-class BrowserResizePlugin {
-    constructor() {
-        return class implements IBrowserResizePlugin {
-            private dataStore: IDataStore;
-
-            public renderer: WebGLRenderer;
-            public camera: PerspectiveCamera | OrthographicCamera;
-            public cameraConfig: ICameraConfig;
-            constructor(dataStore: IDataStore) {
-                this.dataStore = dataStore;
-
-                this.renderer = dataStore.get("renderer");
-                this.camera = dataStore.get("camera");
-                this.cameraConfig = dataStore.get("cameraConfig");
-            }
-
-            public bindEventListener(): void {
-                window.addEventListener("resize", e => this.handleResize(e));
-            }
-
-            public unbindEventListener(): void {
-                window.removeEventListener("resize", e => this.handleResize(e));
-            }
-
-            public handleResize(e: UIEvent) {
-                this.dataStore.set("sizes", onWindowResize(this.renderer, this.camera, this.cameraConfig.config));
-            }
-        }
-    }
-}
-```
-</details> 
+[Code](../plugins/browser-resize-plugin/browser-resize-plugin.ts)
 
 ## `ClickPlugin` [EventPlugin]
 
@@ -256,79 +143,7 @@ new ClickPlugin([
 
 ### Source
 
-<details>
-
-<summary>Code</summary>
-
-```js
-class ClickPlugin {
-    constructor(bindings: IClickBindingConfig[]) {
-        return class implements IClickPlugin{
-            private dataStore: IDataStore;
-
-            public animations: AnimationClip[];
-            public mixer: AnimationMixer;
-
-            constructor(dataStore: IDataStore) {
-                this.dataStore = dataStore;
-
-                this.animations = dataStore.get("animations");
-                this.mixer = dataStore.get("animationMixer");
-
-                this.dataStore.set(`clickBindings`, bindings);
-            }
-
-            public bindEventListener(): void {
-                window.addEventListener("click", e => this.handleClick(e as MouseEvent));
-            }
-
-            public unbindEventListener(): void {
-                window.removeEventListener("click", e => this.handleClick(e as MouseEvent));
-            }
-
-            public handleClick = (e: MouseEvent): void => {
-                const intersection = this.dataStore.get("intersection");
-                if (!intersection) {
-                    return;
-                }
-
-                const clicked = intersection.object;
-
-                if (clicked instanceof Mesh) {
-                    bindings.forEach(binding => {
-                        if (isMatching(clicked, binding)) {``
-                            binding.onClick(clicked);
-
-                            this.handleBindingAnimation(binding, (animation: AnimationClip, animationBinding: IAnimate) => {
-                                const action = this.mixer.clipAction(animation);
-                                action.loop = animationBinding.loop;
-                                if (!action.isRunning()) {
-                                    action.reset().play();
-                                }
-                            });
-                        }
-                    });
-                }
-            }
-
-            public handleBindingAnimation(binding: IBindingConfig, callback: (animation: AnimationClip, animationBinding: IAnimate) => void) {
-                if (binding.animate) {
-                    this.animations = this.dataStore.get("animations")
-                    
-                    binding.animate.forEach((animationBinding) => {
-                        this.animations.forEach(animation => {
-                            if (isMatching(animation, animationBinding)) {
-                                callback(animation, animationBinding);
-                            }
-                        });
-                    });
-                }
-            }
-        }
-    }
-}
-```
-</details> 
+[Code](../plugins/click-plugin/click-plugin.ts) 
 
 ## `ClockPlugin` [ScenePlugin]
 
@@ -353,39 +168,7 @@ This plugin has no dependencies.
 
 ### Source
 
-<details>
-
-<summary>Code</summary>
-
-```js
-class ClockPlugin {
-    constructor() {
-        return class implements IClockPlugin {
-            private dataStore: IDataStore;
-
-            public clock: Clock;
-            public previousTime: number;
-
-            constructor(dataStore: IDataStore) {
-                this.dataStore = dataStore;
-
-                this.clock = new Clock();
-		        this.previousTime = 0;
-            }
-
-            public update() {
-                const elapsedTime = this.clock.getElapsedTime();
-                const deltaTime = elapsedTime - this.previousTime;
-                this.previousTime = elapsedTime;
-                
-                this.dataStore.set("elapsedTime", elapsedTime)
-                this.dataStore.set("deltaTime", deltaTime)
-            }
-        }
-    }
-}
-```
-</details> 
+[Code](../plugins/clock-plugin/clock-plugin.ts)
 
 ## `GlobalIlluminationPlugin` [ScenePlugin]
 
@@ -407,49 +190,7 @@ This plugin has no dependencies.
 
 ### Source
 
-<details>
-
-<summary>Code</summary>
-
-```js
-class GlobalIlluminationPlugin {
-    constructor() {
-        return class implements IGlobalIlluminationPlugin {
-            private dataStore: IDataStore;
-
-            public scene: Scene;
-            constructor(dataStore: IDataStore) {
-                this.dataStore = dataStore;
-
-                this.scene = dataStore.get("scene");
-                this.addLights()
-            }
-
-            public addLights() {
-                const ambient = this.createAmbient();
-                const directional = this.createDirectional();
-
-                this.scene.add(ambient);
-                this.scene.add(directional);
-            }
-
-            public createAmbient() {
-                return new AmbientLight(0xffffff, 0.5);
-            }
-        
-            public createDirectional() {
-                const light = new DirectionalLight(0xffffff, 1);
-                light.position.set(1, 1, 0.2);
-        
-                return light;
-            }
-
-            public update() {}
-        }
-    }
-}
-```
-</details> 
+[Code](../plugins/global-illumination-plugin/global-illumination-plugin.ts)
 
 ## `GltfDracoLoaderPlugin` [ScenePlugin]
 
@@ -480,52 +221,7 @@ This plugin has no dependencies.
 
 ### Source
 
-<details>
-
-<summary>Code</summary>
-
-```js
-class GltfDracoLoaderPlugin {
-    constructor(path: string) {
-        return class implements IGltfDracoLoaderPlugin{
-            private dataStore: IDataStore;
-
-            public scene: Scene;
-            public dracoLoader: DRACOLoader;
-            public gltfLoader: GLTFLoader;
-
-            constructor(dataStore: IDataStore) {
-                this.dataStore = dataStore;
-
-                dataStore.set("mapLoaded", false);
-                dataStore.set("animations", []);
-
-                this.scene = dataStore.get("scene");
-                
-                this.dracoLoader = new DRACOLoader();
-                this.dracoLoader.setDecoderPath("decoder/");
-
-                this.gltfLoader = new GLTFLoader();
-                this.gltfLoader.setDRACOLoader(this.dracoLoader);
-
-                this.loadGltf(path);
-            }
-
-            public loadGltf(path: string) {
-                this.gltfLoader.load(path, (gltf) => {                    
-                    this.dataStore.set("animations", gltf.animations);            
-                    this.scene.add(gltf.scene);
-                    this.dataStore.set("mapLoaded", true);                      
-                });
-            }
-
-            public update() {}
-        }
-    }
-}
-```
-
-</details> 
+[Code](../plugins/gltf-draco-loader-plugin/gltf-draco-loader-plugin.ts) 
 
 ## `HoverPlugin` [EventPlugin]
 
@@ -566,94 +262,7 @@ new HoverPlugin([
 
 ### Source
 
-<details>
-
-<summary>Code</summary>
-
-```js
-class HoverPlugin {
-    constructor(bindings: IHoverBindingConfig[]) {
-        return class implements IHoverPlugin{
-            private dataStore: IDataStore;
-
-            public animations: AnimationClip[];
-            public mixer: AnimationMixer;
-            public hovered: Mesh | null = null;
-
-            constructor(dataStore: DataStore) {
-                this.dataStore = dataStore;
-
-                this.animations = dataStore.get("animations");
-                this.mixer = dataStore.get("animationMixer");
-
-                this.dataStore.set(`hoverBindings`, bindings);
-            }
-
-            public bindEventListener(): void {
-                window.addEventListener("mousemove", e => this.handleHover(e as MouseEvent));
-            }
-
-            public unbindEventListener(): void {
-                window.removeEventListener("mousemove", e => this.handleHover(e as MouseEvent));
-            }
-
-            public handleHover(e: MouseEvent): void {
-                const previous = this.hovered;
-                const current = this.dataStore.get("intersection")?.object;
-        
-                if (previous === current) {
-                    return
-                }
-        
-                if (previous instanceof Mesh) {
-                    bindings.forEach(binding => {
-                        if (isMatching(previous, binding)) {
-                            binding.onHoverEnd(previous);
-                            this.handleBindingAnimation(binding, (animation: AnimationClip, animationBinding: IAnimate) => {
-                                const action = this.mixer.clipAction(animation);
-                                action.loop = LoopOnce;
-                            });
-                        }
-                    });
-                }
-        
-                if (current instanceof Mesh) {
-                    bindings.forEach(binding => {
-                        if (isMatching(current, binding)) {
-                            binding.onHoverStart(current);
-                            this.handleBindingAnimation(binding, (animation: AnimationClip, animationBinding: IAnimate) => {
-                                const action = this.mixer.clipAction(animation);
-                                action.loop = animationBinding.loop;
-                                if (!action.isRunning()) {
-                                    action.reset().play();
-                                }
-                            });
-                        }
-                    });
-                }
-        
-                this.hovered = (current as Mesh);
-            }
-
-            public handleBindingAnimation(binding: IBindingConfig, callback: (animation: AnimationClip, animationBinding: IAnimate) => void) {
-                if (binding.animate) {
-                    this.animations = this.dataStore.get("animations")
-                    
-                    binding.animate.forEach((animationBinding) => {
-                        this.animations.forEach(animation => {
-                            if (isMatching(animation, animationBinding)) {
-                                callback(animation, animationBinding);
-                            }
-                        });
-                    });
-                }
-            }
-        }
-    }
-}
-```
-
-</details> 
+[Code](../plugins/hover-plugin/hover-plugin.ts)
 
 ## `MapControlsPlugin` [ScenePlugin]
 
@@ -696,119 +305,7 @@ This plugin has no dependencies.
 
 ### Source
 
-<details>
-
-<summary>Code</summary>
-
-```js
-class MapControlsPlugin {
-    constructor(config: IMapControlsConfig) {
-        return class implements IMapControlsPlugin {
-            private dataStore: IDataStore;
-
-            public camera: Camera;
-            public canvas: HTMLCanvasElement;
-            public mapControls: MapControls;
-            constructor(dataStore: IDataStore) {
-                this.dataStore = dataStore;
-
-                this.camera = dataStore.get("camera");
-                this.canvas = dataStore.get("canvas");
-                this.mapControls = this.createMapControls(this.camera, this.canvas);
-
-                this.dataStore.set("controls", this.mapControls);
-            }
-
-            public update() {
-                this.mapControls.update();
-        
-                // this.mapControls.enabled = false;
-                //     Update the camera here
-                // this.mapControls.enabled = true;
-            };
-        
-            public createMapControls(camera: Camera, canvas: HTMLCanvasElement): MapControls {
-                const mapControls = new MapControls(camera, canvas);
-                if (config.enableDamping) {
-                    mapControls.enableDamping = config.enableDamping;
-                }
-                if (config.enableRotate) {
-                    mapControls.enableRotate = config.enableRotate;
-                }
-                if (config.enablePan) {
-                    mapControls.enablePan = config.enablePan;
-                }
-                if (config.enableZoom) {
-                    mapControls.enableZoom = config.enableZoom;
-                }
-                if (config.dampingFactor) {
-                    mapControls.dampingFactor = config.dampingFactor;
-                }
-                if (config.rotateSpeed) {
-                    mapControls.rotateSpeed = config.rotateSpeed;
-                }
-                if (config.panSpeed) {
-                    mapControls.panSpeed = config.panSpeed;
-                }
-                if (config.zoomSpeed) {
-                    mapControls.zoomSpeed = config.zoomSpeed
-                }
-                if (config.mouseButtons) {
-                    mapControls.mouseButtons = config.mouseButtons
-                }
-                if (config.touches) {
-                    mapControls.touches = config.touches
-                }
-                if (config.rotationLimits) {
-                    const limits = config.rotationLimits;
-        
-                    // Vertical rotation limits
-                    mapControls.minPolarAngle = limits.minPolarAngle? limits.minPolarAngle : Infinity;
-                    mapControls.maxPolarAngle = limits.maxPolarAngle? limits.maxPolarAngle : Infinity;
-        
-                    // Horizontal rotation limits
-                    mapControls.minAzimuthAngle = limits.minAzimuthAngle? limits.minAzimuthAngle : Infinity;
-                    mapControls.maxAzimuthAngle = limits.maxAzimuthAngle? limits.maxAzimuthAngle : Infinity;
-                }
-                if (config.panLimits) {
-                    const limits = config.panLimits;
-        
-                    // Panning limits
-                    const minPan = limits.minPan? limits.minPan : new Vector3(Infinity, Infinity, Infinity);
-                    const maxPan = limits.maxPan? limits.maxPan : new Vector3(Infinity, Infinity, Infinity);
-                    const _v = new Vector3();
-                    
-                    mapControls.addEventListener("change", () => {
-                        _v.copy(mapControls.target);
-                        mapControls.target.clamp(minPan, maxPan);
-                        _v.sub(mapControls.target);
-                        camera.position.sub(_v);
-                    })
-                }
-                if (config.distanceLimits) {
-                    const limits = config.distanceLimits;
-        
-                    // Dolly (distance) limits
-                    mapControls.minDistance = limits.minDistance? limits.minDistance : 0;
-                    mapControls.maxDistance = limits.maxDistance? limits.maxDistance : Infinity;
-                }
-                if (config.zoomLimits) {
-                    const limits = config.zoomLimits;
-        
-                    // Dolly (zoom) limits
-                    mapControls.minZoom = limits.minZoom? limits.minZoom : 0;
-                    mapControls.maxZoom = limits.maxZoom? limits.maxZoom : Infinity;
-                }
-        
-        
-                return mapControls
-            }
-        }
-    }
-}
-```
-
-</details> 
+[Code](../plugins/map-controls-plugin/map-controls-plugin.ts)
 
 ## `MousePositionPlugin` [EventPlugin]
 
@@ -832,36 +329,7 @@ This plugin has no dependencies.
 
 ### Source
 
-<details>
-
-<summary>Code</summary>
-
-```js
-class MousePositionPlugin {
-    constructor() {
-        return class implements IMousePositionPlugin {
-            private dataStore: IDataStore;
-            constructor(dataStore: IDataStore) {
-                this.dataStore = dataStore;
-            }
-
-            public bindEventListener() {
-                window.addEventListener('mousemove', this.handleMouseMove);
-            }
-
-            public unbindEventListener() {
-                window.removeEventListener('mousemove', this.handleMouseMove);
-            }
-
-            public handleMouseMove = (e: MouseEvent) => {
-                this.dataStore.set('mousePosition', {x: calculateCursorX(e), y: calculateCursorY(e)});
-            }
-        }
-    }
-}
-```
-
-</details> 
+[Code](../plugins/mouse-position-plugin/mouse-position-plugin.ts)
 
 ## `RaycasterPlugin` [EventPlugin]
 
@@ -893,49 +361,4 @@ new MousePositionPlugin({
 
 ### Source
 
-<details>
-
-<summary>Code</summary>
-
-```js
-class RaycasterPlugin {
-    constructor(config: IRaycasterConfig) {
-        return class implements IRacasterPlugin {
-            private dataStore: IDataStore;
-
-            public raycaster: Raycaster;
-            public camera: Camera;
-            public scene: Scene;
-
-            constructor(dataStore: IDataStore) {
-                this.dataStore = dataStore;
-                this.raycaster = new Raycaster();
-
-                this.camera = dataStore.get("camera");
-                this.scene = dataStore.get("scene");
-            }
-
-            public bindEventListener() {
-                window.addEventListener(config.trigger, this.handleClick);
-            }
-
-            public unbindEventListener() {
-                window.removeEventListener(config.trigger, this.handleClick);
-            }
-
-            public handleClick = () => {
-                const pos = this.dataStore.get("mousePosition");
-                if (pos === undefined) {
-                    return
-                };
-        
-                this.raycaster.setFromCamera(pos, this.camera);
-        
-                this.dataStore.set('intersection', this.raycaster.intersectObjects(this.scene.children, true)[0]);                
-            }
-        }
-    }
-}
-```
-
-</details> 
+[Code](../plugins/raycaster-plugin/raycaster-plugin.ts)
