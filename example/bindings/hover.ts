@@ -32,7 +32,7 @@ export default function createHoverBindings(store: Store) {
                     matching: 'partial',
                     loop: LoopRepeat,
                 },
-            ]
+            ],
         },
         {
             name: 'ring',

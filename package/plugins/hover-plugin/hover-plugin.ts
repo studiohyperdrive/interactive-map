@@ -1,12 +1,14 @@
 import { AnimationClip, AnimationMixer, LoopOnce, Mesh } from "three";
 
-import { IAnimate, IHoverBindingConfig, IBindingConfig } from "../../types";
+import { IAnimate, IBindingConfig, IHoverBindingConfig } from "../../types";
+
 import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
+
 import { IHoverPlugin } from "./hover-plugin.types";
 import { isMatching } from "../../utils/bindings";
 
-export default class HoverPlugin {
+export class HoverPlugin {
     constructor(bindings: IHoverBindingConfig[]) {
         return class implements IHoverPlugin{
             private dataStore: IDataStore;
@@ -20,6 +22,8 @@ export default class HoverPlugin {
 
                 this.animations = dataStore.get("animations");
                 this.mixer = dataStore.get("animationMixer");
+
+                this.dataStore.set(`hoverBindings`, bindings);
             }
 
             public bindEventListener(): void {
@@ -84,3 +88,5 @@ export default class HoverPlugin {
         }
     }
 }
+
+export default HoverPlugin;

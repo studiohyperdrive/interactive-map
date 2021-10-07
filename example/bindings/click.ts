@@ -1,9 +1,9 @@
 import { Mesh } from "three";
-import { flattenChildren } from "@shd-developer/interactive-map";
 import { IClickBindingConfig } from "@shd-developer/interactive-map/dist/types";
-import { setOpacity } from "@shd-developer/interactive-map/dist/utils/opacity";
+import { mutateRandomColor } from "@shd-developer/interactive-map/dist/utils";
 import { NextRouter } from "next/dist/client/router";
 import { Store } from "redux";
+import { handleOpacity } from "./helpers";
 
 const barns = [
     "livestock-farm",
@@ -13,32 +13,16 @@ const barns = [
 ]
 
 export default function createClickBindings(store: Store, router: NextRouter) {
-    const handleOpacity = (mesh: Mesh) => {
-        const parent = mesh.parent ? mesh.parent.parent ? mesh.parent.parent : mesh.parent : null;
-        const { three } = store.getState();
-        const scene = three.manager.scene;
-
-        const children = flattenChildren(scene.children, Infinity);
-
-        parent && children.forEach((c) => {
-            if (c.parent && c.parent.name !== parent.name && c.parent.parent && c.parent.parent.name !== parent.name) {
-                setOpacity(c, 0.3);
-            } else {
-                setOpacity(parent, 1);
-            }
-        });
-    }
-
     return ([
         {
             name: "farm",
             matching: "partial",
-            onClick: handleOpacity
+            onClick: (mesh: Mesh) => handleOpacity(mesh, store)
         },
         /* {
             name: "lake",
             matching: "partial",
-            onClick: handleOpacity
+            onClick: (mesh: Mesh) => handleOpacity(mesh, store)
         }, */
         /* {
             name: "tower",

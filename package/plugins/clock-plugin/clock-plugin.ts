@@ -1,9 +1,10 @@
 import { Clock } from "three";
 
 import { IDataStore } from "../../data-store/data-store.types"
+
 import { IClockPlugin } from "./clock-plugin.types";
 
-export default class ClockPlugin {
+export class ClockPlugin {
     constructor() {
         return class implements IClockPlugin {
             private dataStore: IDataStore;
@@ -29,3 +30,5 @@ export default class ClockPlugin {
         }
     }
 }
+
+export default ClockPlugin;
