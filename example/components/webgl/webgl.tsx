@@ -4,14 +4,28 @@ import { useRouter } from "next/dist/client/router";
 
 import createClickBindings from "../../bindings/click";
 import createHoverBindings from "../../bindings/hover";
-import animation from '../../bindings/animation';
+import animationConfig from '../../bindings/animation';
 import sceneConfig from "../../config/sceneConfig";
+import controlsConfig from "../../config/controlsConfig";
 
 import actions from "../../redux/actions";
 import store from "../../redux/store";
 
 import { WebGLProps } from "./webgl.types";
 import ThreeEntryPoint from "@shd-developer/interactive-map/dist/three-entry-point";
+import {
+  ClickPlugin,
+  HoverPlugin,
+  MousePositionPlugin,
+  RaycasterPlugin,
+  AnimationPlugin,
+  GltfDracoLoaderPlugin,
+  ClockPlugin,
+  AnimationMixerPlugin,
+  BrowserResizePlugin,
+  GlobalIlluminationPlugin,
+  MapControlsPlugin,
+} from "@shd-developer/interactive-map/dist/plugins";
 
 const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   const threeRootElement = useRef<HTMLCanvasElement | null>(null);
@@ -25,9 +39,25 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
           payload: new ThreeEntryPoint(
             threeRootElement.current,
             sceneConfig,
-            createClickBindings(store, router),
-            createHoverBindings(store),
-            animation,
+            [
+              new BrowserResizePlugin,
+              new MousePositionPlugin,
+              new RaycasterPlugin({trigger: "mousemove"}),
+              new ClickPlugin(
+                createClickBindings(store, router)
+              ),
+              new HoverPlugin(
+                createHoverBindings(store),
+              ),
+            ],
+            [
+              new GltfDracoLoaderPlugin("/models/interactive-map_v2.8-draco.glb"),
+              new GlobalIlluminationPlugin,
+              new ClockPlugin,
+              new AnimationMixerPlugin,
+              new AnimationPlugin(animationConfig),
+              new MapControlsPlugin(controlsConfig),
+            ],
           )
         });
       } else {
@@ -40,27 +70,15 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
     if (disabled) {
       three.unbindEventListeners();
     } else if (!three.interactive) {
-      three.bindEventListeners(three.click, three.hover);
+      three.bindEventListeners();
     }
   }
 
   return (
     <div>
-      <canvas ref={threeRootElement} />
-
-      <div className="webgl__rotate-buttons">
-        <div className="webgl__rotate-button" onClick={() => {
-          const manager = three?.manager;
-          manager?.controls?.handleClickRotateLeft();
-          manager?.update();
-        }}>{"<-"}</div>
-
-        <div className="webgl__rotate-button" onClick={() => {
-          const manager = three?.manager;
-          manager?.controls?.handleClickRotateRight();
-          manager?.update();
-        }}>{"->"}</div>
-      </div>
+      {/* <div className="im__webgl--container"> */}
+        <canvas ref={threeRootElement} />
+      {/* </div> */}
     </div>
   );
 };

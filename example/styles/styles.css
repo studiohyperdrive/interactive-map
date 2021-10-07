@@ -1,3 +1,8 @@
+.im__webgl--container {
+    width: 50vw;
+    height: 50vh;
+}
+
 .webgl__rotate-buttons {
     display: flex;
     position: absolute;

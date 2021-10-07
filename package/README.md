@@ -18,6 +18,10 @@ Basic usage of this package requires at least:
 - A reference to an HTMLCanvasElement
 - The path to a local GLTF & DRACO compatible mesh file
 - Basic camera configuration
+- Some default plugins
+    - Browser resize plugin
+    - Loader plugin
+    - Illumination plugin (optional)
 
 ```
 new ThreeEntryPoint(
@@ -26,7 +30,6 @@ new ThreeEntryPoint(
 
     // Config
     {
-        map: "/models/interactive-map_v2.8-draco.glb",
         camera: {
             type: "orthographic",
             config: {
@@ -41,23 +44,66 @@ new ThreeEntryPoint(
                 }
             }
         },
-        controls: {
-            enableDamping: true
-        }
     },
 
-    // Clicks
-    [],
+    // Event plugins
+    [
+        new BrowserResizePlugin
+    ],
 
-    // Hover
-    [],
-
-    // Animations
-    [],
+    // Scene plugins
+    [
+        new GltfDracoLoaderPlugin("/path-to-mesh"),
+        new GlobalIlluminationPlugin,
+    ],
 )
 ```
 
+#
+
+## Plugins
+
+To add functionality to your app you can use the provided plugins or write your own. There are two types of plugins. Scene plugins extend Three.js logic and event plugins bind to events. Communication between plugins is handled by a `dataStore`.
+
+### Scene plugins
+
+Scene plugins allow you to extend the Three.js logic. *eg. add controls that let the user interact with the scene*
+
+Each plugin should expect a reference to the `dataStore` and have an `update` method. The `update` method is called on each frame. This allows you to inject logic in the render loop or update values in realtime.
+
+[ClockPlugin](plugins/browser-resize-plugin/browser-resize-plugin.ts) is an example of a simple clock plugin that updates the `elapsedTime` and `deltaTime` properties in the `dataStore`.
+
+### Event plugins
+
+Event plugins bind to events and perform an action when that event is fired. 
+*eg. Resizing the canvas and camera when the `resize` event is fired*
+
+Each plugin should expect a reference to the `dataStore`. They should also have `bindEventListener` and `unbindEventListener` methods.
+
+[BrowserResizePlugin](plugins/browser-resize-plugin/browser-resize-plugin.ts) is an example of a resize plugin that will update the `sizes` object on the `dataStore` while updating the canvas and camera on resize.
+
+### Overview
+A complete list of the provided plugins and their use cases can be found below.
+
+| Plugin | Description |
+| --- | --- |
+| [`AnimationMixerPlugin`](docs/PLUGINS.md#animationmixerplugin-sceneplugin) | Creates a new `animationMixer` |
+| [`AnimationPlugin`](docs/PLUGINS.md#animationplugin-sceneplugin) | Allows you to configure consistent animations |
+| [`BrowserResizePlugin`](docs/PLUGINS.md#browserresizeplugin-eventplugin) | Makes the canvas responsive |
+| [`ClickPlugin`](docs/PLUGINS.md#clickplugin-eventplugin) | Enables click bindings |
+| [`ClockPlugin`](docs/PLUGINS.md#clockplugin-sceneplugin) | Calculates `elapsedTime` and `deltaTime` |
+| [`GlobalIlluminationPlugin`](docs/PLUGINS.md#globalilluminationplugin-sceneplugin) | Adds ambient and directional lighting |
+| [`GltfDracoLoaderPlugin`](docs/PLUGINS.md#gltfdracoloaderplugin-sceneplugin) | Loads a Draco compressed `.gltf` or `.glb` file |
+| [`HoverPlugin`](docs/PLUGINS.md#hoverplugin-eventplugin) | Enables hover bindings |
+| [`MapControlsPlugin`](docs/PLUGINS.md#mapcontrolsplugin-sceneplugin) | Adds basic interaction to the map |
+| [`MousePositionPlugin`](docs/PLUGINS.md#mousepositionplugin-eventplugin) | Gets the mouse position |
+| [`RaycasterPlugin`](docs/PLUGINS.md#raycasterplugin-eventplugin) | Gets the first mesh that intersects with the mouse |
+
+#
+
 ## Clicks
+
+Click bindings are provided by the [`ClickPlugin`](docs/PLUGINS.md#clickplugin-eventplugin). The bindings array is passed to the plugin's constructor.
 
 To respond to click events in the scene you should first ensure clear naming is applied in the mesh file. Using either the `exact` or `partial` matching rules you can emulate behaviour similar to `document.querySelector`.
 
@@ -96,6 +142,8 @@ function createClickBindings(router: NextRouter) {
 ```
 
 ## Hover
+
+Hover bindings are provided by the [`HoverPlugin`](docs/PLUGINS.md#hoverplugin-eventplugin). The bindings array is passed to the plugin's constructor.
 
 Similar to click bindings explained above you can define the same interaction for hover events. This example will randomly change the color of a `skyscraper` mesh when first hovering over the mesh and then revert it when hovering away.
 
@@ -148,7 +196,9 @@ function createHoverBindings(store: Store) {
 
 ## Animation
 
-Consistent animations can be defined in the last array passed to the `ThreeEntryPoint` constructor. The example below will start the associated `AnimationAction` at a random time and repeat that animation at a random interval.
+Use the [`AnimationPlugin`](docs/PLUGINS.md#animationplugin-sceneplugin) to enable the animation config.
+
+Consistent animations can be defined in an array passed to the [`AnimationPlugin`](docs/PLUGINS.md#animationplugin-sceneplugin) constructor. The example below will start the associated `AnimationAction` at a random time and repeat that animation at a random interval.
 
 ```
 {
@@ -171,6 +221,8 @@ Consistent animations can be defined in the last array passed to the `ThreeEntry
 }
 ```
 
+### Click and hover
+
 Animations that occur in response to an event are triggered from that event's optional `animate` property. Again, it's important to have clear nomenclature in place to ensure maintainability.
 
 ```
@@ -190,9 +242,9 @@ Animations that occur in response to an event are triggered from that event's op
 }
 ```
 
-The example above, implemented as a `Click` binding, will perform the `small-houseAction` animation once on any `small-house` that gets clicked.
+The example above, implemented as a `Click` binding, will perform the `small-houseAction` animation once on any `small-house` that gets clicked. (see [`ClickPlugin`](docs/PLUGINS.md#clickplugin-eventplugin))
 
-This can also be done for `Hover` bindings.
+This can also be done for `Hover` bindings. (see [`HoverPlugin`](docs/PLUGINS.md#hoverplugin-eventplugin))
 
 ```
 {
@@ -212,6 +264,14 @@ This can also be done for `Hover` bindings.
 }
 ```
 
+#
+
+## 3D
+
+[This slite doc](https://studiohyperdrive.slite.com/api/s/note/AcyJqGtRBUoT88mcrUFudY/3D-naar-Three-js) documents a basic Blender to Three.js workflow. 
+
+#
+
 ## Setup
 
 - Navigate to the package root `cd package`
@@ -219,6 +279,8 @@ This can also be done for `Hover` bindings.
 - Install dependencies `npm i`
 - (Optional) Run `npm run symlink` in the `example` folder to avoid having to publish every little change
 - Run `npm run build` after making changes
+
+#
 
 ## Team
 
