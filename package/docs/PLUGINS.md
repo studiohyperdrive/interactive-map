@@ -16,7 +16,7 @@ By default the `dataStore` will contain the following properties. They are set w
 
 ---
 
-## `AnimationMixerPlugin` [ScenePlugin]
+## `AnimationMixerPlugin` ScenePlugin
 
 The `AnimationMixerPlugin` will create a new [`AnimationMixer`](https://threejs.org/docs/#api/en/animation/AnimationMixer) with the current scene. The mixer is updated in the plugin"s `update` method.
 
@@ -24,7 +24,6 @@ The `AnimationMixerPlugin` will create a new [`AnimationMixer`](https://threejs.
 
 | Property | Description |
 | --- | --- |
-/
 
 ```js
 new AnimationMixerPlugin();
