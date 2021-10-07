@@ -161,23 +161,23 @@ A complete list of the provided plugins and their use cases can be found below.
 
 | Plugin | Description |
 | --- | --- |
-| [`AnimationMixerPlugin`](docs/PLUGINS.md#animationmixerplugin) | Creates a new `animationMixer` |
-| [`AnimationPlugin`](docs/PLUGINS.md#animationplugin) | Allows you to configure consistent animations |
-| [`BrowserResizePlugin`](docs/PLUGINS.md#browserresizeplugin) | Makes the canvas responsive |
-| [`ClickPlugin`](docs/PLUGINS.md#clickplugin) | Enables click bindings |
-| [`ClockPlugin`](docs/PLUGINS.md#clockplugin) | Calculates `elapsedTime` and `deltaTime` |
-| [`GlobalIlluminationPlugin`](docs/PLUGINS.md#globalilluminationplugin) | Adds ambient and directional lighting |
-| [`GltfDracoLoaderPlugin`](docs/PLUGINS.md#gltfdracoloaderplugin) | Loads a Draco compressed `.gltf` or `.glb` file |
-| [`HoverPlugin`](docs/PLUGINS.md#hoverplugin) | Enables hover bindings |
-| [`MapControlsPlugin`](docs/PLUGINS.md#mapcontrolsplugin) | Adds basic interaction to the map |
-| [`MousePositionPlugin`](docs/PLUGINS.md#mousepositionplugin) | Gets the mouse position |
-| [`RaycasterPlugin`](docs/PLUGINS.md#raycasterplugin) | Gets the first mesh that intersects with the mouse |
+| [`AnimationMixerPlugin`](docs/PLUGINS.md#animationmixerplugin-sceneplugin) | Creates a new `animationMixer` |
+| [`AnimationPlugin`](docs/PLUGINS.md#animationplugin-sceneplugin) | Allows you to configure consistent animations |
+| [`BrowserResizePlugin`](docs/PLUGINS.md#browserresizeplugin-eventplugin) | Makes the canvas responsive |
+| [`ClickPlugin`](docs/PLUGINS.md#clickplugin-eventplugin) | Enables click bindings |
+| [`ClockPlugin`](docs/PLUGINS.md#clockplugin-sceneplugin) | Calculates `elapsedTime` and `deltaTime` |
+| [`GlobalIlluminationPlugin`](docs/PLUGINS.md#globalilluminationplugin-sceneplugin) | Adds ambient and directional lighting |
+| [`GltfDracoLoaderPlugin`](docs/PLUGINS.md#gltfdracoloaderplugin-sceneplugin) | Loads a Draco compressed `.gltf` or `.glb` file |
+| [`HoverPlugin`](docs/PLUGINS.md#hoverplugin-eventplugin) | Enables hover bindings |
+| [`MapControlsPlugin`](docs/PLUGINS.md#mapcontrolsplugin-sceneplugin) | Adds basic interaction to the map |
+| [`MousePositionPlugin`](docs/PLUGINS.md#mousepositionplugin-eventplugin) | Gets the mouse position |
+| [`RaycasterPlugin`](docs/PLUGINS.md#raycasterplugin-eventplugin) | Gets the first mesh that intersects with the mouse |
 
 #
 
 ## Clicks
 
-Click bindings are provided by the [`ClickPlugin`](docs/PLUGINS.md#clickplugin). The bindings array is passed to the plugin's constructor.
+Click bindings are provided by the [`ClickPlugin`](docs/PLUGINS.md#clickplugin-eventplugin). The bindings array is passed to the plugin's constructor.
 
 To respond to click events in the scene you should first ensure clear naming is applied in the mesh file. Using either the `exact` or `partial` matching rules you can emulate behaviour similar to `document.querySelector`.
 
@@ -217,7 +217,7 @@ function createClickBindings(router: NextRouter) {
 
 ## Hover
 
-Hover bindings are provided by the [`HoverPlugin`](docs/PLUGINS.md#hoverplugin). The bindings array is passed to the plugin's constructor.
+Hover bindings are provided by the [`HoverPlugin`](docs/PLUGINS.md#hoverplugin-eventplugin). The bindings array is passed to the plugin's constructor.
 
 Similar to click bindings explained above you can define the same interaction for hover events. This example will randomly change the color of a `skyscraper` mesh when first hovering over the mesh and then revert it when hovering away.
 
@@ -270,9 +270,9 @@ function createHoverBindings(store: Store) {
 
 ## Animation
 
-Use the [`AnimationPlugin`](docs/PLUGINS.md#animationplugin) to enable the animation config.
+Use the [`AnimationPlugin`](docs/PLUGINS.md#animationplugin-sceneplugin) to enable the animation config.
 
-Consistent animations can be defined in an array passed to the [`AnimationPlugin`](docs/PLUGINS.md#animationplugin) constructor. The example below will start the associated `AnimationAction` at a random time and repeat that animation at a random interval.
+Consistent animations can be defined in an array passed to the [`AnimationPlugin`](docs/PLUGINS.md#animationplugin-sceneplugin) constructor. The example below will start the associated `AnimationAction` at a random time and repeat that animation at a random interval.
 
 ```
 {
@@ -316,9 +316,9 @@ Animations that occur in response to an event are triggered from that event's op
 }
 ```
 
-The example above, implemented as a `Click` binding, will perform the `small-houseAction` animation once on any `small-house` that gets clicked. (see [`ClickPlugin`](docs/PLUGINS.md#clickplugin))
+The example above, implemented as a `Click` binding, will perform the `small-houseAction` animation once on any `small-house` that gets clicked. (see [`ClickPlugin`](docs/PLUGINS.md#clickplugin-eventplugin))
 
-This can also be done for `Hover` bindings. (see [`HoverPlugin`](docs/PLUGINS.md#hoverplugin))
+This can also be done for `Hover` bindings. (see [`HoverPlugin`](docs/PLUGINS.md#hoverplugin-eventplugin))
 
 ```
 {

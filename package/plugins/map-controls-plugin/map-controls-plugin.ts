@@ -19,6 +19,8 @@ export default class MapControlsPlugin {
                 this.camera = dataStore.get("camera");
                 this.canvas = dataStore.get("canvas");
                 this.mapControls = this.createMapControls(this.camera, this.canvas);
+
+                this.dataStore.set("controls", this.mapControls);
             }
 
             public update() {
