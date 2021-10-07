@@ -23,7 +23,7 @@ export class HoverPlugin {
                 this.animations = dataStore.get("animations");
                 this.mixer = dataStore.get("animationMixer");
 
-                this.dataStore.set(`hoverBindings`, bindings);
+                this.dataStore.set("hoverBindings", bindings);
             }
 
             public bindEventListener(): void {
@@ -36,7 +36,7 @@ export class HoverPlugin {
 
             public handleHover(e: MouseEvent): void {
                 const previous = this.hovered;
-                const current = this.dataStore.get('intersection')?.object;
+                const current = this.dataStore.get("intersection")?.object;
         
                 if (previous === current) {
                     return
