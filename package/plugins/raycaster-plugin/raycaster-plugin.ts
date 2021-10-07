@@ -23,7 +23,7 @@ export default class RaycasterPlugin {
             }
 
             public handleClick = () => {
-                const pos = this.dataStore.data.mousePosition;
+                const pos = this.dataStore.get("mousePosition");
                 if (pos === undefined) {
                     return
                 };

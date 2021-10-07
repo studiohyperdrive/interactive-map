@@ -20,6 +20,8 @@ export default class HoverPlugin {
 
                 this.animations = dataStore.get("animations");
                 this.mixer = dataStore.get("animationMixer");
+
+                this.dataStore.set(`hoverBindings`, bindings);
             }
 
             public bindEventListener(): void {
