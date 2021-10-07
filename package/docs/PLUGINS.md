@@ -7,18 +7,18 @@ By default the `dataStore` will contain the following properties. They are set w
 
 | Property | Description |
 | --- | --- |
-| `canvas` | The canvas on which te end result is shown |
-| `sizes` | Object that contrains the initial width and height of the canvas |
-| `scene` | The scene instance in which objects, cameras, ... are placed |
-| `renderer` | The renderer displays the scene on the canvas |
-| `camera` | The camera that the renderer uses to display the scene. As defined in `sceneConfig` |
-| `cameraConfig` | The camera config as defined in `sceneConfig` |
+| `canvas` | The canvas on which the end result is shown. |
+| `sizes` | Object that contains the initial width and height of the canvas. |
+| `scene` | The scene instance in which objects, cameras, etc are placed. |
+| `renderer` | The renderer displays the scene on the canvas. |
+| `camera` | The camera that the renderer uses to display the scene. As defined in `sceneConfig`. |
+| `cameraConfig` | The camera config as defined in `sceneConfig`. |
 
 ---
 
 ## `AnimationMixerPlugin` [ScenePlugin]
 
-The `AnimationMixerPlugin` will create a new [`AnimationMixer`](https://threejs.org/docs/#api/en/animation/AnimationMixer) with the current scene. The mixer is updated in the plugin"s `update` method.
+The `AnimationMixerPlugin` will create a new [`AnimationMixer`](https://threejs.org/docs/#api/en/animation/AnimationMixer) with the current scene. The mixer is updated in the plugin's `update` method.
 
 ### Constructor
 
@@ -30,13 +30,13 @@ new AnimationMixerPlugin();
 
 | DataStore property | Description |
 | --- | --- |
-| `animationMixer` | The animation mixer instance |
+| `animationMixer` | The animation mixer instance. |
 
 ### Dependencies
 
 | DataStore property | Description | Plugin |
 | --- | --- | --- |
-| `deltaTime` | Value that reflects the time in milliseconds since the previous frame | [`ClockPlugin`](#clockplugin-sceneplugin) |
+| `deltaTime` | Value that reflects the time in milliseconds since the previous frame. | [`ClockPlugin`](#clockplugin-sceneplugin) |
 
 ### Source
 
@@ -80,7 +80,7 @@ The `AnimationPlugin` allows you to define an `animationConfig` that will initia
 
 | Property | Description |
 | --- | --- |
-| `animationConfig` | Array with configuration objects |
+| `animationConfig` | Array with configuration objects. |
 
 ```js
 new AnimationPlugin([
@@ -97,14 +97,14 @@ new AnimationPlugin([
 
 | DataStore property | Description |
 | --- | --- |
-| `animationConfig` | Array with configuration objects |
+| `animationConfig` | Array with configuration objects. |
 
 ### Dependencies
 
 | DataStore property | Description | Plugin |
 | --- | --- | --- |
-| `animationMixer` | Mixer that will control the playback of the animations | [`AnimationMixerPlugin`](#animationmixerplugin-sceneplugin) |
-| `mapLoaded` | Boolean value that reflects the loaded state of the model | [`GltfDracoLoaderPlugin`](#gltfdracoloaderplugin-sceneplugin) |
+| `animationMixer` | Mixer that will control the playback of the animations. | [`AnimationMixerPlugin`](#animationmixerplugin-sceneplugin) |
+| `mapLoaded` | Boolean value that reflects the loaded state of the model. | [`GltfDracoLoaderPlugin`](#gltfdracoloaderplugin-sceneplugin) |
 
 ### Source
 
@@ -159,7 +159,8 @@ class AnimationPlugin {
 
 ## `BrowserResizePlugin` [EventPlugin]
 
-The `BrowserResizePlugin` resizes the canvas and camera and updates the `"sizes"` property on the dateStore when the `resize` event is fired. This plugin supports [`PerspectiveCamera`](https://threejs.org/docs/#api/en/cameras/PerspectiveCamera) and [`OrthographicCamera`](https://threejs.org/docs/?q=orth#api/en/cameras/OrthographicCamera)
+The `BrowserResizePlugin` resizes the canvas & camera and updates the `sizes` property on the `dataStore` when the `resize` event is fired.
+This plugin supports [`PerspectiveCamera`](https://threejs.org/docs/#api/en/cameras/PerspectiveCamera) and [`OrthographicCamera`](https://threejs.org/docs/?q=orth#api/en/cameras/OrthographicCamera).
 
 ### Constructor
 
@@ -171,11 +172,11 @@ new BrowserResizePlugin();
 
 | DataStore property | Description |
 | --- | --- |
-| `sizes` | Object that contrains the width and height of the canvas, updated on resize |
+| `sizes` | Object that contrains the width and height of the canvas, updated on resize. |
 
 ### Dependencies
 
-This plugin has nog dependencies.
+This plugin has no dependencies.
 
 ### Source
 
@@ -219,13 +220,14 @@ class BrowserResizePlugin {
 
 ## `ClickPlugin` [EventPlugin]
 
-The `ClickPlugin` enables click interaction with the model. For more information on how to define the bindings see [clicks](../README.md#clicks). See [click and hover](../README.md#click-and-hover) for more information about animations on hover.
+The `ClickPlugin` enables click interaction with the model. For more information on how to define these bindings, see [Clicks](../README.md#clicks).
+See [Click and hover](../README.md#click-and-hover) for more information about animations on hover.
 
 ### Constructor
 
 | Property | Description |
 | --- | --- |
-| `clickBindings` | Array with click bindings |
+| `clickBindings` | Array with click bindings. |
 
 ```js
 new ClickPlugin([
@@ -242,15 +244,15 @@ new ClickPlugin([
 
 | DataStore property | Description |
 | --- | --- |
-| `clickBindings` | Array with click bindings |
+| `clickBindings` | Array with click bindings. |
 
 ### Dependencies
 
 | DataStore property | Description | Plugin |
 | --- | --- | --- |
-| `animations` | Array that contains all animations from the model | [`GltfDracoLoaderPlugin`](#gltfdracoloaderplugin-sceneplugin) |
-| `animationMixer` | Mixer that will control the playback of the animations | [`AnimationMixerPlugin`](#animationmixerplugin-sceneplugin) |
-| `intersection` | The object that has been clicked | [`RaycasterPlugin`](#raycasterplugin-eventplugin) |
+| `animations` | Array that contains all animations from the model. | [`GltfDracoLoaderPlugin`](#gltfdracoloaderplugin-sceneplugin) |
+| `animationMixer` | Mixer that will control the playback of the animations. | [`AnimationMixerPlugin`](#animationmixerplugin-sceneplugin) |
+| `intersection` | The object that has been clicked. | [`RaycasterPlugin`](#raycasterplugin-eventplugin) |
 
 ### Source
 
@@ -330,7 +332,7 @@ class ClickPlugin {
 
 ## `ClockPlugin` [ScenePlugin]
 
-The `ClockPlugin` exposes a `elapsedTime` and `deltaTime` property. The values are updated on each frame.
+The `ClockPlugin` exposes an `elapsedTime` and `deltaTime` property. These values are updated on each frame.
 
 ### Constructor
 
@@ -342,8 +344,8 @@ new ClockPlugin();
 
 | DataStore property | Description |
 | --- | --- |
-| `elapsedTime` | Value that reflects the total time in milliseconds since the render loop started |
-| `deltaTime` | Value that reflects the time in milliseconds since the previous frame |
+| `elapsedTime` | Value that reflects the total time in milliseconds since the render loop started. |
+| `deltaTime` | Value that reflects the time in milliseconds since the previous frame. |
 
 ### Dependencies
 
@@ -387,7 +389,7 @@ class ClockPlugin {
 
 ## `GlobalIlluminationPlugin` [ScenePlugin]
 
-The `GlobalIlluminationPlugin` adds [`AmbientLight`](https://threejs.org/docs/#api/en/lights/AmbientLight) and [`DirectionalLight`](https://threejs.org/docs/?q=direc#api/en/lights/DirectionalLight) to the scene.
+The `GlobalIlluminationPlugin` adds a basic [`AmbientLight`](https://threejs.org/docs/#api/en/lights/AmbientLight) and [`DirectionalLight`](https://threejs.org/docs/?q=direc#api/en/lights/DirectionalLight) to the scene.
 
 ### Constructor
 
@@ -451,13 +453,14 @@ class GlobalIlluminationPlugin {
 
 ## `GltfDracoLoaderPlugin` [ScenePlugin]
 
-The `GltfDracoLoaderPlugin` assynchronously loads a Draco compressed `.glTF` of `.glb` file. The model will be added to the `scene` and animations (if any) will be added to the `dataStore`. When finished it updates the `mapLoaded` property.
+The `GltfDracoLoaderPlugin` asynchronously loads a Draco compressed `.glTF` of `.glb` file. The model will be added to the `scene` and animations (if any) will be added to the `animations` property of the `dataStore`.
+When finished it sets the `mapLoaded` property of the `dataStore` to `true`.
 
 ### Constructor
 
 | Property | Description |
 | --- | --- |
-| `path` | path to the glTF file |
+| `path` | path to the glTF file. |
 
 ```js
 new GltfDracoLoaderPlugin(path: string);
@@ -467,8 +470,8 @@ new GltfDracoLoaderPlugin(path: string);
 
 | DataStore property | Description |
 | --- | --- |
-| `mapLoaded` | Boolean value that reflects the loaded state of the model |
-| `animations` | Array that contains all animations from the model |
+| `mapLoaded` | Boolean value that reflects the loaded state of the model. |
+| `animations` | Array that contains all animations from the model. |
 
 
 ### Dependencies
@@ -526,13 +529,14 @@ class GltfDracoLoaderPlugin {
 
 ## `HoverPlugin` [EventPlugin]
 
-The `HoverPlugin` enables hover interaction with the model. For more information on how to define the bindings see [hover](../README.md#hover). See [click and hover](../README.md#click-and-hover) for more information about animations on hover.
+The `HoverPlugin` enables hover interaction with the model. For more information on how to define the bindings see [Hover](../README.md#hover).
+See [Click and hover](../README.md#click-and-hover) for more information about triggering animations on hover.
 
 ### Constructor
 
 | Property | Description |
 | --- | --- |
-| `hoverBindings` | Array with hover bindings |
+| `hoverBindings` | Array with hover bindings. |
 
 ```js
 new HoverPlugin([
@@ -550,15 +554,15 @@ new HoverPlugin([
 
 | DataStore property | Description |
 | --- | --- |
-| `hoverBindings` | Array with click bindings |
+| `hoverBindings` | Array with hover bindings. |
 
 ### Dependencies
 
 | DataStore property | Description | Plugin |
 | --- | --- | --- |
-| `animations` | Array that contains all animations from the model | [`GltfDracoLoaderPlugin`](#gltfdracoloaderplugin-sceneplugin) |
-| `animationMixer` | Mixer that will control the playback of the animations | [`AnimationMixerPlugin`](#animationmixerplugin-sceneplugin) |
-| `intersection` | The object that has been clicked | [`RaycasterPlugin`](#raycasterplugin-eventplugin) |
+| `animations` | Array that contains all animations from the model. | [`GltfDracoLoaderPlugin`](#gltfdracoloaderplugin-sceneplugin) |
+| `animationMixer` | Mixer that will control the playback of the animations. | [`AnimationMixerPlugin`](#animationmixerplugin-sceneplugin) |
+| `intersection` | The object that is being hovered. | [`RaycasterPlugin`](#raycasterplugin-eventplugin) |
 
 ### Source
 
@@ -653,13 +657,13 @@ class HoverPlugin {
 
 ## `MapControlsPlugin` [ScenePlugin]
 
-The `MapControlsPlugin` add basic controls to the app. These controls can be configured through a `controlsConfig`.
+The `MapControlsPlugin` adds basic controls to the app. These controls can be configured through a `controlsConfig`.
 
 ### Constructor
 
 | Property | Description |
 | --- | --- |
-| `controlsConfig` | Object that contains the controls setup |
+| `controlsConfig` | Object that contains the controls setup. |
 
 ```js
 new MapControlsPlugin({
@@ -684,7 +688,7 @@ new MapControlsPlugin({
 
 | DataStore property | Description |
 | --- | --- |
-| `controls` | The controls instance defined in the plugin |
+| `controls` | The controls instance defined in the plugin. |
 
 ### Dependencies
 
@@ -808,7 +812,7 @@ class MapControlsPlugin {
 
 ## `MousePositionPlugin` [EventPlugin]
 
-The `MousePositionPlugin` populates the `mousePosition` property on the `dataStore`. This value is updated on `mousemove`.
+The `MousePositionPlugin` populates the `mousePosition` property on the `dataStore`. This value is updated on the DOM event `mousemove`.
 
 ### Constructor
 
@@ -820,7 +824,7 @@ new MousePositionPlugin();
 
 | DataStore property | Description |
 | --- | --- |
-| `mousePosition` | Object that contains the `x` and `y`values of the mouse |
+| `mousePosition` | Object that contains the `x` and `y`values of the mouse. |
 
 ### Dependencies
 
@@ -867,7 +871,7 @@ The `RaycasterPlugin` returns the `Mesh` that the mouse is currently over. This 
 
 | Property | Description |
 | --- | --- |
-| `config` | Configuration object. Trigger can be `click` of `mousemove` |
+| `config` | Configuration object, trigger can be either `click` or `mousemove`. |
 
 ```js
 new MousePositionPlugin({
@@ -879,13 +883,13 @@ new MousePositionPlugin({
 
 | DataStore property | Description |
 | --- | --- |
-| `intersection` | The `Mesh` that the mouse is currently over |
+| `intersection` | The `Mesh` that the mouse is currently over. |
 
 ### Dependencies
 
 | DataStore property | Description | Plugin |
 | --- | --- | --- |
-| `mousePosition` | Object that contains the `x` and `y`values of the mouse | [`MousePositionPlugin`](#mousepositionplugin-eventplugin) |
+| `mousePosition` | Object that contains the `x` and `y`values of the mouse. | [`MousePositionPlugin`](#mousepositionplugin-eventplugin) |
 
 ### Source
 
