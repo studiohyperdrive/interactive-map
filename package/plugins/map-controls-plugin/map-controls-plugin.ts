@@ -22,7 +22,7 @@ export class MapControlsPlugin {
 
                 this.mapControls = this.createMapControls(this.camera, this.canvas);
 
-                dataStore.set("controls", this.mapControls);
+                this.dataStore.set("controls", this.mapControls);
             }
 
             public update() {

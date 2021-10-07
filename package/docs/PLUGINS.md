@@ -16,14 +16,11 @@ By default the `dataStore` will contain the following properties. They are set w
 
 ---
 
-## `AnimationMixerPlugin` ScenePlugin
+## `AnimationMixerPlugin` [ScenePlugin]
 
 The `AnimationMixerPlugin` will create a new [`AnimationMixer`](https://threejs.org/docs/#api/en/animation/AnimationMixer) with the current scene. The mixer is updated in the plugin"s `update` method.
 
 ### Constructor
-
-| Property | Description |
-| --- | --- |
 
 ```js
 new AnimationMixerPlugin();
@@ -39,7 +36,7 @@ new AnimationMixerPlugin();
 
 | DataStore property | Description | Plugin |
 | --- | --- | --- |
-| `deltaTime` | Value that reflects the time in milliseconds since the previous frame | [`ClockPlugin`](#clockplugin) |
+| `deltaTime` | Value that reflects the time in milliseconds since the previous frame | [`ClockPlugin`](#clockplugin-sceneplugin) |
 
 ### Source
 
@@ -106,8 +103,8 @@ new AnimationPlugin([
 
 | DataStore property | Description | Plugin |
 | --- | --- | --- |
-| `animationMixer` | Mixer that will control the playback of the animations | [`AnimationMixerPlugin`](#animationmixerplugin) |
-| `mapLoaded` | Boolean value that reflects the loaded state of the model | [`GltfDracoLoaderPlugin`](#gltfdracoloaderplugin) |
+| `animationMixer` | Mixer that will control the playback of the animations | [`AnimationMixerPlugin`](#animationmixerplugin-sceneplugin) |
+| `mapLoaded` | Boolean value that reflects the loaded state of the model | [`GltfDracoLoaderPlugin`](#gltfdracoloaderplugin-sceneplugin) |
 
 ### Source
 
@@ -166,10 +163,6 @@ The `BrowserResizePlugin` resizes the canvas and camera and updates the `"sizes"
 
 ### Constructor
 
-| Property | Description |
-| --- | --- |
-/
-
 ```js
 new BrowserResizePlugin();
 ```
@@ -182,9 +175,7 @@ new BrowserResizePlugin();
 
 ### Dependencies
 
-| DataStore property | Description | Plugin |
-| --- | --- | --- |
-/
+This plugin has nog dependencies.
 
 ### Source
 
@@ -257,9 +248,9 @@ new ClickPlugin([
 
 | DataStore property | Description | Plugin |
 | --- | --- | --- |
-| `animations` | Array that contains all animations from the model | ["GltfDracoLoaderPlugin"] |
-| `animationMixer` | Mixer that will control the playback of the animations | [`AnimationMixerPlugin`](#animationmixerplugin) |
-| `intersection` | The object that has been clicked | [`RaycasterPlugin`](#raycasterplugin) |
+| `animations` | Array that contains all animations from the model | [`GltfDracoLoaderPlugin`](#gltfdracoloaderplugin-sceneplugin) |
+| `animationMixer` | Mixer that will control the playback of the animations | [`AnimationMixerPlugin`](#animationmixerplugin-sceneplugin) |
+| `intersection` | The object that has been clicked | [`RaycasterPlugin`](#raycasterplugin-eventplugin) |
 
 ### Source
 
@@ -343,10 +334,6 @@ The `ClockPlugin` exposes a `elapsedTime` and `deltaTime` property. The values a
 
 ### Constructor
 
-| Property | Description |
-| --- | --- |
-/
-
 ```js
 new ClockPlugin();
 ```
@@ -360,9 +347,7 @@ new ClockPlugin();
 
 ### Dependencies
 
-| DataStore property | Description | Plugin |
-| --- | --- | --- |
-/
+This plugin has no dependencies.
 
 ### Source
 
@@ -406,25 +391,17 @@ The `GlobalIlluminationPlugin` adds [`AmbientLight`](https://threejs.org/docs/#a
 
 ### Constructor
 
-| Property | Description |
-| --- | --- |
-/
-
 ```js
 new GlobalIlluminationPlugin();
 ```
 
 ### Output
 
-| DataStore property | Description |
-| --- | --- |
-/
+This plugin does not write to the `dataStore`.
 
 ### Dependencies
 
-| DataStore property | Description | Plugin |
-| --- | --- | --- |
-/
+This plugin has no dependencies.
 
 ### Source
 
@@ -490,15 +467,13 @@ new GltfDracoLoaderPlugin(path: string);
 
 | DataStore property | Description |
 | --- | --- |
-| `mapLoaded` | Boolean value that reflects the loaded state of the model | [`GltfDracoLoaderPlugin`](#gltfdracoloaderplugin) |
-| `animations` | Array that contains all animations from the model | ["GltfDracoLoaderPlugin"] |
+| `mapLoaded` | Boolean value that reflects the loaded state of the model |
+| `animations` | Array that contains all animations from the model |
 
 
 ### Dependencies
 
-| DataStore property | Description | Plugin |
-| --- | --- | --- |
-/
+This plugin has no dependencies.
 
 ### Source
 
@@ -581,9 +556,9 @@ new HoverPlugin([
 
 | DataStore property | Description | Plugin |
 | --- | --- | --- |
-| `animations` | Array that contains all animations from the model | ["GltfDracoLoaderPlugin"] |
-| `animationMixer` | Mixer that will control the playback of the animations | [`AnimationMixerPlugin`](#animationmixerplugin) |
-| `intersection` | The object that has been clicked | [`RaycasterPlugin`](#raycasterplugin) |
+| `animations` | Array that contains all animations from the model | [`GltfDracoLoaderPlugin`](#gltfdracoloaderplugin-sceneplugin) |
+| `animationMixer` | Mixer that will control the playback of the animations | [`AnimationMixerPlugin`](#animationmixerplugin-sceneplugin) |
+| `intersection` | The object that has been clicked | [`RaycasterPlugin`](#raycasterplugin-eventplugin) |
 
 ### Source
 
@@ -709,13 +684,11 @@ new MapControlsPlugin({
 
 | DataStore property | Description |
 | --- | --- |
-/
+| `controls` | The controls instance defined in the plugin |
 
 ### Dependencies
 
-| DataStore property | Description | Plugin |
-| --- | --- | --- |
-/
+This plugin has no dependencies.
 
 ### Source
 
@@ -738,6 +711,8 @@ class MapControlsPlugin {
                 this.camera = dataStore.get("camera");
                 this.canvas = dataStore.get("canvas");
                 this.mapControls = this.createMapControls(this.camera, this.canvas);
+
+                this.dataStore.set("controls", this.mapControls);
             }
 
             public update() {
@@ -837,10 +812,6 @@ The `MousePositionPlugin` populates the `mousePosition` property on the `dataSto
 
 ### Constructor
 
-| Property | Description |
-| --- | --- |
-/
-
 ```js
 new MousePositionPlugin();
 ```
@@ -853,9 +824,7 @@ new MousePositionPlugin();
 
 ### Dependencies
 
-| DataStore property | Description | Plugin |
-| --- | --- | --- |
-/
+This plugin has no dependencies.
 
 ### Source
 
@@ -916,7 +885,7 @@ new MousePositionPlugin({
 
 | DataStore property | Description | Plugin |
 | --- | --- | --- |
-| `mousePosition` | Object that contains the `x` and `y`values of the mouse | [`MousePositionPlugin`](#mousepositionplugin) |
+| `mousePosition` | Object that contains the `x` and `y`values of the mouse | [`MousePositionPlugin`](#mousepositionplugin-eventplugin) |
 
 ### Source
 
