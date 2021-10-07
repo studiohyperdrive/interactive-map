@@ -18,6 +18,10 @@ Basic usage of this package requires at least:
 - A reference to an HTMLCanvasElement
 - The path to a local GLTF & DRACO compatible mesh file
 - Basic camera configuration
+- Some plugins
+    - Browser resize plugin
+    - Loader plugin
+    - Illumination plugin (optional)
 
 ```
 new ThreeEntryPoint(
@@ -26,7 +30,6 @@ new ThreeEntryPoint(
 
     // Config
     {
-        map: "/models/interactive-map_v2.8-draco.glb",
         camera: {
             type: "orthographic",
             config: {
@@ -41,19 +44,18 @@ new ThreeEntryPoint(
                 }
             }
         },
-        controls: {
-            enableDamping: true
-        }
     },
 
-    // Clicks
-    [],
+    // Event plugins
+    [
+        new BrowserResizePlugin
+    ],
 
-    // Hover
-    [],
-
-    // Animations
-    [],
+    // Scene plugins
+    [
+        new GltfDracoLoaderPlugin("/path-to-mesh"),
+        new GlobalIlluminationPlugin,
+    ],
 )
 ```
 
@@ -171,6 +173,8 @@ Consistent animations can be defined in the last array passed to the `ThreeEntry
 }
 ```
 
+### Click and hover
+
 Animations that occur in response to an event are triggered from that event's optional `animate` property. Again, it's important to have clear nomenclature in place to ensure maintainability.
 
 ```
@@ -212,6 +216,122 @@ This can also be done for `Hover` bindings.
 }
 ```
 
+#
+
+## Plugins
+
+To add functionality you can use the provided plugins or write your own. There are two types of plugins. Scene plugins extend Three.js logic and event plugins bind to events. Communication between plugins is handled by a `dataStore`.
+
+### Scene plugins
+
+Scene plugins allow you to extend the Three.js logic. *eg. add controls that let the user interact with the scene*
+
+Each plugin should expect a reference to the `dataStore` and have an `update` method. The `update` method is called on each frame. This allows you to inject logic in the render loop or update values in realtime.
+
+Below is an example of a simple clock plugin that updates the `elapsedTime` and `deltaTime` properties in the `dataStore`.
+
+```
+interface IClockPlugin extends IScenePlugin {
+    clock: Clock,
+    previousTime: number,
+}
+
+export default class ClockPlugin {
+    constructor() {
+        return class implements IClockPlugin {
+            private dataStore: IDataStore;
+
+            public clock: Clock;
+            public previousTime: number;
+
+            constructor(dataStore: IDataStore) {
+                this.dataStore = dataStore;
+
+                this.clock = new Clock();
+		        this.previousTime = 0;
+            }
+
+            public update() {
+                const elapsedTime = this.clock.getElapsedTime();
+                const deltaTime = elapsedTime - this.previousTime;
+                this.previousTime = elapsedTime;
+                
+                this.dataStore.set("elapsedTime", elapsedTime)
+                this.dataStore.set("deltaTime", deltaTime)
+            }
+        }
+    }
+}
+```
+
+### Event plugins
+
+Event plugins bind to events and perform an action when that event is fired. 
+*eg. Resizing the canvas and camera when the `resize` event is fired*
+
+Each plugin should expect a reference to the `dataStore`. They should also have `bindEventListener` and `unbindEventListener` methods.
+
+Below is an example of a resize plugin that will update the `sizes` object on the `dataStore` while updating the canvas and camera on resize.
+
+```
+interface IBrowserResizePlugin extends IEventPlugin {
+    renderer: WebGLRenderer,
+    camera: PerspectiveCamera | OrthographicCamera,
+    handleResize: (e:UIEvent) => void,
+}
+
+export default class BrowserResizePlugin {
+    constructor() {
+        return class implements IBrowserResizePlugin {
+            private dataStore: IDataStore;
+
+            public renderer: WebGLRenderer;
+            public camera: PerspectiveCamera | OrthographicCamera;
+            public cameraConfig: ICameraConfig;
+            constructor(dataStore: IDataStore) {
+                this.dataStore = dataStore;
+
+                this.renderer = dataStore.get("renderer");
+                this.camera = dataStore.get("camera");
+                this.cameraConfig = dataStore.get("cameraConfig");
+            }
+
+            public bindEventListener(): void {
+                window.addEventListener("resize", e => this.handleResize(e));
+            }
+
+            public unbindEventListener(): void {
+                window.removeEventListener("resize", e => this.handleResize(e));
+            }
+
+            public handleResize(e: UIEvent) {
+                // From utils/event
+                this.dataStore.set("sizes", onWindowResize(this.renderer, this.camera, this.cameraConfig.config));
+            }
+        }
+    }
+}
+```
+
+### Overview
+A complete list of the provided plugins and their use cases can be found below.
+
+| Plugin | Description |
+| --- | --- |
+| [`AnimationMixerPlugin`](docs/PLUGINS.md#animationmixerplugin) | Creates a new `animationMixer` |
+| [`AnimationPlugin`](docs/PLUGINS.md#animationplugin) | Allows you to configure consistent animations |
+| [`BrowserResizePlugin`](docs/PLUGINS.md#browserresizeplugin) | Makes the canvas responsive |
+| [`ClickPlugin`](docs/PLUGINS.md#clickplugin) | Enables click bindings |
+| [`ClockPlugin`](docs/PLUGINS.md#clockplugin) | Calculates `elapsedTime` and `deltaTime` |
+| [`GlobalIlluminationPlugin`](docs/PLUGINS.md#globalilluminationplugin) | Adds ambient and directional lighting |
+| [`GltfDracoLoaderPlugin`](docs/PLUGINS.md#gltfdracoloaderplugin) | Loads a Draco compressed `.gltf` or `.glb` file |
+| [`HoverPlugin`](docs/PLUGINS.md#hoverplugin) | Enables hover bindings |
+| [`MapControlsPlugin`](docs/PLUGINS.md#mapcontrolsplugin) | Adds basic interaction to the map |
+| [`MousePositionPlugin`](docs/PLUGINS.md#mousepositionplugin) | Gets the mouse position |
+| [`RaycasterPlugin`](docs/PLUGINS.md#raycasterplugin) | Gets the first mesh that intersects with the mouse |
+
+#
+
 ## Setup
 
 - Navigate to the package root `cd package`
@@ -219,6 +339,8 @@ This can also be done for `Hover` bindings.
 - Install dependencies `npm i`
 - (Optional) Run `npm run symlink` in the `example` folder to avoid having to publish every little change
 - Run `npm run build` after making changes
+
+#
 
 ## Team
 
