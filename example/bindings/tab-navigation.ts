@@ -32,12 +32,12 @@ export default function createTabNavigationBindings(): ITabNavigationBinding[] {
             order: 0,
             afterNavigate: zoomAndColor
         },
-        {
-            name: "small-house003",
-            matching: "exact",
-            order: 0,
-            afterNavigate: zoomAndColor
-        },
+        // {
+        //     name: "small-house003",
+        //     matching: "exact",
+        //     order: 0,
+        //     afterNavigate: zoomAndColor
+        // },
         {
             name: "small-house004",
             matching: "exact",
@@ -89,7 +89,7 @@ export default function createTabNavigationBindings(): ITabNavigationBinding[] {
         {
             name: "small-house012",
             matching: "exact",
-            order: -1,
+            order: 2,
             afterNavigate: zoomAndColor
         }
     ];

@@ -2,7 +2,6 @@ import { Scene } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 
-import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
 
 import { IGltfDracoLoaderPlugin } from "./gltf-draco-loader-plugin.types";
@@ -16,7 +15,7 @@ export class GltfDracoLoaderPlugin {
             public dracoLoader: DRACOLoader;
             public gltfLoader: GLTFLoader;
 
-            constructor(dataStore: DataStore) {
+            constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
                 dataStore.set("mapLoaded", false);
@@ -27,7 +26,6 @@ export class GltfDracoLoaderPlugin {
                 this.dracoLoader = new DRACOLoader();
                 this.dracoLoader.setDecoderPath('decoder/');
 
-                // Add loader
                 this.gltfLoader = new GLTFLoader();
                 this.gltfLoader.setDRACOLoader(this.dracoLoader);
 
@@ -46,3 +44,5 @@ export class GltfDracoLoaderPlugin {
         }
     }
 }
+
+export default GltfDracoLoaderPlugin;

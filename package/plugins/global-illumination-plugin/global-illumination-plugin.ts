@@ -13,7 +13,7 @@ export class GlobalIlluminationPlugin {
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
-                this.scene = this.dataStore.get("scene");
+                this.scene = dataStore.get("scene");
                 this.addLights()
             }
 
@@ -40,3 +40,5 @@ export class GlobalIlluminationPlugin {
         }
     }
 }
+
+export default GlobalIlluminationPlugin;

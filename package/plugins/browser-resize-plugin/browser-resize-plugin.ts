@@ -37,3 +37,5 @@ export class BrowserResizePlugin {
         }
     }
 }
+
+export default BrowserResizePlugin

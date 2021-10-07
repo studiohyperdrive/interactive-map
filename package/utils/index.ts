@@ -1,3 +1,4 @@
+export * from "./bindings";
 export * from "./build";
 export * from "./event";
 export * from "./general";

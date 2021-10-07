@@ -1,6 +1,6 @@
 import { AnimationClip, AnimationMixer } from "three";
 
-import { IEventPlugin } from "../../types";
+import { IAnimate, IBindingConfig, IEventPlugin } from "../../types";
 
 export interface IClickPlugin extends IEventPlugin {
     animations: AnimationClip[],
@@ -8,4 +8,5 @@ export interface IClickPlugin extends IEventPlugin {
     bindEventListener: () => void,
     unbindEventListener: () => void,
     handleClick: (e: MouseEvent) => void,
+    handleBindingAnimation: (binding: IBindingConfig, callback: (animation: AnimationClip, animationBinding: IAnimate) => void) => void,
 }

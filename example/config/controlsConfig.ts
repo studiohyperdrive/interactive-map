@@ -1,5 +1,5 @@
 import { MOUSE, TOUCH, Vector3 } from "three";
-import { IMapControlsConfig } from "@shd-developer/interactive-map/dist/plugins/map-controls-plugin/map-controls-plugin.types";
+import { IMapControlsConfig } from "@shd-developer/interactive-map/dist/plugins";
 
 export default {
     enableDamping: true,

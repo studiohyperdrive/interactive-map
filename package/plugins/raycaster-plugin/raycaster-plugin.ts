@@ -1,8 +1,6 @@
 import { Camera, Raycaster, Scene } from "three";
 
-import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
-
 import { IRaycasterPlugin, IRaycasterConfig } from "./raycaster-plugin.types";
 
 export class RaycasterPlugin {
@@ -14,7 +12,7 @@ export class RaycasterPlugin {
             public camera: Camera;
             public scene: Scene;
 
-            constructor(dataStore: DataStore) {
+            constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
                 this.raycaster = new Raycaster();
 
@@ -39,3 +37,5 @@ export class RaycasterPlugin {
         }
     }
 }
+
+export default RaycasterPlugin;

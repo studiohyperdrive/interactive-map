@@ -6,6 +6,7 @@ import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
 
 import { IHoverPlugin } from "./hover-plugin.types";
+import { isMatching } from "../../utils/bindings";
 
 export class HoverPlugin {
     constructor(bindings: IHoverBindingConfig[]) {
@@ -41,7 +42,7 @@ export class HoverPlugin {
         
                 if (previous instanceof Mesh) {
                     bindings.forEach(binding => {
-                        if (this.isMatching(previous, binding)) {
+                        if (isMatching(previous, binding)) {
                             binding.onHoverEnd(previous);
                             this.handleBindingAnimation(binding, (animation: AnimationClip, animationBinding: IAnimate) => {
                                 const action = this.mixer.clipAction(animation);
@@ -53,7 +54,7 @@ export class HoverPlugin {
         
                 if (current instanceof Mesh) {
                     bindings.forEach(binding => {
-                        if (this.isMatching(current, binding)) {
+                        if (isMatching(current, binding)) {
                             binding.onHoverStart(current);
                             this.handleBindingAnimation(binding, (animation: AnimationClip, animationBinding: IAnimate) => {
                                 const action = this.mixer.clipAction(animation);
@@ -69,27 +70,13 @@ export class HoverPlugin {
                 this.hovered = (current as Mesh);
             }
 
-            // Utils?
-            public isMatching(item: { name: string, parent?: any }, binding: IBindingConfig): boolean {
-                const parentName = item.parent?.type === "Group"? item.parent.name : undefined;
-                
-                switch (binding.matching) {
-                    case "partial":
-                        return item.name.indexOf(binding.name) > -1 || parentName && parentName.indexOf(binding.name) > -1;
-        
-                    case "exact":
-                    default:
-                        return item.name === binding.name || parentName && parentName === binding.name;
-                }
-            }
-
             public handleBindingAnimation(binding: IBindingConfig, callback: (animation: AnimationClip, animationBinding: IAnimate) => void) {
                 if (binding.animate) {
                     this.animations = this.dataStore.get("animations")
                     
                     binding.animate.forEach((animationBinding) => {
                         this.animations.forEach(animation => {
-                            if (this.isMatching(animation, animationBinding)) {
+                            if (isMatching(animation, animationBinding)) {
                                 callback(animation, animationBinding);
                             }
                         });
@@ -99,3 +86,5 @@ export class HoverPlugin {
         }
     }
 }
+
+export default HoverPlugin;

@@ -2,7 +2,7 @@ import { OrthographicCamera, PerspectiveCamera, WebGLRenderer } from "three";
 
 import { ISize, IOrthographicCameraConfig, IPerspectiveCameraConfig } from "../types";
 
-export const onWindowResize = (renderer: WebGLRenderer, camera: PerspectiveCamera | OrthographicCamera, cameraConfig: IOrthographicCameraConfig | IPerspectiveCameraConfig): ISize => {
+export const onWindowResize = (renderer: WebGLRenderer, camera: PerspectiveCamera | OrthographicCamera, cameraConfig: IPerspectiveCameraConfig | IOrthographicCameraConfig): ISize => {
     const canvas = renderer.domElement
     const div = canvas.parentElement;
 

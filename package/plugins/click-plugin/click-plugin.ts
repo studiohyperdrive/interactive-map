@@ -3,7 +3,6 @@ import { AnimationClip, AnimationMixer, Mesh } from "three";
 import { IAnimate, IBindingConfig, IClickBindingConfig } from "../../types";
 import { isMatching } from "../../utils";
 
-import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
 
 import { IClickPlugin } from "./click-plugin.types";
@@ -16,7 +15,7 @@ export class ClickPlugin {
             public animations: AnimationClip[];
             public mixer: AnimationMixer;
 
-            constructor(dataStore: DataStore) {
+            constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
                 this.animations = dataStore.get("animations");
@@ -74,3 +73,5 @@ export class ClickPlugin {
         }
     }
 }
+
+export default ClickPlugin;

@@ -125,3 +125,5 @@ export class MapControlsPlugin {
         }
     }
 }
+
+export default MapControlsPlugin;

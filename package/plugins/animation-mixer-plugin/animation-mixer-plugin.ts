@@ -28,3 +28,5 @@ export class AnimationMixerPlugin {
         }
     }
 }
+
+export default AnimationMixerPlugin;

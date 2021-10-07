@@ -1,10 +1,10 @@
 import SceneManager from "./scene-manager";
 import DataStore from "./data-store/data-store";
 
-import { ISceneConfig } from "./types";
+import { IEntryPoint, ISceneConfig } from "./types";
 
-export default class ThreeEntryPoint {
-	public dataStore: DataStore;
+export default class ThreeEntryPoint implements IEntryPoint {
+	private dataStore: DataStore;
 
 	public canvas: HTMLCanvasElement;
 	public manager: SceneManager;

@@ -1,12 +1,31 @@
-import { AnimationActionLoopStyles, MOUSE, TOUCH, Vector3 } from "three";
+import { AnimationActionLoopStyles, MOUSE, OrthographicCamera, PerspectiveCamera, Scene, TOUCH, Vector3, WebGLRenderer } from "three";
+
+// Base
+
+export interface IEntryPoint {
+    canvas: HTMLCanvasElement;
+	manager: IManager;
+	sceneConfig: ISceneConfig;
+	plugins: any[];
+	interactive: boolean;
+    bindEventListeners: () => void;
+    unbindEventListeners: () => void;
+    render: () => void;
+}
+
+export interface IManager {
+    sizes: ISize;
+	sceneConfig: ISceneConfig;
+	scene: Scene;
+	renderer: WebGLRenderer;
+	camera: PerspectiveCamera | OrthographicCamera;
+	plugins: any[];
+    update: Function;
+}
 
 export interface ISize {
     width: number;
     height: number;
-}
-
-export interface IManager {
-    update: Function;
 }
 
 export interface IPosition {
@@ -15,9 +34,7 @@ export interface IPosition {
     z: number,
 }
 
-export interface IUpdates {
-    update: Function;
-}
+// Bindings
 
 export interface IBindingConfig {
     name: string,
@@ -120,8 +137,18 @@ export interface ICameraConfig {
     type: "orthographic" | "perspective",
     config: IOrthographicCameraConfig | IPerspectiveCameraConfig,
 }
+
 export interface ISceneConfig {
-    map: string,
     camera: ICameraConfig,
-    controls: ISceneControlsConfig,
+}
+
+// Plugins
+
+export interface IEventPlugin {
+    bindEventListener: () => void,
+    unbindEventListener: () => void,
+}
+
+export interface IScenePlugin {
+    update: () => void,
 }

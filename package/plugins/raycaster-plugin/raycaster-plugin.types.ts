@@ -9,6 +9,8 @@ export interface IRaycasterPlugin extends IScenePlugin {
     handleClick: () => void,
 }
 
+// Config
+
 export interface IRaycasterConfig {
     trigger: "click" | "mousemove",
 }

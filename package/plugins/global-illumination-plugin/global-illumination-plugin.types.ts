@@ -1,4 +1,5 @@
 import { AmbientLight, DirectionalLight, Scene } from "three";
+
 import { IScenePlugin } from "../../types";
 
 export interface IGlobalIlluminationPlugin extends IScenePlugin {

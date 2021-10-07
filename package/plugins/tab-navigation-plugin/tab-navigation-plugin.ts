@@ -85,3 +85,5 @@ export class TabNavigationPlugin {
         }
     }
 }
+
+export default TabNavigationPlugin;
