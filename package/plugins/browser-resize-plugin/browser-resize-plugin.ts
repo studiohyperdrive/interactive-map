@@ -13,6 +13,7 @@ export default class BrowserResizePlugin {
             public renderer: WebGLRenderer;
             public camera: PerspectiveCamera | OrthographicCamera;
             public cameraConfig: ICameraConfig;
+
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
@@ -22,14 +23,14 @@ export default class BrowserResizePlugin {
             }
 
             public bindEventListener(): void {
-                window.addEventListener("resize", e => this.handleResize(e));
+                window.addEventListener("resize", this.handleResize);
             }
 
             public unbindEventListener(): void {
-                window.removeEventListener("resize", e => this.handleResize(e));
+                window.removeEventListener("resize", this.handleResize);
             }
 
-            public handleResize(e: UIEvent) {
+            public handleResize = (e: UIEvent) => {
                 this.dataStore.set("sizes", onWindowResize(this.renderer, this.camera, this.cameraConfig.config));
             }
         }

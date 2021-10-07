@@ -6,6 +6,7 @@ export default class MousePositionPlugin {
     constructor() {
         return class implements IMousePositionPlugin {
             private dataStore: IDataStore;
+            
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
             }
