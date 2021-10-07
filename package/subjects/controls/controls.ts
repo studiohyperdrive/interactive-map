@@ -16,7 +16,7 @@ export default class Controls implements IControls {
     constructor(camera: Camera, canvas: HTMLCanvasElement, config: ISceneControlsConfig) {
         this.config = config;
 
-        this.mapControls = this.createOribitControls(camera, canvas);
+        this.mapControls = this.createOrbitControls(camera, canvas);
         this.camera = camera;
 
         this.rotationDelta = 0;
@@ -34,7 +34,7 @@ export default class Controls implements IControls {
         this.mapControls.enabled = true;
     };
 
-    public createOribitControls(camera: Camera, canvas: HTMLCanvasElement): MapControls {
+    public createOrbitControls(camera: Camera, canvas: HTMLCanvasElement): MapControls {
         const mapControls = new MapControls(camera, canvas);
         if (this.config.enableDamping) {
             mapControls.enableDamping = this.config.enableDamping;
