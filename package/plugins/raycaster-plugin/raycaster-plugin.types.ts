@@ -2,7 +2,7 @@ import { Camera, Raycaster, Scene } from "three";
 
 import { IEventPlugin } from "../../types";
 
-export interface IRacasterPlugin extends IEventPlugin {
+export interface IRaycasterPlugin extends IEventPlugin {
     raycaster: Raycaster,
     camera: Camera,
     scene: Scene,

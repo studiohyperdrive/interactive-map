@@ -362,3 +362,61 @@ new MousePositionPlugin({
 ### Source
 
 [Code](../plugins/raycaster-plugin/raycaster-plugin.ts)
+
+## `TabNavigationPlugin` [EventPlugin]
+
+The `TabNavigationPlugin` allows developers to specify a list of meshes, based on name and previously mentioned matching rules, that can be cycled through when pressing the `Tab` and `Shift + Tab` keys.
+
+This allows for tab-based navigation, highlighting and/or accessibility. This plugin does not prevent the default behaviour of the `Tab` and `Shift + Tab` keys when either end of the list is reached.
+
+### Constructor
+
+| Property | Description |
+| --- | --- |
+| `bindings` | A list of objects implementing `ITabNavigationBinding`. |
+
+```js
+new TabNavigationPlugin(
+    [
+        {
+            name: "small-house",
+            matching: "exact",
+            order: 0,
+            afterNavigate: (
+                camera: PerspectiveCamera | OrthographicCamera,
+                controls: MapControls,
+                children: Array<Object3D | Mesh>
+            ) => {
+                //
+            }
+        },
+        {
+            name: "small-house001",
+            matching: "exact",
+            order: 0,
+            afterNavigate: (
+                camera: PerspectiveCamera | OrthographicCamera,
+                controls: MapControls,
+                children: Array<Object3D | Mesh>
+            ) => {
+                //
+            }
+        },
+    ]
+)
+```
+
+### Output
+
+| DataStore property | Description |
+| --- | --- |
+
+### Dependencies
+
+| DataStore property | Description | Plugin |
+| --- | --- | --- |
+| `mapLoaded` | Boolean value that reflects the loaded state of the model. | [`GltfDracoLoaderPlugin`](#gltfdracoloaderplugin-sceneplugin) |
+
+### Source
+
+[Code](../plugins/tab-navigation-plugin/tab-navigation-plugin.ts)
