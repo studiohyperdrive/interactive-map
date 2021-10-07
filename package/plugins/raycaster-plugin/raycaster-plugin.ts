@@ -18,12 +18,18 @@ export class RaycasterPlugin {
 
                 this.camera = dataStore.get("camera");
                 this.scene = dataStore.get("scene");
+            }
 
+            public bindEventListener() {
                 window.addEventListener(config.trigger, this.handleClick);
             }
 
+            public unbindEventListener() {
+                window.removeEventListener(config.trigger, this.handleClick);
+            }
+
             public handleClick = () => {
-                const pos = this.dataStore.data.mousePosition;
+                const pos = this.dataStore.get("mousePosition");
                 if (pos === undefined) {
                     return
                 };
@@ -32,8 +38,6 @@ export class RaycasterPlugin {
         
                 this.dataStore.set('intersection', this.raycaster.intersectObjects(this.scene.children, true)[0]);                
             }
-
-            public update() {}
         }
     }
 }
