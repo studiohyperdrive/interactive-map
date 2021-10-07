@@ -41,6 +41,8 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
             sceneConfig,
             [
               new BrowserResizePlugin,
+              new MousePositionPlugin,
+              new RaycasterPlugin({trigger: "mousemove"}),
               new ClickPlugin(
                 createClickBindings(store, router)
               ),
@@ -53,8 +55,6 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
               new GlobalIlluminationPlugin,
               new ClockPlugin,
               new AnimationMixerPlugin,
-              new MousePositionPlugin,
-              new RaycasterPlugin({trigger: "mousemove"}),
               new AnimationPlugin(animationConfig),
               new MapControlsPlugin(controlsConfig),
             ],
