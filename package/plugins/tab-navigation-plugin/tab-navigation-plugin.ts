@@ -77,7 +77,7 @@ export class TabNavigationPlugin {
                 if (next?.afterNavigate) {
                     flattenChildren(this.scene.children).forEach(child => {
                         if (next && isMatching(child, next)) {
-                            (next.afterNavigate as Function)(child);
+                            (next.afterNavigate as Function)(this.dataStore.get("camera"), this.dataStore.get("controls"), [child]);
                         }
                     });
                 }
