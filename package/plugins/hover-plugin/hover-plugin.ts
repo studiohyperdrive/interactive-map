@@ -27,14 +27,14 @@ export class HoverPlugin {
             }
 
             public bindEventListener(): void {
-                window.addEventListener("mousemove", e => this.handleHover(e as MouseEvent));
+                window.addEventListener("mousemove", this.handleHover);
             }
 
             public unbindEventListener(): void {
-                window.removeEventListener("mousemove", e => this.handleHover(e as MouseEvent));
+                window.removeEventListener("mousemove", this.handleHover);
             }
 
-            public handleHover(e: MouseEvent): void {
+            public handleHover = (e: MouseEvent): void => {
                 const previous = this.hovered;
                 const current = this.dataStore.get("intersection")?.object;
         
