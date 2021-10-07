@@ -16,7 +16,7 @@ By default the `dataStore` will contain the following properties. They are set w
 
 ---
 
-## `AnimationMixerPlugin`
+## `AnimationMixerPlugin` [ScenePlugin]
 
 The `AnimationMixerPlugin` will create a new [`AnimationMixer`](https://threejs.org/docs/#api/en/animation/AnimationMixer) with the current scene. The mixer is updated in the plugin"s `update` method.
 
@@ -76,7 +76,7 @@ class AnimationMixerPlugin {
 ```
 </details> 
 
-## `AnimationPlugin`
+## `AnimationPlugin` [ScenePlugin]
 
 The `AnimationPlugin` allows you to define an `animationConfig` that will initiate animations after the model is loaded.
 
@@ -161,7 +161,7 @@ class AnimationPlugin {
 ```
 </details> 
 
-## `BrowserResizePlugin`
+## `BrowserResizePlugin` [EventPlugin]
 
 The `BrowserResizePlugin` resizes the canvas and camera and updates the `"sizes"` property on the dateStore when the `resize` event is fired. This plugin supports [`PerspectiveCamera`](https://threejs.org/docs/#api/en/cameras/PerspectiveCamera) and [`OrthographicCamera`](https://threejs.org/docs/?q=orth#api/en/cameras/OrthographicCamera)
 
@@ -227,7 +227,7 @@ class BrowserResizePlugin {
 ```
 </details> 
 
-## `ClickPlugin`
+## `ClickPlugin` [EventPlugin]
 
 The `ClickPlugin` enables click interaction with the model. For more information on how to define the bindings see [clicks](../README.md#clicks). See [click and hover](../README.md#click-and-hover) for more information about animations on hover.
 
@@ -338,7 +338,7 @@ class ClickPlugin {
 ```
 </details> 
 
-## `ClockPlugin`
+## `ClockPlugin` [ScenePlugin]
 
 The `ClockPlugin` exposes a `elapsedTime` and `deltaTime` property. The values are updated on each frame.
 
@@ -401,7 +401,7 @@ class ClockPlugin {
 ```
 </details> 
 
-## `GlobalIlluminationPlugin`
+## `GlobalIlluminationPlugin` [ScenePlugin]
 
 The `GlobalIlluminationPlugin` adds [`AmbientLight`](https://threejs.org/docs/#api/en/lights/AmbientLight) and [`DirectionalLight`](https://threejs.org/docs/?q=direc#api/en/lights/DirectionalLight) to the scene.
 
@@ -473,7 +473,7 @@ class GlobalIlluminationPlugin {
 ```
 </details> 
 
-## `GltfDracoLoaderPlugin`
+## `GltfDracoLoaderPlugin` [ScenePlugin]
 
 The `GltfDracoLoaderPlugin` assynchronously loads a Draco compressed `.glTF` of `.glb` file. The model will be added to the `scene` and animations (if any) will be added to the `dataStore`. When finished it updates the `mapLoaded` property.
 
@@ -550,7 +550,7 @@ class GltfDracoLoaderPlugin {
 
 </details> 
 
-## `HoverPlugin`
+## `HoverPlugin` [EventPlugin]
 
 The `HoverPlugin` enables hover interaction with the model. For more information on how to define the bindings see [hover](../README.md#hover). See [click and hover](../README.md#click-and-hover) for more information about animations on hover.
 
@@ -677,7 +677,7 @@ class HoverPlugin {
 
 </details> 
 
-## `MapControlsPlugin`
+## `MapControlsPlugin` [ScenePlugin]
 
 The `MapControlsPlugin` add basic controls to the app. These controls can be configured through a `controlsConfig`.
 
@@ -832,7 +832,7 @@ class MapControlsPlugin {
 
 </details> 
 
-## `MousePositionPlugin`
+## `MousePositionPlugin` [EventPlugin]
 
 The `MousePositionPlugin` populates the `mousePosition` property on the `dataStore`. This value is updated on `mousemove`.
 
@@ -871,15 +871,19 @@ class MousePositionPlugin {
             private dataStore: IDataStore;
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
-                
-                window.addEventListener("mousemove", this.handleMouseMove);
+            }
+
+            public bindEventListener() {
+                window.addEventListener('mousemove', this.handleMouseMove);
+            }
+
+            public unbindEventListener() {
+                window.removeEventListener('mousemove', this.handleMouseMove);
             }
 
             public handleMouseMove = (e: MouseEvent) => {
-                this.dataStore.set("mousePosition", {x: calculateCursorX(e), y: calculateCursorY(e)});
+                this.dataStore.set('mousePosition', {x: calculateCursorX(e), y: calculateCursorY(e)});
             }
-
-            public update() {}
         }
     }
 }
@@ -887,7 +891,7 @@ class MousePositionPlugin {
 
 </details> 
 
-## `RaycasterPlugin`
+## `RaycasterPlugin` [EventPlugin]
 
 The `RaycasterPlugin` returns the `Mesh` that the mouse is currently over. This value can be updated on `click` or `mousemove`. 
 
@@ -937,22 +941,26 @@ class RaycasterPlugin {
 
                 this.camera = dataStore.get("camera");
                 this.scene = dataStore.get("scene");
+            }
 
+            public bindEventListener() {
                 window.addEventListener(config.trigger, this.handleClick);
             }
 
+            public unbindEventListener() {
+                window.removeEventListener(config.trigger, this.handleClick);
+            }
+
             public handleClick = () => {
-                const pos = this.dataStore.data.mousePosition;
+                const pos = this.dataStore.get("mousePosition");
                 if (pos === undefined) {
                     return
                 };
         
                 this.raycaster.setFromCamera(pos, this.camera);
         
-                this.dataStore.set("intersection", this.raycaster.intersectObjects(this.scene.children, true)[0]);                
+                this.dataStore.set('intersection', this.raycaster.intersectObjects(this.scene.children, true)[0]);                
             }
-
-            public update() {}
         }
     }
 }
