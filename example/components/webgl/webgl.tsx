@@ -10,7 +10,7 @@ import createClickBindings from "../../bindings/click";
 import createHoverBindings from "../../bindings/hover";
 import createTabNavigationBindings from "../../bindings/tab-navigation";
 
-import sceneConfig from "../../config/sceneConfig";
+import { ortho } from "../../config/sceneConfig";
 import controlsConfig from "../../config/controlsConfig";
 
 import actions from "../../redux/actions";
@@ -25,7 +25,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   const buildThree = (): ThreeEntryPoint | null => {
     return threeRootElement.current ? new ThreeEntryPoint(
       threeRootElement.current,
-      sceneConfig,
+      ortho,
       [
         new BrowserResizePlugin,
         new ClickPlugin(
@@ -44,7 +44,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
         new ClockPlugin,
         new AnimationMixerPlugin,
         new MousePositionPlugin,
-        new RaycasterPlugin({trigger: "mousemove"}),
+        new RaycasterPlugin({ trigger: "mousemove" }),
         new AnimationPlugin(animationConfig),
         new MapControlsPlugin(controlsConfig),
       ],
@@ -73,7 +73,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   }
 
   return (
-    <div>
+    <div className="crosshair">
       {/* <div className="im__webgl--container"> */}
       <canvas ref={threeRootElement} />
       {/* </div> */}

@@ -18,3 +18,27 @@
     width: 100%;
     text-align: center;
 }
+
+.crosshair::before {
+    content: "";
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 9px;
+    width: 1px;
+    background-color: hotpink;
+    opacity: 0.5;
+}
+
+.crosshair::after {
+    content: "";
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 1px;
+    width: 9px;
+    background-color: hotpink;
+    opacity: 0.5;
+}
