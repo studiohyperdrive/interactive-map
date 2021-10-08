@@ -87,8 +87,13 @@ This plugin supports [`PerspectiveCamera`](https://threejs.org/docs/#api/en/came
 
 ### Constructor
 
+| Property | Description |
+| --- | --- |
+| `window` | A reference to the window. |
+| `element` | (Optional) reference to the element that sizes the canvas. Default is `null` |
+
 ```js
-new BrowserResizePlugin();
+new BrowserResizePlugin(window: Window, element?: Element | null);
 ```
 
 ### Output
