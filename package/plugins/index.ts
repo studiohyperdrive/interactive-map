@@ -30,3 +30,6 @@ export * from "./mouse-position-plugin/mouse-position-plugin.types";
 
 export {default as RaycasterPlugin} from "./raycaster-plugin/raycaster-plugin";
 export * from "./raycaster-plugin/raycaster-plugin.types";
+
+export {default as WebglRendererPlugin} from "./webgl-renderer-plugin/webgl-renderer-plugin";
+export * from "./webgl-renderer-plugin/webgl-renderer-plugin.types";

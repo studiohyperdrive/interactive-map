@@ -25,6 +25,7 @@ import {
   BrowserResizePlugin,
   GlobalIlluminationPlugin,
   MapControlsPlugin,
+  WebglRendererPlugin,
 } from "@shd-developer/interactive-map/dist/plugins";
 
 const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
@@ -57,6 +58,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
               new AnimationMixerPlugin,
               new AnimationPlugin(animationConfig),
               new MapControlsPlugin(controlsConfig),
+              new WebglRendererPlugin
             ],
           )
         });

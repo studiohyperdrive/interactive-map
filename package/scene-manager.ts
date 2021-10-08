@@ -10,7 +10,6 @@ export default class SceneManager implements IManager {
 	public sizes: ISize;
 	public sceneConfig: ISceneConfig;
 	public scene: Scene;
-	public renderer: WebGLRenderer;
 	public camera: PerspectiveCamera | OrthographicCamera;
 	public plugins: any[];
 	
@@ -25,7 +24,6 @@ export default class SceneManager implements IManager {
 		this.sceneConfig = sceneConfig;
 		
 		this.scene = buildScene();
-		this.renderer = buildRenderer(canvas, this.sizes);
 		this.camera = this.sceneConfig.camera.type === "orthographic" 
 			? buildOrthographicCamera(this.scene, this.sizes, this.sceneConfig.camera.config as IOrthographicCameraConfig) 
 			: buildPerspectiveCamera(this.scene, this.sizes, this.sceneConfig.camera.config as IPerspectiveCameraConfig);
@@ -33,7 +31,6 @@ export default class SceneManager implements IManager {
 		dataStore.set("canvas", canvas);
 		dataStore.set("sizes", this.sizes);
 		dataStore.set("scene", this.scene);
-		dataStore.set("renderer", this.renderer);
 		dataStore.set("camera", this.camera);
 		dataStore.set("cameraConfig", sceneConfig.camera);
 		
@@ -47,7 +44,5 @@ export default class SceneManager implements IManager {
 		this.plugins.forEach(plugin => {
 			plugin.update();
 		});
-		
-		this.renderer.render(this.scene, this.camera);
 	}
 };
