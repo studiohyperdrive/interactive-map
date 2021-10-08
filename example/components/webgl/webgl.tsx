@@ -40,7 +40,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
             threeRootElement.current,
             sceneConfig,
             [
-              new BrowserResizePlugin,
+              new BrowserResizePlugin(window),
               new MousePositionPlugin,
               new RaycasterPlugin({trigger: "mousemove"}),
               new ClickPlugin(
@@ -76,9 +76,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
 
   return (
     <div>
-      {/* <div className="im__webgl--container"> */}
-        <canvas ref={threeRootElement} />
-      {/* </div> */}
+      <canvas ref={threeRootElement} />
     </div>
   );
 };

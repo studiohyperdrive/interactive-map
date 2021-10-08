@@ -6,7 +6,7 @@ import { IDataStore } from "../../data-store/data-store.types";
 import { IBrowserResizePlugin } from "./browser-resize-plugin.types";
 
 export default class BrowserResizePlugin {
-    constructor() {
+    constructor(window: Window, element: Element | null = null ) {
         return class implements IBrowserResizePlugin {
             private dataStore: IDataStore;
 
@@ -19,6 +19,8 @@ export default class BrowserResizePlugin {
                 this.renderer = dataStore.get("renderer");
                 this.camera = dataStore.get("camera");
                 this.cameraConfig = dataStore.get("cameraConfig");
+                
+                this.setSize();
             }
 
             public bindEventListener(): void {
@@ -29,8 +31,12 @@ export default class BrowserResizePlugin {
                 window.removeEventListener("resize", e => this.handleResize(e));
             }
 
-            public handleResize(e: UIEvent) {
-                this.dataStore.set("sizes", onWindowResize(this.renderer, this.camera, this.cameraConfig.config));
+            public handleResize(e: Event) {
+                this.setSize();
+            }
+
+            public setSize() {
+                this.dataStore.set("sizes", onWindowResize(element? element : window, this.renderer, this.camera, this.cameraConfig.config))
             }
         }
     }
