@@ -4,18 +4,16 @@ export const ortho: ISceneConfig = {
     camera: {
         type: "orthographic",
         config: {
-            frustumSize: 2,
-            near: 0.0001,
-            far: 100,
+            frustumSize: 1400,
+            near: 1,
+            far: 10000,
             position: {
-                x: 2,
-                y: 2,
-                z: 2
+                x: 1500,
+                y: -1500,
+                z: 1500
             }
         }
-    },
-    map: '',
-    controls: {}
+    }
 };
 
 export const perspective: ISceneConfig = {
@@ -31,9 +29,5 @@ export const perspective: ISceneConfig = {
                 z: 2
             },
         }
-    },
-    map: '',
-    controls: {}
-}
-
-export default ortho as ISceneConfig;
+    }
+};

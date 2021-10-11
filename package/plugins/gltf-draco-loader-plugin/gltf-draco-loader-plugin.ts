@@ -8,7 +8,7 @@ import { IGltfDracoLoaderPlugin } from "./gltf-draco-loader-plugin.types";
 
 export class GltfDracoLoaderPlugin {
     constructor(path: string) {
-        return class implements IGltfDracoLoaderPlugin{
+        return class implements IGltfDracoLoaderPlugin {
             private dataStore: IDataStore;
 
             public scene: Scene;
@@ -22,7 +22,7 @@ export class GltfDracoLoaderPlugin {
                 dataStore.set("animations", []);
 
                 this.scene = dataStore.get("scene");
-                
+
                 this.dracoLoader = new DRACOLoader();
                 this.dracoLoader.setDecoderPath('decoder/');
 
@@ -33,14 +33,14 @@ export class GltfDracoLoaderPlugin {
             }
 
             public loadGltf(path: string) {
-                this.gltfLoader.load(path, (gltf) => {                    
+                this.gltfLoader.load(path, (gltf) => {
                     this.dataStore.set("animations", gltf.animations);
                     this.scene.add(gltf.scene);
-                    this.dataStore.set("mapLoaded", true);                      
+                    this.dataStore.set("mapLoaded", true);
                 });
             }
 
-            public update() {}
+            public update() { }
         }
     }
 }

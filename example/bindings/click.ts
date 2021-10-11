@@ -1,20 +1,31 @@
-import { IClickBindingConfig } from "@shd-developer/interactive-map/dist/types";
-import { mutateRandomColor } from "@shd-developer/interactive-map/dist/utils";
-import { NextRouter } from "next/dist/client/router";
+import { Mesh } from "three";
 import { Store } from "redux";
+import { NextRouter } from "next/dist/client/router";
 
-import { Mesh, MeshStandardMaterial, LoopOnce } from "three";
+import { IClickBindingConfig } from "@shd-developer/interactive-map/dist/types";
 
-import actions from "../redux/actions";
+import { handleOpacity } from "./helpers";
+
+const barns = [
+    "livestock-farm",
+    "agriculture",
+    "dairy-farm",
+    "horticulture"
+]
 
 export default function createClickBindings(store: Store, router: NextRouter) {
     return ([
         {
-            name: "skyscraper",
+            name: "farm",
             matching: "partial",
-            onClick: mutateRandomColor
+            onClick: (mesh: Mesh) => handleOpacity(mesh, store)
         },
-        {
+        /* {
+            name: "lake",
+            matching: "partial",
+            onClick: (mesh: Mesh) => handleOpacity(mesh, store)
+        }, */
+        /* {
             name: "tower",
             matching: "partial",
             onClick: (mesh: Mesh) => {
@@ -48,6 +59,6 @@ export default function createClickBindings(store: Store, router: NextRouter) {
                     loop: LoopOnce,
                 }
             ]
-        }
+        } */
     ] as IClickBindingConfig[]);
 }

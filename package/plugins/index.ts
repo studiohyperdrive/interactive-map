@@ -22,6 +22,9 @@ export * from "./gltf-draco-loader-plugin/gltf-draco-loader-plugin.types";
 export { default as HoverPlugin } from "./hover-plugin/hover-plugin";
 export * from "./hover-plugin/hover-plugin.types";
 
+export { default as IlluminationPlugin } from "./illumination-plugin/illumination-plugin";
+export * from "./illumination-plugin/illumination-plugin.types";
+
 export { default as MapControlsPlugin } from "./map-controls-plugin/map-controls-plugin";
 export * from "./map-controls-plugin/map-controls-plugin.types";
 

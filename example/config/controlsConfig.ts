@@ -19,15 +19,15 @@ export default {
     rotationLimits: {
         minPolarAngle: 0.9553166181245092,
         maxPolarAngle: 0.9553166181245092,
-        minAzimuthAngle: 0,
-        maxAzimuthAngle: Math.PI / 2,
+        minAzimuthAngle: Math.PI / 6,
+        maxAzimuthAngle: Math.PI / 3,
     },
     panLimits: {
-        minPan: new Vector3(-1, 0, -2),
-        maxPan: new Vector3(1, 0, 0),
+        minPan: new Vector3(0, 0, 0),
+        maxPan: new Vector3(0, 0, 0),
     },
     zoomLimits: {
-        minZoom: 0.8,
+        minZoom: 1,
         maxZoom: 2,
     }
 } as IMapControlsConfig;

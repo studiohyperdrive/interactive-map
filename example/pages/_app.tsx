@@ -15,7 +15,9 @@ import Tooltip from "../components/tooltip/tooltip";
 import RingDialog from "../components/dialogs/ring/ring";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const shouldShowMap = (url: string) => { return url === "/" };
+  const shouldShowMap = (url: string) => {
+    return url === "/";
+  };
 
   const router = useRouter();
   const [map, setMap] = useState(shouldShowMap(router.pathname));
@@ -30,11 +32,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       }
     };
 
-    router.events.on("routeChangeStart", handleStart)
+    router.events.on("routeChangeStart", handleStart);
 
     return () => {
-      router.events.off("routeChangeStart", handleStart)
-    }
+      router.events.off("routeChangeStart", handleStart);
+    };
   }, [router]);
 
   return (
@@ -47,7 +49,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <RingDialog />
       </main>
     </Provider>
-  )
+  );
 }
 
-export default MyApp
+export default MyApp;

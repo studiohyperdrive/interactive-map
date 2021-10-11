@@ -1,13 +1,13 @@
-import { AnimationActionLoopStyles, MOUSE, OrthographicCamera, PerspectiveCamera, Scene, TOUCH, Vector3, WebGLRenderer } from "three";
+import { AnimationActionLoopStyles, Light, MOUSE, OrthographicCamera, PerspectiveCamera, Scene, TextureEncoding, TOUCH, Vector3 } from "three";
 
 // Base
 
 export interface IEntryPoint {
     canvas: HTMLCanvasElement;
-	manager: IManager;
-	sceneConfig: ISceneConfig;
-	plugins: any[];
-	interactive: boolean;
+    manager: IManager;
+    sceneConfig: ISceneConfig;
+    plugins: any[];
+    interactive: boolean;
     bindEventListeners: () => void;
     unbindEventListeners: () => void;
     render: () => void;
@@ -41,11 +41,11 @@ export interface IBindingConfig {
     animate?: IAnimate[],
 }
 
-export interface IClickBindingConfig extends IBindingConfig{
+export interface IClickBindingConfig extends IBindingConfig {
     onClick: Function,
 }
 
-export interface IHoverBindingConfig extends IBindingConfig{
+export interface IHoverBindingConfig extends IBindingConfig {
     onHoverStart: Function,
     onHoverEnd: Function,
 }
@@ -133,12 +133,33 @@ export interface ISceneControlsConfig {
 }
 
 export interface ICameraConfig {
-    type: "orthographic" | "perspective",
-    config: IOrthographicCameraConfig | IPerspectiveCameraConfig,
+    type: "orthographic" | "perspective",
+    config: IOrthographicCameraConfig | IPerspectiveCameraConfig,
+}
+
+export interface ILight {
+    setup: Light,
+    position?: Vector3,
+}
+
+export interface IIlluminationConfig {
+    lights?: ILight[]
+}
+
+export interface IMouseEvents {
+    update?: boolean,
+    intersect?: boolean,
+    hover?: boolean,
+    click?: boolean
 }
 
 export interface ISceneConfig {
     camera: ICameraConfig,
+    controls?: ISceneControlsConfig
+}
+
+export interface IWebglRendererConfig {
+    outputEncoding?: TextureEncoding
 }
 
 // Plugins

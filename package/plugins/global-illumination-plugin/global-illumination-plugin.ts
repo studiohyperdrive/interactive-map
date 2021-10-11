@@ -10,11 +10,12 @@ export class GlobalIlluminationPlugin {
             private dataStore: IDataStore;
 
             public scene: Scene;
+            
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
-                this.scene = dataStore.get("scene");
-                this.addLights()
+                this.scene = this.dataStore.get("scene");
+                this.addLights();
             }
 
             public addLights() {

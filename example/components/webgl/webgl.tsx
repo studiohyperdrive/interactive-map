@@ -3,15 +3,31 @@ import { connect } from "react-redux";
 import { useRouter } from "next/dist/client/router";
 
 import ThreeEntryPoint from "@shd-developer/interactive-map/dist/three-entry-point";
-import { ClickPlugin, HoverPlugin, MousePositionPlugin, RaycasterPlugin, AnimationPlugin, GltfDracoLoaderPlugin, ClockPlugin, AnimationMixerPlugin, TabNavigationPlugin, BrowserResizePlugin, GlobalIlluminationPlugin, MapControlsPlugin, WebglRendererPlugin } from "@shd-developer/interactive-map/dist/plugins";
+import {
+  ClickPlugin,
+  HoverPlugin,
+  MousePositionPlugin,
+  RaycasterPlugin,
+  AnimationPlugin,
+  GltfDracoLoaderPlugin,
+  ClockPlugin,
+  AnimationMixerPlugin,
+  TabNavigationPlugin,
+  BrowserResizePlugin,
+  GlobalIlluminationPlugin,
+  MapControlsPlugin,
+  IlluminationPlugin,
+  WebglRendererPlugin,
+} from "@shd-developer/interactive-map/dist/plugins";
 
-import animationConfig from '../../bindings/animation';
+import animationConfig from "../../bindings/animation";
 import createClickBindings from "../../bindings/click";
 import createHoverBindings from "../../bindings/hover";
 import createTabNavigationBindings from "../../bindings/tab-navigation";
 
-import { ortho } from "../../config/sceneConfig";
+import { ortho, perspective } from "../../config/sceneConfig";
 import controlsConfig from "../../config/controlsConfig";
+import illuminationConfig from "../../config/illuminationConfig";
 
 import actions from "../../redux/actions";
 import store from "../../redux/store";
@@ -23,41 +39,38 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   const router = useRouter();
 
   const buildThree = (): ThreeEntryPoint | null => {
-    return threeRootElement.current ? new ThreeEntryPoint(
-      threeRootElement.current,
-      ortho,
-      [
-        new BrowserResizePlugin(window),
-        new MousePositionPlugin,
-        new RaycasterPlugin({ trigger: "mousemove" }),
-        new ClickPlugin(
-          createClickBindings(store, router),
-        ),
-        new HoverPlugin(
-          createHoverBindings(store),
-        ),
-        new TabNavigationPlugin(
-          createTabNavigationBindings(),
+    return threeRootElement.current
+      ? new ThreeEntryPoint(
+          threeRootElement.current,
+          ortho,
+          [
+            new BrowserResizePlugin(window),
+            new MousePositionPlugin(),
+            new RaycasterPlugin({ trigger: "mousemove" }),
+            new ClickPlugin(createClickBindings(store, router)),
+            // new HoverPlugin(createHoverBindings(store)),
+            new TabNavigationPlugin(createTabNavigationBindings()),
+          ],
+          [
+            new GltfDracoLoaderPlugin("/models/boerderleren-draco.gltf"),
+            // new GlobalIlluminationPlugin(),
+            new IlluminationPlugin(illuminationConfig),
+            new ClockPlugin(),
+            new AnimationMixerPlugin(),
+            new AnimationPlugin(animationConfig),
+            new MapControlsPlugin(controlsConfig),
+            new WebglRendererPlugin
+          ]
         )
-      ],
-      [
-        new GltfDracoLoaderPlugin("/models/interactive-map_v2.8-draco.glb"),
-        new GlobalIlluminationPlugin,
-        new ClockPlugin,
-        new AnimationMixerPlugin,
-        new AnimationPlugin(animationConfig),
-        new MapControlsPlugin(controlsConfig),
-        new WebglRendererPlugin
-      ],
-    ) : null;
-  }
+      : null;
+  };
 
   // Run once
   useEffect(() => {
     if (three === undefined) {
       store.dispatch({
         type: actions.three.set,
-        payload: buildThree()
+        payload: buildThree(),
       });
     } else {
       threeRootElement.current?.replaceWith(three.canvas);
@@ -73,13 +86,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
     }
   }
 
-  return (
-    <div className="crosshair">
-      {/* <div className="im__webgl--container"> */}
-      <canvas ref={threeRootElement} />
-      {/* </div> */}
-    </div>
-  );
+  return <canvas ref={threeRootElement} />;
 };
 
 export default connect((state: { three?: ThreeEntryPoint }) => {
