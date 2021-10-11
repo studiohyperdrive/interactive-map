@@ -1,7 +1,9 @@
 export default {
     three: {
         set: "three/set",
-        reset: "three/reset"
+        reset: "three/reset",
+        enable: "three/enable",
+        disable: "three/disable"
     },
     tooltip: {
         set: "tooltip/set",

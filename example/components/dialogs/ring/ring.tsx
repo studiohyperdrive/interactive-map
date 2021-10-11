@@ -11,9 +11,8 @@ const RingDialog: React.FC<RingDialogProps> = ({ open }) => {
     const router = useRouter();
 
     const handleClose = () => {
-        store.dispatch({
-            type: actions.dialogs.ring.close
-        });
+        store.dispatch({ type: actions.dialogs.ring.close });
+        store.dispatch({ type: actions.three.enable });
     }
 
     const handleInfo = () => {

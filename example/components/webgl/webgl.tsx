@@ -67,9 +67,9 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   // Check if three should be disabled
   if (three) {
     if (disabled) {
-      three.unbindEventListeners();
+      store.dispatch({ type: actions.three.disable });
     } else if (!three.interactive) {
-      three.bindEventListeners();
+      store.dispatch({ type: actions.three.enable });
     }
   }
 

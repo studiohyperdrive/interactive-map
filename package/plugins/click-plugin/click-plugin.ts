@@ -21,7 +21,7 @@ export class ClickPlugin {
                 this.animations = dataStore.get("animations");
                 this.mixer = dataStore.get("animationMixer");
 
-                this.dataStore.set(`clickBindings`, bindings);
+                this.dataStore.set("clickBindings", bindings);
             }
 
             public bindEventListener(): void {
@@ -34,6 +34,7 @@ export class ClickPlugin {
 
             public handleClick = (e: MouseEvent): void => {
                 const intersection = this.dataStore.get("intersection");
+
                 if (!intersection) {
                     return;
                 }
@@ -42,7 +43,7 @@ export class ClickPlugin {
 
                 if (clicked instanceof Mesh) {
                     bindings.forEach(binding => {
-                        if (isMatching(clicked, binding)) {``
+                        if (isMatching(clicked, binding)) {
                             binding.onClick(clicked);
 
                             this.handleBindingAnimation(binding, (animation: AnimationClip, animationBinding: IAnimate) => {
