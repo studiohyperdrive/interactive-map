@@ -3,13 +3,13 @@ import { IIlluminationConfig } from "@shd-developer/interactive-map";
 
 export const config = {
     lights: [
-        {
-            setup: new AmbientLight(0xffffff, 1),
-        },
-        {
-            setup: new DirectionalLight(0xffffff, 1),
-            position: new Vector3(1, 1, 1),
-        }
+        // {
+        //     setup: new AmbientLight(0xffffff, 1),
+        // },
+        // {
+        //     setup: new DirectionalLight(0xffffff, 1),
+        //     position: new Vector3(1, 1, 1),
+        // }
     ],
 } as IIlluminationConfig;
 
