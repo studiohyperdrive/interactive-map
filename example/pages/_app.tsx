@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import { useRouter } from "next/dist/client/router";
 import type { AppProps } from "next/app";
 
+import actions from "../redux/actions";
 import store from "../redux/store";
 
 import WebGL from "../components/webgl/webgl";
@@ -23,7 +24,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     const handleStart = (url: string) => {
-      setMap(shouldShowMap(url));
+      const shouldShow = shouldShowMap(url);
+      setMap(shouldShow);
+
+      if (shouldShow) {
+        store.dispatch({ type: actions.three.enable });
+      }
     };
 
     router.events.on("routeChangeStart", handleStart);

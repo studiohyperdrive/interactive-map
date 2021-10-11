@@ -30,13 +30,15 @@ export class RaycasterPlugin {
 
             public handleClick = () => {
                 const pos = this.dataStore.get("mousePosition");
+
                 if (pos === undefined) {
+                    this.dataStore.set("intersection", []);
                     return
                 };
         
                 this.raycaster.setFromCamera(pos, this.camera);
         
-                this.dataStore.set('intersection', this.raycaster.intersectObjects(this.scene.children, true)[0]);                
+                this.dataStore.set("intersection", this.raycaster.intersectObjects(this.scene.children, true)[0]);                
             }
         }
     }

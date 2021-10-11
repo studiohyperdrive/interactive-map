@@ -17,6 +17,7 @@ import {
   GlobalIlluminationPlugin,
   MapControlsPlugin,
   IlluminationPlugin,
+  WebglRendererPlugin,
 } from "@shd-developer/interactive-map/dist/plugins";
 
 import animationConfig from "../../bindings/animation";
@@ -43,7 +44,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
           threeRootElement.current,
           ortho,
           [
-            new BrowserResizePlugin(),
+            new BrowserResizePlugin(window),
             new MousePositionPlugin(),
             new RaycasterPlugin({ trigger: "mousemove" }),
             new ClickPlugin(createClickBindings(store, router)),
@@ -58,6 +59,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
             new AnimationMixerPlugin(),
             new AnimationPlugin(animationConfig),
             new MapControlsPlugin(controlsConfig),
+            new WebglRendererPlugin
           ]
         )
       : null;
@@ -78,9 +80,9 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   // Check if three should be disabled
   if (three) {
     if (disabled) {
-      three.unbindEventListeners();
+      store.dispatch({ type: actions.three.disable });
     } else if (!three.interactive) {
-      three.bindEventListeners();
+      store.dispatch({ type: actions.three.enable });
     }
   }
 

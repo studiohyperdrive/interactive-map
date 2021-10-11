@@ -15,11 +15,10 @@ export interface IEntryPoint {
 
 export interface IManager {
     sizes: ISize;
-    sceneConfig: ISceneConfig;
-    scene: Scene;
-    renderer: WebGLRenderer;
-    camera: PerspectiveCamera | OrthographicCamera;
-    plugins: any[];
+	sceneConfig: ISceneConfig;
+	scene: Scene;
+	camera: PerspectiveCamera | OrthographicCamera;
+	plugins: any[];
     update: Function;
 }
 

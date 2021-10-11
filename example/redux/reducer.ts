@@ -1,6 +1,7 @@
 import { AnyAction } from "redux";
 
 import ThreeEntryPoint from "@shd-developer/interactive-map/dist/three-entry-point";
+import { IMousePositionPlugin, IRaycasterPlugin } from "@shd-developer/interactive-map/dist/plugins";
 
 import actions from "./actions";
 
@@ -29,7 +30,7 @@ const enableThree = (three?: ThreeEntryPoint) => {
     return;
   }
 
-  three.bindEventListeners(three.click, three.hover);
+  three.bindEventListeners();
 }
 
 const disableThree = (three?: ThreeEntryPoint) => {
@@ -38,6 +39,16 @@ const disableThree = (three?: ThreeEntryPoint) => {
   }
 
   three.unbindEventListeners();
+
+  // Prevent ghost clicks
+
+  const mousePositionPlugin = three.plugins.find(plugin => plugin.clearMousePosition) as IMousePositionPlugin;
+  const raycasterPlugin = three.plugins.find(plugin => plugin.raycaster && plugin.handleClick) as IRaycasterPlugin;
+
+  if (mousePositionPlugin && raycasterPlugin) {
+    mousePositionPlugin.clearMousePosition();
+    raycasterPlugin.handleClick();
+  }
 }
 
 export default function reducer(state: IState = initialState, action: AnyAction) {
@@ -53,6 +64,16 @@ export default function reducer(state: IState = initialState, action: AnyAction)
       return { ...state, three: initialState.three };
     }
 
+    case actions.three.enable: {
+      enableThree(state.three);
+      return { ...state };
+    }
+
+    case actions.three.disable: {
+      disableThree(state.three);
+      return { ...state };
+    }
+
     // Tooltip
 
     case actions.tooltip.set: {
@@ -66,14 +87,10 @@ export default function reducer(state: IState = initialState, action: AnyAction)
     // Dialogs
 
     case actions.dialogs.ring.open: {
-      disableThree(state.three);
-
       return { ...state, dialogs: { ...state.dialogs, ring: { ...state.dialogs.ring, open: true } } };
     }
 
     case actions.dialogs.ring.close: {
-      enableThree(state.three);
-
       return { ...state, dialogs: { ...state.dialogs, ring: { ...state.dialogs.ring, open: false } } };
     }
 
