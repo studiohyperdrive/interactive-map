@@ -26,6 +26,9 @@ export class BrowserResizePlugin {
 
             public bindEventListener(): void {
                 window.addEventListener("resize", this.handleResize);
+
+                // Call once when binding to catch unregistered events
+                onWindowResize(this.renderer, this.camera, this.cameraConfig.config);
             }
 
             public unbindEventListener(): void {
