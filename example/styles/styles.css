@@ -1,0 +1,44 @@
+.im__webgl--container {
+    width: 50vw;
+    height: 50vh;
+}
+
+.webgl__rotate-buttons {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    left: calc(50% - 100px);
+    width: 200px;
+}
+
+.webgl__rotate-button {
+    background-color: white;
+    padding: 1rem;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+}
+
+.crosshair::before {
+    content: "";
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 9px;
+    width: 1px;
+    background-color: hotpink;
+    opacity: 0.5;
+}
+
+.crosshair::after {
+    content: "";
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 1px;
+    width: 9px;
+    background-color: hotpink;
+    opacity: 0.5;
+}
