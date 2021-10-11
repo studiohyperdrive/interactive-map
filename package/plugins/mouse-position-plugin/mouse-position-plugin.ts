@@ -13,15 +13,19 @@ export class MousePositionPlugin {
             }
 
             public bindEventListener() {
-                window.addEventListener('mousemove', this.handleMouseMove);
+                window.addEventListener("mousemove", this.handleMouseMove);
             }
 
             public unbindEventListener() {
-                window.removeEventListener('mousemove', this.handleMouseMove);
+                window.removeEventListener("mousemove", this.handleMouseMove);
             }
 
             public handleMouseMove = (e: MouseEvent) => {
-                this.dataStore.set('mousePosition', {x: calculateCursorX(e), y: calculateCursorY(e)});
+                this.dataStore.set("mousePosition", {x: calculateCursorX(e), y: calculateCursorY(e)});
+            }
+
+            public clearMousePosition = () => {
+                this.dataStore.set("mousePosition", undefined);
             }
         }
     }
