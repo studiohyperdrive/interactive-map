@@ -1,5 +1,4 @@
 import { ISceneConfig } from "@shd-developer/interactive-map/dist/types";
-import { AmbientLight, DirectionalLight, sRGBEncoding, Vector3 } from "three";
 
 export const ortho: ISceneConfig = {
     camera: {
@@ -14,23 +13,8 @@ export const ortho: ISceneConfig = {
                 z: 1500
             }
         }
-    },
-    map: '',
-    controls: {},
-    illuminationConfig: {
-        /*         lights: [
-                    {
-                        setup: new AmbientLight(0xffffff, 1),
-                    },
-                    {
-                        setup: new DirectionalLight(0xffffff, 1),
-                        position: new Vector3(1, 1, 1),
-                    }
-                ], */
-        outputEncoding: sRGBEncoding,
-    },
-
-} as ISceneConfig;
+    }
+};
 
 export const perspective: ISceneConfig = {
     camera: {
@@ -45,19 +29,5 @@ export const perspective: ISceneConfig = {
                 z: 2
             },
         }
-    },
-    map: '',
-    controls: {},
-    illuminationConfig: {
-        lights: [
-            {
-                setup: new AmbientLight(0xffffff, 1),
-            },
-            {
-                setup: new DirectionalLight(0xffffff, 1),
-                position: new Vector3(1, 1, 1),
-            }
-        ],
-        outputEncoding: sRGBEncoding,
-    },
-}
+    }
+};
