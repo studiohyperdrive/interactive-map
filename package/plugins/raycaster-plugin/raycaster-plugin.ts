@@ -1,6 +1,8 @@
 import { Camera, Raycaster, Scene } from "three";
 
 import { IDataStore } from "../../data-store/data-store.types";
+import constants from "../../constants";
+
 import { IRaycasterPlugin, IRaycasterConfig } from "./raycaster-plugin.types";
 
 export class RaycasterPlugin {
@@ -16,8 +18,8 @@ export class RaycasterPlugin {
                 this.dataStore = dataStore;
                 this.raycaster = new Raycaster();
 
-                this.camera = dataStore.get("camera");
-                this.scene = dataStore.get("scene");
+                this.camera = dataStore.get(constants.store.camera);
+                this.scene = dataStore.get(constants.store.scene);
             }
 
             public bindEventListener() {
@@ -29,16 +31,16 @@ export class RaycasterPlugin {
             }
 
             public handleClick = () => {
-                const pos = this.dataStore.get("mousePosition");
+                const pos = this.dataStore.get(constants.store.mousePosition);
 
                 if (pos === undefined) {
-                    this.dataStore.set("intersection", []);
+                    this.dataStore.set(constants.store.intersection, []);
                     return
                 };
         
                 this.raycaster.setFromCamera(pos, this.camera);
         
-                this.dataStore.set("intersection", this.raycaster.intersectObjects(this.scene.children, true)[0]);                
+                this.dataStore.set(constants.store.intersection, this.raycaster.intersectObjects(this.scene.children, true)[0]);                
             }
         }
     }

@@ -1,9 +1,10 @@
 import { OrthographicCamera, PerspectiveCamera, Scene, WebGLRenderer } from "three";
 
 import { IManager, ISize, ISceneConfig, IOrthographicCameraConfig, IPerspectiveCameraConfig } from "./types";
-import { buildScene, buildRenderer, buildPerspectiveCamera, buildOrthographicCamera } from "./utils/build";
+import { buildScene, buildPerspectiveCamera, buildOrthographicCamera } from "./utils/build";
 
 import DataStore from "./data-store/data-store";
+import constants from "./constants";
 
 export default class SceneManager implements IManager {
 	private dataStore: DataStore;
@@ -29,15 +30,15 @@ export default class SceneManager implements IManager {
 			? buildOrthographicCamera(this.scene, this.sizes, this.sceneConfig.camera.config as IOrthographicCameraConfig) 
 			: buildPerspectiveCamera(this.scene, this.sizes, this.sceneConfig.camera.config as IPerspectiveCameraConfig);
 
-		dataStore.set("canvas", canvas);
+		this.dataStore.set(constants.store.canvas, canvas);
 
-		dataStore.set("sizes", this.sizes);
-		dataStore.set("scene", this.scene);
-		dataStore.set("camera", this.camera);
+		this.dataStore.set(constants.store.sizes, this.sizes);
+		this.dataStore.set(constants.store.scene, this.scene);
+		this.dataStore.set(constants.store.camera, this.camera);
 
-		dataStore.set("cameraConfig", sceneConfig.camera);
+		this.dataStore.set(constants.store.cameraConfig, sceneConfig.camera);
 
-		this.plugins = plugins.map(Plugin => new Plugin(dataStore));
+		this.plugins = plugins.map(Plugin => new Plugin(this.dataStore));
 	}
 
 	/**

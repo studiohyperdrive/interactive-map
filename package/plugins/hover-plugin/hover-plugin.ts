@@ -4,6 +4,7 @@ import { IAnimate, IBindingConfig, IHoverBindingConfig } from "../../types";
 
 import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
+import constants from "../../constants";
 
 import { IHoverPlugin } from "./hover-plugin.types";
 import { isMatching } from "../../utils/bindings";
@@ -20,10 +21,10 @@ export class HoverPlugin {
             constructor(dataStore: DataStore) {
                 this.dataStore = dataStore;
 
-                this.animations = dataStore.get("animations");
-                this.mixer = dataStore.get("animationMixer");
+                this.animations = dataStore.get(constants.store.animations);
+                this.mixer = dataStore.get(constants.store.animationMixer);
 
-                this.dataStore.set("hoverBindings", bindings);
+                this.dataStore.set(constants.store.hoverBindings, bindings);
             }
 
             public bindEventListener(): void {
@@ -36,7 +37,7 @@ export class HoverPlugin {
 
             public handleHover = (e: MouseEvent): void => {
                 const previous = this.hovered;
-                const current = this.dataStore.get("intersection")?.object;
+                const current = this.dataStore.get(constants.store.intersection)?.object;
         
                 if (previous === current) {
                     return
@@ -74,7 +75,7 @@ export class HoverPlugin {
 
             public handleBindingAnimation(binding: IBindingConfig, callback: (animation: AnimationClip, animationBinding: IAnimate) => void) {
                 if (binding.animate) {
-                    this.animations = this.dataStore.get("animations")
+                    this.animations = this.dataStore.get(constants.store.animations)
                     
                     binding.animate.forEach((animationBinding) => {
                         this.animations.forEach(animation => {

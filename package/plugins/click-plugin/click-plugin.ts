@@ -4,6 +4,7 @@ import { IAnimate, IBindingConfig, IClickBindingConfig } from "../../types";
 import { isMatching } from "../../utils";
 
 import { IDataStore } from "../../data-store/data-store.types";
+import constants from "../../constants";
 
 import { IClickPlugin } from "./click-plugin.types";
 
@@ -18,10 +19,10 @@ export class ClickPlugin {
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
-                this.animations = dataStore.get("animations");
-                this.mixer = dataStore.get("animationMixer");
+                this.animations = dataStore.get(constants.store.animations);
+                this.mixer = dataStore.get(constants.store.animationMixer);
 
-                this.dataStore.set("clickBindings", bindings);
+                this.dataStore.set(constants.store.clickBindings, bindings);
             }
 
             public bindEventListener(): void {
@@ -33,7 +34,7 @@ export class ClickPlugin {
             }
 
             public handleClick = (e: MouseEvent): void => {
-                const intersection = this.dataStore.get("intersection");
+                const intersection = this.dataStore.get(constants.store.intersection);
 
                 if (!intersection) {
                     return;
@@ -60,7 +61,7 @@ export class ClickPlugin {
 
             public handleBindingAnimation(binding: IBindingConfig, callback: (animation: AnimationClip, animationBinding: IAnimate) => void) {
                 if (binding.animate) {
-                    this.animations = this.dataStore.get("animations")
+                    this.animations = this.dataStore.get(constants.store.animations)
                     
                     binding.animate.forEach((animationBinding) => {
                         this.animations.forEach(animation => {

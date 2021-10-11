@@ -1,6 +1,7 @@
 import { AmbientLight, DirectionalLight, Scene } from "three";
 
 import { IDataStore } from "../../data-store/data-store.types";
+import constants from "../../constants";
 
 import { IGlobalIlluminationPlugin } from "./global-illumination-plugin.types";
 
@@ -14,7 +15,7 @@ export class GlobalIlluminationPlugin {
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
-                this.scene = this.dataStore.get("scene");
+                this.scene = this.dataStore.get(constants.store.scene);
                 this.addLights();
             }
 

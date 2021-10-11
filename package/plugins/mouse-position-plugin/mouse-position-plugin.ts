@@ -1,5 +1,7 @@
 import { calculateCursorX, calculateCursorY } from "../../utils";
+
 import { IDataStore } from "../../data-store/data-store.types";
+import constants from "../../constants";
 
 import { IMousePositionPlugin } from "./mouse-position-plugin.types";
 
@@ -21,11 +23,11 @@ export class MousePositionPlugin {
             }
 
             public handleMouseMove = (e: MouseEvent) => {
-                this.dataStore.set("mousePosition", {x: calculateCursorX(e), y: calculateCursorY(e)});
+                this.dataStore.set(constants.store.mousePosition, {x: calculateCursorX(e), y: calculateCursorY(e)});
             }
 
             public clearMousePosition = () => {
-                this.dataStore.set("mousePosition", undefined);
+                this.dataStore.set(constants.store.mousePosition, undefined);
             }
         }
     }

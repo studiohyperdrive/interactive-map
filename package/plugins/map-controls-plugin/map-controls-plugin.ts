@@ -2,6 +2,7 @@ import { Camera, Vector3 } from "three";
 import { MapControls } from "three/examples/jsm/controls/OrbitControls";
 
 import { IDataStore } from "../../data-store/data-store.types";
+import constants from "../../constants";
 
 import { IMapControlsPlugin, IMapControlsConfig } from "./map-controls-plugin.types";
 
@@ -17,20 +18,16 @@ export class MapControlsPlugin {
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
-                this.camera = dataStore.get("camera");
-                this.canvas = dataStore.get("canvas");
+                this.camera = dataStore.get(constants.store.camera);
+                this.canvas = dataStore.get(constants.store.canvas);
 
                 this.mapControls = this.createMapControls(this.camera, this.canvas);
 
-                this.dataStore.set("controls", this.mapControls);
+                this.dataStore.set(constants.store.controls, this.mapControls);
             }
 
             public update() {
                 this.mapControls.update();
-
-                // this.mapControls.enabled = false;
-                //     Update the camera here
-                // this.mapControls.enabled = true;
             };
 
             public createMapControls(camera: Camera, canvas: HTMLCanvasElement): MapControls {

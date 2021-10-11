@@ -4,6 +4,7 @@ import { flattenChildren, isMatching } from "../../utils";
 
 import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
+import constants from "../../constants";
 
 import { ITabNavigationPlugin, ITabNavigationBinding } from "./tab-navigation-plugin.types";
 
@@ -23,7 +24,7 @@ export class TabNavigationPlugin {
             constructor(dataStore: DataStore) {
                 this.dataStore = dataStore;
 
-                this.scene = dataStore.get("scene");
+                this.scene = dataStore.get(constants.store.scene);
 
                 this.handleTabPressListener = (e: Event) => {this.handleTabPress((e as KeyboardEvent))};
                 this.handleShiftTabPressListener = (e: Event) => {this.handleShiftTabPress((e as KeyboardEvent))};
@@ -52,7 +53,7 @@ export class TabNavigationPlugin {
             }
 
             public navigate(e: KeyboardEvent, forward: boolean): void {
-                if (!this.dataStore.get("mapLoaded")) return;
+                if (!this.dataStore.get(constants.store.mapLoaded)) return;
 
                 const fallback = forward ? -1 : this.bindings.length;
                 const i = this.current ? this.bindings.indexOf(this.current) : fallback;
@@ -77,7 +78,7 @@ export class TabNavigationPlugin {
                 if (next?.afterNavigate) {
                     flattenChildren(this.scene.children).forEach(child => {
                         if (next && isMatching(child, next)) {
-                            (next.afterNavigate as Function)(this.dataStore.get("camera"), this.dataStore.get("controls"), [child]);
+                            (next.afterNavigate as Function)(this.dataStore.get(constants.store.camera), this.dataStore.get(constants.store.controls), [child]);
                         }
                     });
                 }

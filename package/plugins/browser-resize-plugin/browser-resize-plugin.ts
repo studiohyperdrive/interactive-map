@@ -4,6 +4,7 @@ import { ICameraConfig } from "../../types";
 import { onWindowResize } from "../../utils";
 
 import { IDataStore } from "../../data-store/data-store.types";
+import constants from "../../constants";
 
 import { IBrowserResizePlugin } from "./browser-resize-plugin.types";
 
@@ -19,9 +20,9 @@ export class BrowserResizePlugin {
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
-                this.renderer = dataStore.get("renderer");
-                this.camera = dataStore.get("camera");
-                this.cameraConfig = dataStore.get("cameraConfig");
+                this.renderer = dataStore.get(constants.store.renderer);
+                this.camera = dataStore.get(constants.store.camera);
+                this.cameraConfig = dataStore.get(constants.store.cameraConfig);
             }
 
             public bindEventListener(): void {
@@ -40,7 +41,7 @@ export class BrowserResizePlugin {
             }
 
             public setSize() {
-                this.dataStore.set("sizes", onWindowResize(element ? element : window, this.renderer, this.camera, this.cameraConfig.config))
+                this.dataStore.set(constants.store.sizes, onWindowResize(element ? element : window, this.renderer, this.camera, this.cameraConfig.config))
             }
         }
     }

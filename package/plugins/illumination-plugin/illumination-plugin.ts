@@ -2,6 +2,7 @@ import { Light, Scene } from "three";
 
 import { IIlluminationConfig, ILight } from "../../types";
 import { IDataStore } from "../../data-store/data-store.types";
+import constants from "../../constants";
 
 import { IIlluminationPlugin } from "./illumination-plugin.types";
 
@@ -18,12 +19,10 @@ export class IlluminationPlugin {
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
-                this.scene = this.dataStore.get("scene");
+                this.scene = this.dataStore.get(constants.store.scene);
 
-                if (config) {
-                    if (config.lights) {
-                        this.lights = this.addLights(this.scene, config.lights);
-                    }
+                if (config?.lights) {
+                    this.lights = this.addLights(this.scene, config.lights);
                 }
             }
 

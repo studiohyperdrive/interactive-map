@@ -4,6 +4,7 @@ import { ISize, IWebglRendererConfig } from "../../types";
 import { buildRenderer } from "../../utils";
 
 import { IDataStore } from "../../data-store/data-store.types";
+import constants from "../../constants";
 
 import { IWebglRendererPlugin } from "./webgl-renderer-plugin.types";
 
@@ -21,14 +22,14 @@ export default class WebglRendererPlugin {
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
-                this.canvas = this.dataStore.get("canvas");
-                this.sizes = this.dataStore.get("sizes");
-                this.scene = this.dataStore.get("scene");
-                this.camera = this.dataStore.get("camera");
+                this.canvas = this.dataStore.get(constants.store.canvas);
+                this.sizes = this.dataStore.get(constants.store.sizes);
+                this.scene = this.dataStore.get(constants.store.scene);
+                this.camera = this.dataStore.get(constants.store.camera);
 
                 this.renderer = buildRenderer(this.canvas, this.sizes, config);
 
-                this.dataStore.set("renderer", this.renderer);
+                this.dataStore.set(constants.store.renderer, this.renderer);
             }
 
             public update() {

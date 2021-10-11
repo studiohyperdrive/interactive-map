@@ -3,6 +3,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 
 import { IDataStore } from "../../data-store/data-store.types";
+import constants from "../../constants";
 
 import { IGltfDracoLoaderPlugin } from "./gltf-draco-loader-plugin.types";
 
@@ -18,10 +19,10 @@ export class GltfDracoLoaderPlugin {
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
-                dataStore.set("mapLoaded", false);
-                dataStore.set("animations", []);
+                dataStore.set(constants.store.mapLoaded, false);
+                dataStore.set(constants.store.animations, []);
 
-                this.scene = dataStore.get("scene");
+                this.scene = dataStore.get(constants.store.scene);
 
                 this.dracoLoader = new DRACOLoader();
                 this.dracoLoader.setDecoderPath('decoder/');
@@ -34,9 +35,9 @@ export class GltfDracoLoaderPlugin {
 
             public loadGltf(path: string) {
                 this.gltfLoader.load(path, (gltf) => {
-                    this.dataStore.set("animations", gltf.animations);
+                    this.dataStore.set(constants.store.animations, gltf.animations);
                     this.scene.add(gltf.scene);
-                    this.dataStore.set("mapLoaded", true);
+                    this.dataStore.set(constants.store.mapLoaded, true);
                 });
             }
 

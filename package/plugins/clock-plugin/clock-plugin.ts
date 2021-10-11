@@ -1,6 +1,7 @@
 import { Clock } from "three";
 
 import { IDataStore } from "../../data-store/data-store.types"
+import constants from "../../constants";
 
 import { IClockPlugin } from "./clock-plugin.types";
 
@@ -16,16 +17,16 @@ export class ClockPlugin {
                 this.dataStore = dataStore;
 
                 this.clock = new Clock();
-		        this.previousTime = 0;
+                this.previousTime = 0;
             }
 
             public update() {
                 const elapsedTime = this.clock.getElapsedTime();
                 const deltaTime = elapsedTime - this.previousTime;
                 this.previousTime = elapsedTime;
-                
-                this.dataStore.set("elapsedTime", elapsedTime)
-                this.dataStore.set("deltaTime", deltaTime)
+
+                this.dataStore.set(constants.store.elapsedTime, elapsedTime)
+                this.dataStore.set(constants.store.deltaTime, deltaTime)
             }
         }
     }
