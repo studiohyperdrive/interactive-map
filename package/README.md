@@ -71,41 +71,7 @@ Scene plugins allow you to extend the Three.js logic. *eg. add controls that let
 
 Each plugin should expect a reference to the `dataStore` and have an `update` method. The `update` method is called on each frame. This allows you to inject logic in the render loop or update values in realtime.
 
-Below is an example of a simple clock plugin that updates the `elapsedTime` and `deltaTime` properties in the `dataStore`.
-
-```
-interface IClockPlugin extends IScenePlugin {
-    clock: Clock,
-    previousTime: number,
-}
-
-export default class ClockPlugin {
-    constructor() {
-        return class implements IClockPlugin {
-            private dataStore: IDataStore;
-
-            public clock: Clock;
-            public previousTime: number;
-
-            constructor(dataStore: IDataStore) {
-                this.dataStore = dataStore;
-
-                this.clock = new Clock();
-		        this.previousTime = 0;
-            }
-
-            public update() {
-                const elapsedTime = this.clock.getElapsedTime();
-                const deltaTime = elapsedTime - this.previousTime;
-                this.previousTime = elapsedTime;
-                
-                this.dataStore.set("elapsedTime", elapsedTime)
-                this.dataStore.set("deltaTime", deltaTime)
-            }
-        }
-    }
-}
-```
+[ClockPlugin](plugins/browser-resize-plugin/browser-resize-plugin.ts) is an example of a simple clock plugin that updates the `elapsedTime` and `deltaTime` properties in the `dataStore`.
 
 ### Event plugins
 
@@ -114,47 +80,7 @@ Event plugins bind to events and perform an action when that event is fired.
 
 Each plugin should expect a reference to the `dataStore`. They should also have `bindEventListener` and `unbindEventListener` methods.
 
-Below is an example of a resize plugin that will update the `sizes` object on the `dataStore` while updating the canvas and camera on resize.
-
-```
-interface IBrowserResizePlugin extends IEventPlugin {
-    renderer: WebGLRenderer,
-    camera: PerspectiveCamera | OrthographicCamera,
-    handleResize: (e:UIEvent) => void,
-}
-
-export default class BrowserResizePlugin {
-    constructor() {
-        return class implements IBrowserResizePlugin {
-            private dataStore: IDataStore;
-
-            public renderer: WebGLRenderer;
-            public camera: PerspectiveCamera | OrthographicCamera;
-            public cameraConfig: ICameraConfig;
-            constructor(dataStore: IDataStore) {
-                this.dataStore = dataStore;
-
-                this.renderer = dataStore.get("renderer");
-                this.camera = dataStore.get("camera");
-                this.cameraConfig = dataStore.get("cameraConfig");
-            }
-
-            public bindEventListener(): void {
-                window.addEventListener("resize", e => this.handleResize(e));
-            }
-
-            public unbindEventListener(): void {
-                window.removeEventListener("resize", e => this.handleResize(e));
-            }
-
-            public handleResize(e: UIEvent) {
-                // From utils/event
-                this.dataStore.set("sizes", onWindowResize(this.renderer, this.camera, this.cameraConfig.config));
-            }
-        }
-    }
-}
-```
+[BrowserResizePlugin](plugins/browser-resize-plugin/browser-resize-plugin.ts) is an example of a resize plugin that will update the `sizes` object on the `dataStore` while updating the canvas and camera on resize.
 
 ### Overview
 A complete list of the provided plugins and their use cases can be found below.
@@ -337,6 +263,12 @@ This can also be done for `Hover` bindings. (see [`HoverPlugin`](docs/PLUGINS.md
     ]
 }
 ```
+
+#
+
+## 3D
+
+[This slite doc](https://studiohyperdrive.slite.com/api/s/note/AcyJqGtRBUoT88mcrUFudY/3D-naar-Three-js) documents a basic Blender to Three.js workflow. 
 
 #
 

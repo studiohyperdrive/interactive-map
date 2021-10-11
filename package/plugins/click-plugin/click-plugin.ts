@@ -14,7 +14,7 @@ export class ClickPlugin {
 
             public animations: AnimationClip[];
             public mixer: AnimationMixer;
-
+            
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
@@ -25,11 +25,11 @@ export class ClickPlugin {
             }
 
             public bindEventListener(): void {
-                window.addEventListener("click", e => this.handleClick(e as MouseEvent));
+                window.addEventListener("click", this.handleClick);
             }
 
             public unbindEventListener(): void {
-                window.removeEventListener("click", e => this.handleClick(e as MouseEvent));
+                window.removeEventListener("click", this.handleClick);
             }
 
             public handleClick = (e: MouseEvent): void => {

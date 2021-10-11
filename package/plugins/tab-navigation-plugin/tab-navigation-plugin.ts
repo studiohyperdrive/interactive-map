@@ -13,7 +13,6 @@ export class TabNavigationPlugin {
             private dataStore: IDataStore;
 
             public scene: Scene;
-            public mapLoaded: boolean;
 
             public current?: ITabNavigationBinding = undefined;
             public bindings: ITabNavigationBinding[] = bindings.sort((a,b) => a.order - b.order);
@@ -25,7 +24,6 @@ export class TabNavigationPlugin {
                 this.dataStore = dataStore;
 
                 this.scene = dataStore.get("scene");
-                this.mapLoaded = dataStore.get("mapLoaded");
 
                 this.handleTabPressListener = (e: Event) => {this.handleTabPress((e as KeyboardEvent))};
                 this.handleShiftTabPressListener = (e: Event) => {this.handleShiftTabPress((e as KeyboardEvent))};
@@ -54,6 +52,8 @@ export class TabNavigationPlugin {
             }
 
             public navigate(e: KeyboardEvent, forward: boolean): void {
+                if (!this.dataStore.get("mapLoaded")) return;
+
                 const fallback = forward ? -1 : this.bindings.length;
                 const i = this.current ? this.bindings.indexOf(this.current) : fallback;
 

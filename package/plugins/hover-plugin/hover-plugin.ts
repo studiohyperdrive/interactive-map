@@ -23,20 +23,20 @@ export class HoverPlugin {
                 this.animations = dataStore.get("animations");
                 this.mixer = dataStore.get("animationMixer");
 
-                this.dataStore.set(`hoverBindings`, bindings);
+                this.dataStore.set("hoverBindings", bindings);
             }
 
             public bindEventListener(): void {
-                window.addEventListener("mousemove", e => this.handleHover(e as MouseEvent));
+                window.addEventListener("mousemove", this.handleHover);
             }
 
             public unbindEventListener(): void {
-                window.removeEventListener("mousemove", e => this.handleHover(e as MouseEvent));
+                window.removeEventListener("mousemove", this.handleHover);
             }
 
-            public handleHover(e: MouseEvent): void {
+            public handleHover = (e: MouseEvent): void => {
                 const previous = this.hovered;
-                const current = this.dataStore.get('intersection')?.object;
+                const current = this.dataStore.get("intersection")?.object;
         
                 if (previous === current) {
                     return
