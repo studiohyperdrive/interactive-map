@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { useRouter } from "next/dist/client/router";
 
 import ThreeEntryPoint from "@shd-developer/interactive-map/dist/three-entry-point";
-import { ClickPlugin, HoverPlugin, MousePositionPlugin, RaycasterPlugin, AnimationPlugin, GltfDracoLoaderPlugin, ClockPlugin, AnimationMixerPlugin, TabNavigationPlugin, BrowserResizePlugin, GlobalIlluminationPlugin, MapControlsPlugin } from "@shd-developer/interactive-map/dist/plugins";
+import { ClickPlugin, HoverPlugin, MousePositionPlugin, RaycasterPlugin, AnimationPlugin, GltfDracoLoaderPlugin, ClockPlugin, AnimationMixerPlugin, TabNavigationPlugin, BrowserResizePlugin, GlobalIlluminationPlugin, MapControlsPlugin, WebglRendererPlugin } from "@shd-developer/interactive-map/dist/plugins";
 
 import animationConfig from '../../bindings/animation';
 import createClickBindings from "../../bindings/click";
@@ -27,9 +27,9 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
       threeRootElement.current,
       ortho,
       [
-        new BrowserResizePlugin,
+        new BrowserResizePlugin(window),
         new MousePositionPlugin,
-        new RaycasterPlugin({trigger: "mousemove"}),
+        new RaycasterPlugin({ trigger: "mousemove" }),
         new ClickPlugin(
           createClickBindings(store, router),
         ),
@@ -47,6 +47,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
         new AnimationMixerPlugin,
         new AnimationPlugin(animationConfig),
         new MapControlsPlugin(controlsConfig),
+        new WebglRendererPlugin
       ],
     ) : null;
   }

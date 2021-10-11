@@ -2,7 +2,7 @@ import { OrthographicCamera, PerspectiveCamera, WebGLRenderer } from "three";
 
 import { ISize, IOrthographicCameraConfig, IPerspectiveCameraConfig } from "../types";
 
-export const onWindowResize = (renderer: WebGLRenderer, camera: PerspectiveCamera | OrthographicCamera, cameraConfig: IPerspectiveCameraConfig | IOrthographicCameraConfig): ISize => {
+export const onWindowResize = (container: Window |Element, renderer: WebGLRenderer, camera: PerspectiveCamera | OrthographicCamera, cameraConfig: IPerspectiveCameraConfig | IOrthographicCameraConfig): ISize => {
     const canvas = renderer.domElement
     const div = canvas.parentElement;
 
@@ -11,10 +11,9 @@ export const onWindowResize = (renderer: WebGLRenderer, camera: PerspectiveCamer
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
     
-    // No sizing wrapper -> window
     const sizes = {
-        width: div?.classList.contains("im__webgl--container")? div.clientWidth : window.innerWidth,
-        height: div?.classList.contains("im__webgl--container")? div.clientHeight : window.innerHeight,
+        width: container instanceof Window? container.innerWidth : container.clientWidth,
+        height: container instanceof Window? container.innerHeight : container.clientHeight,
     }
 
     if (camera instanceof PerspectiveCamera) {
