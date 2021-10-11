@@ -1,4 +1,4 @@
-import { AnimationActionLoopStyles, Light, MOUSE, OrthographicCamera, PerspectiveCamera, Scene, TextureEncoding, TOUCH, Vector3, WebGLRenderer } from "three";
+import { AnimationActionLoopStyles, Light, MOUSE, OrthographicCamera, PerspectiveCamera, Scene, TextureEncoding, TOUCH, Vector3 } from "three";
 
 // Base
 
@@ -143,8 +143,7 @@ export interface ILight {
 }
 
 export interface IIlluminationConfig {
-    lights?: ILight[],
-    outputEncoding?: TextureEncoding,
+    lights?: ILight[]
 }
 
 export interface IMouseEvents {
@@ -157,6 +156,10 @@ export interface IMouseEvents {
 export interface ISceneConfig {
     camera: ICameraConfig,
     controls?: ISceneControlsConfig
+}
+
+export interface IWebglRendererConfig {
+    outputEncoding?: TextureEncoding
 }
 
 // Plugins

@@ -1,11 +1,14 @@
 import { Camera, Scene, WebGLRenderer } from "three";
-import { ISize } from "../../types";
-import { IDataStore } from "../../data-store/data-store.types";
+
+import { ISize, IWebglRendererConfig } from "../../types";
 import { buildRenderer } from "../../utils";
+
+import { IDataStore } from "../../data-store/data-store.types";
+
 import { IWebglRendererPlugin } from "./webgl-renderer-plugin.types";
 
 export default class WebglRendererPlugin {
-    constructor() {
+    constructor(config?: IWebglRendererConfig) {
         return class implements IWebglRendererPlugin{
             private dataStore: IDataStore;
 
@@ -14,16 +17,18 @@ export default class WebglRendererPlugin {
             public scene: Scene;
             public camera: Camera;
             public renderer: WebGLRenderer
+
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
-                this.canvas = dataStore.get("canvas");
-                this.sizes = dataStore.get("sizes");
-                this.scene = dataStore.get("scene");
-                this.camera = dataStore.get("camera");
-                this.renderer = buildRenderer(this.canvas, this.sizes);
+                this.canvas = this.dataStore.get("canvas");
+                this.sizes = this.dataStore.get("sizes");
+                this.scene = this.dataStore.get("scene");
+                this.camera = this.dataStore.get("camera");
 
-                dataStore.set("renderer", this.renderer);
+                this.renderer = buildRenderer(this.canvas, this.sizes, config);
+
+                this.dataStore.set("renderer", this.renderer);
             }
 
             public update() {

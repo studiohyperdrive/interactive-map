@@ -1,4 +1,4 @@
-import { Light, Scene, WebGLRenderer } from "three";
+import { Light, Scene } from "three";
 
 import { IIlluminationConfig, ILight } from "../../types";
 import { IDataStore } from "../../data-store/data-store.types";
@@ -21,15 +21,6 @@ export class IlluminationPlugin {
                 this.scene = this.dataStore.get("scene");
 
                 if (config) {
-                    // TODO: move to RendererPlugin after merge
-                    if (config.outputEncoding) {
-                        const renderer: WebGLRenderer | undefined = this.dataStore.get("renderer") as WebGLRenderer | undefined;
-
-                        if (renderer) {
-                            renderer.outputEncoding = config.outputEncoding;
-                        }
-                    }
-
                     if (config.lights) {
                         this.lights = this.addLights(this.scene, config.lights);
                     }
