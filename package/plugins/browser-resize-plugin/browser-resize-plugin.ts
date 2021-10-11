@@ -28,14 +28,14 @@ export class BrowserResizePlugin {
                 window.addEventListener("resize", this.handleResize);
 
                 // Call once when binding to catch unregistered events
-                onWindowResize(this.renderer, this.camera, this.cameraConfig.config);
+                this.handleResize();
             }
 
             public unbindEventListener(): void {
                 window.removeEventListener("resize", this.handleResize);
             }
 
-            public handleResize = (e: UIEvent) => {
+            public handleResize = (e?: UIEvent) => {
                 this.dataStore.set("sizes", onWindowResize(this.renderer, this.camera, this.cameraConfig.config));
             }
         }
