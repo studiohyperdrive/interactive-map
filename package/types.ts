@@ -157,7 +157,7 @@ export interface IMouseEvents {
 
 export interface ISceneConfig {
     camera: ICameraConfig,
-    illuminationConfig?: IIlluminationConfig,
+    controls?: ISceneControlsConfig
 }
 
 // Plugins
