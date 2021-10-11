@@ -10,7 +10,6 @@ By default the `dataStore` will contain the following properties. They are set w
 | `canvas` | The canvas on which the end result is shown. |
 | `sizes` | Object that contains the initial width and height of the canvas. |
 | `scene` | The scene instance in which objects, cameras, etc are placed. |
-| `renderer` | The renderer displays the scene on the canvas. |
 | `camera` | The camera that the renderer uses to display the scene. As defined in `sceneConfig`. |
 | `cameraConfig` | The camera config as defined in `sceneConfig`. |
 
@@ -87,8 +86,13 @@ This plugin supports [`PerspectiveCamera`](https://threejs.org/docs/#api/en/came
 
 ### Constructor
 
+| Property | Description |
+| --- | --- |
+| `window` | A reference to the window. |
+| `element` | (Optional) reference to the element that sizes the canvas. Default is `null` |
+
 ```js
-new BrowserResizePlugin();
+new BrowserResizePlugin(window: Window, element?: Element | null);
 ```
 
 ### Output
@@ -342,7 +346,7 @@ The `RaycasterPlugin` returns the `Mesh` that the mouse is currently over. This 
 | `config` | Configuration object, trigger can be either `click` or `mousemove`. |
 
 ```js
-new MousePositionPlugin({
+new RaycasterPlugin({
     trigger: "click" | "mousemove",
 });
 ```
@@ -420,3 +424,27 @@ new TabNavigationPlugin(
 ### Source
 
 [Code](../plugins/tab-navigation-plugin/tab-navigation-plugin.ts)
+
+## `WebglRendererPlugin` [ScenePlugin]
+
+The `WebglRendererPlugin` creates a new [`WebGLRenderer`](https://threejs.org/docs/?q=webglr#api/en/renderers/WebGLRenderer). The renderer is updated in the plugin's `update` method. Best practise is to add this plugin at the end of the `scenePlugins` array so that the renderer is updated at the end of the render loop.
+
+### Constructor
+
+```js
+new WebglRendererPlugin();
+```
+
+### Output
+
+| DataStore property | Description |
+| --- | --- |
+| `renderer` | The `renderer` instance defined in the plugin. |
+
+### Dependencies
+
+This plugin has no dependencies.
+
+### Source
+
+[Code](../plugins/webgl-renderer-plugin/webgl-renderer-plugin.ts)

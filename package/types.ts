@@ -17,7 +17,6 @@ export interface IManager {
     sizes: ISize;
 	sceneConfig: ISceneConfig;
 	scene: Scene;
-	renderer: WebGLRenderer;
 	camera: PerspectiveCamera | OrthographicCamera;
 	plugins: any[];
     update: Function;

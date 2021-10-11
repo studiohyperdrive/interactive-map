@@ -8,12 +8,12 @@ import { IDataStore } from "../../data-store/data-store.types";
 import { IBrowserResizePlugin } from "./browser-resize-plugin.types";
 
 export class BrowserResizePlugin {
-    constructor() {
+    constructor(window: Window, element: Element | null = null) {
         return class implements IBrowserResizePlugin {
             private dataStore: IDataStore;
 
             public renderer: WebGLRenderer;
-            public camera: PerspectiveCamera | OrthographicCamera;
+            public camera: PerspectiveCamera | OrthographicCamera;
             public cameraConfig: ICameraConfig;
 
             constructor(dataStore: IDataStore) {
@@ -28,15 +28,19 @@ export class BrowserResizePlugin {
                 window.addEventListener("resize", this.handleResize);
 
                 // Call once when binding to catch unregistered events
-                this.handleResize();
+                this.setSize();
             }
 
             public unbindEventListener(): void {
                 window.removeEventListener("resize", this.handleResize);
             }
 
-            public handleResize = (e?: UIEvent) => {
-                this.dataStore.set("sizes", onWindowResize(this.renderer, this.camera, this.cameraConfig.config));
+            public handleResize(e: Event) {
+                this.setSize();
+            }
+
+            public setSize() {
+                this.dataStore.set("sizes", onWindowResize(element ? element : window, this.renderer, this.camera, this.cameraConfig.config))
             }
         }
     }
