@@ -19,6 +19,7 @@ export default function createClickBindings(store: Store, router: NextRouter) {
             matching: "partial",
             onClick: (mesh: Mesh) => {
                 mutateRandomColor(mesh);
+                store.dispatch({ type: actions.three.disable });
                 router.push("/tower");
             }
         },
@@ -26,6 +27,7 @@ export default function createClickBindings(store: Store, router: NextRouter) {
             name: "ring",
             matching: "exact",
             onClick: (mesh: Mesh) => {
+                store.dispatch({ type: actions.three.disable });
                 store.dispatch({ type: actions.dialogs.ring.open });
                 store.dispatch({ type: actions.tooltip.reset });
             }
