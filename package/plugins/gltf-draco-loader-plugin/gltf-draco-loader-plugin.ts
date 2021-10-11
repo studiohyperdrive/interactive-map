@@ -3,9 +3,10 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 
 import { IDataStore } from "../../data-store/data-store.types";
+
 import { IGltfDracoLoaderPlugin } from "./gltf-draco-loader-plugin.types";
 
-export default class GltfDracoLoaderPlugin {
+export class GltfDracoLoaderPlugin {
     constructor(path: string) {
         return class implements IGltfDracoLoaderPlugin{
             private dataStore: IDataStore;
@@ -33,7 +34,7 @@ export default class GltfDracoLoaderPlugin {
 
             public loadGltf(path: string) {
                 this.gltfLoader.load(path, (gltf) => {                    
-                    this.dataStore.set("animations", gltf.animations);            
+                    this.dataStore.set("animations", gltf.animations);
                     this.scene.add(gltf.scene);
                     this.dataStore.set("mapLoaded", true);                      
                 });
@@ -43,3 +44,5 @@ export default class GltfDracoLoaderPlugin {
         }
     }
 }
+
+export default GltfDracoLoaderPlugin;

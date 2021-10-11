@@ -1,6 +1,6 @@
 {
   "name": "studio-hyperdrive_interactive-map",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "next": "node node_modules/next/dist/bin/next",
@@ -15,7 +15,7 @@
     "@emotion/styled": "^11.3.0",
     "@mui/material": "^5.0.0",
     "@reduxjs/toolkit": "^1.6.1",
-    "@shd-developer/interactive-map": "^1.1.2",
+    "@shd-developer/interactive-map": "^2.1.0",
     "next": "11.1.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",

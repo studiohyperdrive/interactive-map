@@ -1,11 +1,11 @@
 import { Camera, Raycaster, Scene } from "three";
 
 import { IDataStore } from "../../data-store/data-store.types";
-import { IRacasterPlugin, IRaycasterConfig } from "./raycaster-plugin.types";
+import { IRaycasterPlugin, IRaycasterConfig } from "./raycaster-plugin.types";
 
-export default class RaycasterPlugin {
+export class RaycasterPlugin {
     constructor(config: IRaycasterConfig) {
-        return class implements IRacasterPlugin {
+        return class implements IRaycasterPlugin {
             private dataStore: IDataStore;
 
             public raycaster: Raycaster;
@@ -41,3 +41,5 @@ export default class RaycasterPlugin {
         }
     }
 }
+
+export default RaycasterPlugin;

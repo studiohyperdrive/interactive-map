@@ -1,12 +1,14 @@
 import { AnimationClip, AnimationMixer, LoopOnce, Mesh } from "three";
 
-import { IAnimate, IHoverBindingConfig, IBindingConfig } from "../../types";
+import { IAnimate, IBindingConfig, IHoverBindingConfig } from "../../types";
+
 import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
+
 import { IHoverPlugin } from "./hover-plugin.types";
 import { isMatching } from "../../utils/bindings";
 
-export default class HoverPlugin {
+export class HoverPlugin {
     constructor(bindings: IHoverBindingConfig[]) {
         return class implements IHoverPlugin{
             private dataStore: IDataStore;
@@ -25,14 +27,14 @@ export default class HoverPlugin {
             }
 
             public bindEventListener(): void {
-                window.addEventListener("mousemove", e => this.handleHover(e as MouseEvent));
+                window.addEventListener("mousemove", this.handleHover);
             }
 
             public unbindEventListener(): void {
-                window.removeEventListener("mousemove", e => this.handleHover(e as MouseEvent));
+                window.removeEventListener("mousemove", this.handleHover);
             }
 
-            public handleHover(e: MouseEvent): void {
+            public handleHover = (e: MouseEvent): void => {
                 const previous = this.hovered;
                 const current = this.dataStore.get("intersection")?.object;
         
@@ -86,3 +88,5 @@ export default class HoverPlugin {
         }
     }
 }
+
+export default HoverPlugin;

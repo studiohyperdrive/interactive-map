@@ -1,18 +1,20 @@
 import { AnimationClip, AnimationMixer, Mesh } from "three";
 
-import { IDataStore } from "../../data-store/data-store.types";
-import { IAnimate, IClickBindingConfig, IBindingConfig } from "../../types";
-import { IClickPlugin } from "./click-plugin.types";
-import { isMatching } from "../../utils/bindings";
+import { IAnimate, IBindingConfig, IClickBindingConfig } from "../../types";
+import { isMatching } from "../../utils";
 
-export default class ClickPlugin {
+import { IDataStore } from "../../data-store/data-store.types";
+
+import { IClickPlugin } from "./click-plugin.types";
+
+export class ClickPlugin {
     constructor(bindings: IClickBindingConfig[]) {
         return class implements IClickPlugin{
             private dataStore: IDataStore;
 
             public animations: AnimationClip[];
             public mixer: AnimationMixer;
-
+            
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
@@ -23,11 +25,11 @@ export default class ClickPlugin {
             }
 
             public bindEventListener(): void {
-                window.addEventListener("click", e => this.handleClick(e as MouseEvent));
+                window.addEventListener("click", this.handleClick);
             }
 
             public unbindEventListener(): void {
-                window.removeEventListener("click", e => this.handleClick(e as MouseEvent));
+                window.removeEventListener("click", this.handleClick);
             }
 
             public handleClick = (e: MouseEvent): void => {
@@ -71,3 +73,5 @@ export default class ClickPlugin {
         }
     }
 }
+
+export default ClickPlugin;

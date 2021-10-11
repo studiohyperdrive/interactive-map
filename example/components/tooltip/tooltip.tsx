@@ -37,10 +37,10 @@ const Tooltip: React.FC<TooltipProps> = ({ title }) => {
       setOpen(true);
     };
 
-    document.addEventListener("mousemove", listener);
+    window.addEventListener("mousemove", listener);
 
     return () => {
-      document.removeEventListener("mousemove", listener);
+      window.removeEventListener("mousemove", listener);
     }
   }, []);
 

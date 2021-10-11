@@ -1,9 +1,10 @@
 import { AnimationMixer, Scene } from "three";
 
 import { IDataStore } from "../../data-store/data-store.types"
+
 import { IAnimationMixerPlugin } from "./animation-mixer-plugin.types";
 
-export default class AnimationMixerPlugin {
+export class AnimationMixerPlugin {
     constructor() {
         return class implements IAnimationMixerPlugin {
             private dataStore: IDataStore;
@@ -27,3 +28,5 @@ export default class AnimationMixerPlugin {
         }
     }
 }
+
+export default AnimationMixerPlugin;
