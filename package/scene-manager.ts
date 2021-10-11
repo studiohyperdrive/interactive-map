@@ -26,18 +26,19 @@ export default class SceneManager implements IManager {
 		this.sceneConfig = sceneConfig;
 
 		this.scene = buildScene();
-		this.renderer = buildRenderer(canvas, this.sizes, this.sceneConfig.illuminationConfig);
+		this.renderer = buildRenderer(canvas, this.sizes);
 		this.camera = this.sceneConfig.camera.type === "orthographic"
 			? buildOrthographicCamera(this.scene, this.sizes, this.sceneConfig.camera.config as IOrthographicCameraConfig)
 			: buildPerspectiveCamera(this.scene, this.sizes, this.sceneConfig.camera.config as IPerspectiveCameraConfig);
 
 		dataStore.set("canvas", canvas);
+
 		dataStore.set("sizes", this.sizes);
 		dataStore.set("scene", this.scene);
 		dataStore.set("renderer", this.renderer);
 		dataStore.set("camera", this.camera);
+
 		dataStore.set("cameraConfig", sceneConfig.camera);
-		dataStore.set("illuminationConfig", sceneConfig.illuminationConfig || {});
 
 		this.plugins = plugins.map(Plugin => new Plugin(dataStore));
 	}

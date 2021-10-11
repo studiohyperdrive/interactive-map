@@ -1,6 +1,6 @@
 import { AnimationMixer, Clock, OrthographicCamera, PerspectiveCamera, Raycaster, Scene, Vector2, Vector3, WebGLRenderer } from "three";
 
-import { ISize, IOrthographicCameraConfig, IPerspectiveCameraConfig, IIlluminationConfig } from "../types";
+import { ISize, IOrthographicCameraConfig, IPerspectiveCameraConfig } from "../types";
 
 import { calculateCursorX, calculateCursorY } from "./general";
 
@@ -8,14 +8,11 @@ export const buildScene = (): Scene => {
     return new Scene();
 };
 
-export const buildRenderer = (canvas: HTMLCanvasElement, sizes: ISize, illuminationConfig?: IIlluminationConfig): WebGLRenderer => {
+export const buildRenderer = (canvas: HTMLCanvasElement, sizes: ISize): WebGLRenderer => {
     const renderer: WebGLRenderer = new WebGLRenderer({ canvas: canvas, antialias: true });
+
     renderer.setSize(sizes.width, sizes.height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    if (illuminationConfig && illuminationConfig.outputEncoding) {
-        renderer.outputEncoding = illuminationConfig.outputEncoding;
-    }
 
     return renderer;
 };
