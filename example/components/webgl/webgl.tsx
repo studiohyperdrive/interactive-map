@@ -28,6 +28,7 @@ import createTabNavigationBindings from "../../bindings/tab-navigation";
 import { ortho, perspective } from "../../config/sceneConfig";
 import controlsConfig from "../../config/controlsConfig";
 import illuminationConfig from "../../config/illuminationConfig";
+import rendererConfig from "../../config/rendererConfig";
 
 import actions from "../../redux/actions";
 import store from "../../redux/store";
@@ -59,7 +60,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
             new AnimationMixerPlugin(),
             new AnimationPlugin(animationConfig),
             new MapControlsPlugin(controlsConfig),
-            new WebglRendererPlugin
+            new WebglRendererPlugin(rendererConfig)
           ]
         )
       : null;

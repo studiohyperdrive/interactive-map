@@ -1,4 +1,4 @@
-import { AmbientLight, DirectionalLight, sRGBEncoding, Vector3 } from "three";
+import { AmbientLight, DirectionalLight, Vector3 } from "three";
 import { IIlluminationConfig } from "@shd-developer/interactive-map";
 
 export const config = {
@@ -11,7 +11,6 @@ export const config = {
             position: new Vector3(1, 1, 1),
         }
     ],
-    outputEncoding: sRGBEncoding,
 } as IIlluminationConfig;
 
 export default config;
