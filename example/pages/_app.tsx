@@ -1,21 +1,21 @@
-import '../styles/globals.css';
-import '../styles/styles.css';
+import "../styles/globals.css";
+import "../styles/styles.css";
 
-import { useEffect, useState } from 'react';
-import { Provider } from 'react-redux';
+import { useEffect, useState } from "react";
+import { Provider } from "react-redux";
 
-import { useRouter } from 'next/dist/client/router';
-import type { AppProps } from 'next/app';
+import { useRouter } from "next/dist/client/router";
+import type { AppProps } from "next/app";
 
-import store from '../redux/store';
+import store from "../redux/store";
 
-import WebGL from '../components/webgl/webgl';
-import Tooltip from '../components/tooltip/tooltip';
-import RingDialog from '../components/dialogs/ring/ring';
+import WebGL from "../components/webgl/webgl";
+import Tooltip from "../components/tooltip/tooltip";
+import RingDialog from "../components/dialogs/ring/ring";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const shouldShowMap = (url: string) => {
-    return url === '/';
+    return url === "/";
   };
 
   const router = useRouter();
@@ -26,10 +26,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       setMap(shouldShowMap(url));
     };
 
-    router.events.on('routeChangeStart', handleStart);
+    router.events.on("routeChangeStart", handleStart);
 
     return () => {
-      router.events.off('routeChangeStart', handleStart);
+      router.events.off("routeChangeStart", handleStart);
     };
   }, [router]);
 
