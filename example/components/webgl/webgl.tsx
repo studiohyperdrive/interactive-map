@@ -1,8 +1,8 @@
-import { FC, useEffect, useRef } from 'react';
-import { connect } from 'react-redux';
-import { useRouter } from 'next/dist/client/router';
+import { FC, useEffect, useRef } from "react";
+import { connect } from "react-redux";
+import { useRouter } from "next/dist/client/router";
 
-import ThreeEntryPoint from '@shd-developer/interactive-map/dist/three-entry-point';
+import ThreeEntryPoint from "@shd-developer/interactive-map/dist/three-entry-point";
 import {
   ClickPlugin,
   HoverPlugin,
@@ -16,20 +16,22 @@ import {
   BrowserResizePlugin,
   GlobalIlluminationPlugin,
   MapControlsPlugin,
-} from '@shd-developer/interactive-map/dist/plugins';
+  IlluminationPlugin,
+} from "@shd-developer/interactive-map/dist/plugins";
 
-import animationConfig from '../../bindings/animation';
-import createClickBindings from '../../bindings/click';
-import createHoverBindings from '../../bindings/hover';
-import createTabNavigationBindings from '../../bindings/tab-navigation';
+import animationConfig from "../../bindings/animation";
+import createClickBindings from "../../bindings/click";
+import createHoverBindings from "../../bindings/hover";
+import createTabNavigationBindings from "../../bindings/tab-navigation";
 
-import { ortho, perspective } from '../../config/sceneConfig';
-import controlsConfig from '../../config/controlsConfig';
+import { ortho, perspective } from "../../config/sceneConfig";
+import controlsConfig from "../../config/controlsConfig";
+import illuminationConfig from "../../config/illuminationConfig";
 
-import actions from '../../redux/actions';
-import store from '../../redux/store';
+import actions from "../../redux/actions";
+import store from "../../redux/store";
 
-import { WebGLProps } from './webgl.types';
+import { WebGLProps } from "./webgl.types";
 
 const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   const threeRootElement = useRef<HTMLCanvasElement | null>(null);
@@ -43,14 +45,15 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
           [
             new BrowserResizePlugin(),
             new MousePositionPlugin(),
-            new RaycasterPlugin({ trigger: 'mousemove' }),
+            new RaycasterPlugin({ trigger: "mousemove" }),
             new ClickPlugin(createClickBindings(store, router)),
-            //new HoverPlugin(createHoverBindings(store)),
-            new TabNavigationPlugin(createTabNavigationBindings(store)),
+            // new HoverPlugin(createHoverBindings(store)),
+            new TabNavigationPlugin(createTabNavigationBindings()),
           ],
           [
-            new GltfDracoLoaderPlugin('/models/boerderleren-draco.gltf'),
-            //new GlobalIlluminationPlugin(),
+            new GltfDracoLoaderPlugin("/models/boerderleren-draco.gltf"),
+            // new GlobalIlluminationPlugin(),
+            new IlluminationPlugin(illuminationConfig),
             new ClockPlugin(),
             new AnimationMixerPlugin(),
             new AnimationPlugin(animationConfig),
