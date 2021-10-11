@@ -1,8 +1,9 @@
 import { Mesh } from "three";
-import { IClickBindingConfig } from "@shd-developer/interactive-map/dist/types";
-import { mutateRandomColor } from "@shd-developer/interactive-map/dist/utils";
-import { NextRouter } from "next/dist/client/router";
 import { Store } from "redux";
+import { NextRouter } from "next/dist/client/router";
+
+import { IClickBindingConfig } from "@shd-developer/interactive-map/dist/types";
+
 import { handleOpacity } from "./helpers";
 
 const barns = [
