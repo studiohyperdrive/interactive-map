@@ -1,5 +1,5 @@
-import { AmbientLight, DirectionalLight, Vector3 } from "three";
-import { IIlluminationConfig } from "@shd-developer/interactive-map";
+// import { AmbientLight, DirectionalLight, Vector3 } from "three";
+import { IIlluminationConfig } from "@shd-developer/interactive-map/dist/types";
 
 export const config = {
     lights: [
