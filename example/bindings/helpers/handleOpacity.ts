@@ -1,6 +1,5 @@
 import { Mesh } from "three";
-import { flattenChildren } from "@shd-developer/interactive-map";
-import { setOpacity } from "@shd-developer/interactive-map/dist/utils";
+import { setOpacity, flattenChildren } from "@shd-developer/interactive-map/dist/utils";
 import { Store } from "redux";
 
 export const handleOpacity = (mesh: Mesh, store: Store) => {
