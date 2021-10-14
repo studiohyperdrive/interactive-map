@@ -1,8 +1,8 @@
 import { Mesh, Object3D, OrthographicCamera, PerspectiveCamera } from "three";
 import { MapControls } from "three/examples/jsm/controls/OrbitControls";
 
-import { ITabNavigationBinding } from "@shd-developer/interactive-map/dist/plugins";
-import { zoomCameraToSelection, mutateRandomColor } from "@shd-developer/interactive-map/dist/utils";
+import { ITabNavigationBinding } from "@studiohyperdrive/interactive-map/dist/plugins";
+import { zoomCameraToSelection, mutateRandomColor } from "@studiohyperdrive/interactive-map/dist/utils";
 
 const zoomAndColor = (camera: PerspectiveCamera | OrthographicCamera, controls: MapControls, children: Array<Object3D | Mesh>) => {
     zoomCameraToSelection(camera, controls, children, 5);

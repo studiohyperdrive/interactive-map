@@ -1,4 +1,4 @@
-import { ISceneConfig } from "@shd-developer/interactive-map/dist/types";
+import { ISceneConfig } from "@studiohyperdrive/interactive-map/dist/types";
 
 export const ortho: ISceneConfig = {
     camera: {

@@ -2,7 +2,7 @@ import { FC, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { useRouter } from "next/dist/client/router";
 
-import ThreeEntryPoint from "@shd-developer/interactive-map/dist/three-entry-point";
+import ThreeEntryPoint from "@studiohyperdrive/interactive-map/dist/three-entry-point";
 import {
   ClickPlugin,
   HoverPlugin,
@@ -18,7 +18,7 @@ import {
   MapControlsPlugin,
   IlluminationPlugin,
   WebglRendererPlugin,
-} from "@shd-developer/interactive-map/dist/plugins";
+} from "@studiohyperdrive/interactive-map/dist/plugins";
 
 import animationConfig from "../../bindings/animation";
 import createClickBindings from "../../bindings/click";

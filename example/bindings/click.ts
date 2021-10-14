@@ -2,7 +2,7 @@ import { Mesh } from "three";
 import { Store } from "redux";
 import { NextRouter } from "next/dist/client/router";
 
-import { IClickBindingConfig } from "@shd-developer/interactive-map/dist/types";
+import { IClickBindingConfig } from "@studiohyperdrive/interactive-map/dist/types";
 
 import { handleOpacity } from "./helpers";
 
