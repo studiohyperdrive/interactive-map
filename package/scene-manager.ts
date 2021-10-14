@@ -1,4 +1,4 @@
-import { OrthographicCamera, PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import { OrthographicCamera, PerspectiveCamera, Scene } from "three";
 
 import { IManager, ISize, ISceneConfig, IOrthographicCameraConfig, IPerspectiveCameraConfig } from "./types";
 import { buildScene, buildPerspectiveCamera, buildOrthographicCamera } from "./utils/build";

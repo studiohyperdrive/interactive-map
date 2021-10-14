@@ -1,5 +1,4 @@
-import { IBindingConfig } from "../..";
-import { IEventPlugin } from "../../types";
+import { IEventPlugin, IBindingConfig } from "../../types";
 
 export interface ITabNavigationPlugin extends IEventPlugin {
     handleTabPress(e: KeyboardEvent): void
