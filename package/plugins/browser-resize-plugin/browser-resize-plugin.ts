@@ -26,21 +26,17 @@ export class BrowserResizePlugin {
             }
 
             public bindEventListener(): void {
-                window.addEventListener("resize", this.handleResize);
+                window.addEventListener("resize", this.handleResize.bind(this));
 
                 // Call once when binding to catch unregistered events
-                this.setSize();
+                this.handleResize();
             }
 
             public unbindEventListener(): void {
-                window.removeEventListener("resize", this.handleResize);
+                window.removeEventListener("resize", this.handleResize.bind(this));
             }
 
-            public handleResize(e: Event) {
-                this.setSize();
-            }
-
-            public setSize() {
+            public handleResize(e?: Event) {
                 this.dataStore.set(constants.store.sizes, onWindowResize(element ? element : window, this.renderer, this.camera, this.cameraConfig.config))
             }
         }
