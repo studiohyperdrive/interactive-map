@@ -17,23 +17,27 @@ export class BrowserResizePlugin {
             public camera: PerspectiveCamera | OrthographicCamera;
             public cameraConfig: ICameraConfig;
 
+            public listener: EventListener;
+
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
                 this.renderer = dataStore.get(constants.store.renderer);
                 this.camera = dataStore.get(constants.store.camera);
                 this.cameraConfig = dataStore.get(constants.store.cameraConfig);
+
+                this.listener = this.handleResize.bind(this) as EventListener;
             }
 
             public bindEventListener(): void {
-                window.addEventListener("resize", this.handleResize.bind(this));
+                window.addEventListener("resize", this.listener);
 
                 // Call once when binding to catch unregistered events
                 this.handleResize();
             }
 
             public unbindEventListener(): void {
-                window.removeEventListener("resize", this.handleResize.bind(this));
+                window.removeEventListener("resize", this.listener);
             }
 
             public handleResize(e?: Event) {
