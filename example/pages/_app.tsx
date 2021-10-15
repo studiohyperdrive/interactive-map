@@ -42,8 +42,10 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <main>
-        {map && <Tooltip />}
-        {map && <WebGL />}
+        {map && <div>
+          <Tooltip />
+          <WebGL />
+        </div>}
 
         <Component {...pageProps} />
         <RingDialog />
