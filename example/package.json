@@ -16,7 +16,7 @@
     "@emotion/styled": "^11.3.0",
     "@mui/material": "^5.0.0",
     "@reduxjs/toolkit": "^1.6.1",
-    "@studiohyperdrive/interactive-map": "^2.2.6",
+    "@studiohyperdrive/interactive-map": "^2.2.7",
     "next": "11.1.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
