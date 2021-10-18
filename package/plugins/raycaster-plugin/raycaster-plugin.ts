@@ -14,23 +14,27 @@ export class RaycasterPlugin {
             public camera: Camera;
             public scene: Scene;
 
+            public listener: EventListener;
+
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
                 this.raycaster = new Raycaster();
 
                 this.camera = dataStore.get(constants.store.camera);
                 this.scene = dataStore.get(constants.store.scene);
+
+                this.listener = this.handleClick.bind(this) as EventListener;
             }
 
             public bindEventListener() {
-                window.addEventListener(config.trigger, this.handleClick);
+                window.addEventListener(config.trigger, this.listener);
             }
 
             public unbindEventListener() {
-                window.removeEventListener(config.trigger, this.handleClick);
+                window.removeEventListener(config.trigger, this.listener);
             }
 
-            public handleClick = () => {
+            public handleClick() {
                 const pos = this.dataStore.get(constants.store.mousePosition);
 
                 if (pos === undefined) {

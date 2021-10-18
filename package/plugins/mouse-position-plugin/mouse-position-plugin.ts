@@ -9,17 +9,21 @@ export class MousePositionPlugin {
     constructor() {
         return class implements IMousePositionPlugin {
             private dataStore: IDataStore;
+
+            public listener: EventListener;
             
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
+                
+                this.listener = this.handleMouseMove.bind(this) as EventListener;
             }
 
             public bindEventListener() {
-                window.addEventListener("mousemove", this.handleMouseMove);
+                window.addEventListener("mousemove", this.listener);
             }
 
             public unbindEventListener() {
-                window.removeEventListener("mousemove", this.handleMouseMove);
+                window.removeEventListener("mousemove", this.listener);
             }
 
             public handleMouseMove = (e: MouseEvent) => {
