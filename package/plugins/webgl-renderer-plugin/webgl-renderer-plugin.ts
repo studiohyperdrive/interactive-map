@@ -27,13 +27,18 @@ export default class WebglRendererPlugin {
                 this.scene = this.dataStore.get(constants.store.scene);
                 this.camera = this.dataStore.get(constants.store.camera);
 
-                this.renderer = buildRenderer(this.canvas, this.sizes, config);
-
-                this.dataStore.set(constants.store.renderer, this.renderer);
+                this.renderer = this.setRenderer(this.canvas, this.sizes, config);
             }
 
             public update() {
                 this.renderer.render(this.scene, this.camera);
+            }
+
+            public setRenderer(canvas: HTMLCanvasElement, sizes: ISize, config?: IWebglRendererConfig): WebGLRenderer {
+                const renderer = buildRenderer(canvas, sizes, config);
+                this.dataStore.set(constants.store.renderer, renderer);
+
+                return renderer;
             }
         }
     }

@@ -11,7 +11,7 @@ const Tower: NextPage = () => {
         <title>Interactive map | Tower</title>
       </Head>
 
-      <h1>🗼 Tower page</h1>
+      <h1>🍓 Strawberry page</h1>
 
       <button onClick={() => {router.back()}}>Back</button>
       

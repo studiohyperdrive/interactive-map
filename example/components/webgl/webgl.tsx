@@ -50,7 +50,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
             new RaycasterPlugin({ trigger: "mousemove" }),
             new ClickPlugin(createClickBindings(store, router)),
             // new HoverPlugin(createHoverBindings(store)),
-            new TabNavigationPlugin(createTabNavigationBindings()),
+            // new TabNavigationPlugin(createTabNavigationBindings()),
           ],
           [
             new GltfDracoLoaderPlugin("/models/boerderleren-draco.gltf"),
@@ -74,7 +74,15 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
         payload: buildThree(),
       });
     } else {
-      threeRootElement.current?.replaceWith(three.canvas);
+      if (threeRootElement.current) {
+        const rendererPlugin = three.manager.plugins.find(plugin => {
+          return plugin.renderer && plugin.sizes &&  plugin.setRenderer;
+        });
+
+        if (rendererPlugin) {
+          rendererPlugin.renderer = rendererPlugin.setRenderer(threeRootElement.current, rendererPlugin.sizes, rendererConfig);
+        }
+      }
     }
   }, [router, three]);
 
