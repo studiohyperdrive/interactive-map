@@ -23,8 +23,8 @@ export class HoverPlugin {
             constructor(dataStore: DataStore) {
                 this.dataStore = dataStore;
 
-                this.animations = dataStore.get(constants.store.animations);
-                this.mixer = dataStore.get(constants.store.animationMixer);
+                this.animations = this.dataStore.get(constants.store.animations);
+                this.mixer = this.dataStore.get(constants.store.animationMixer);
 
                 this.dataStore.set(constants.store.hoverBindings, bindings);
 

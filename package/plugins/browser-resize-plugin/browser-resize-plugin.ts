@@ -22,9 +22,9 @@ export class BrowserResizePlugin {
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
-                this.renderer = dataStore.get(constants.store.renderer);
-                this.camera = dataStore.get(constants.store.camera);
-                this.cameraConfig = dataStore.get(constants.store.cameraConfig);
+                this.renderer = this.dataStore.get(constants.store.renderer);
+                this.camera = this.dataStore.get(constants.store.camera);
+                this.cameraConfig = this.dataStore.get(constants.store.cameraConfig);
 
                 this.listener = this.handleResize.bind(this) as EventListener;
             }
@@ -41,6 +41,8 @@ export class BrowserResizePlugin {
             }
 
             public handleResize(e?: Event) {
+                this.renderer = this.dataStore.get(constants.store.renderer);
+
                 this.dataStore.set(constants.store.sizes, onWindowResize(element ? element : window, this.renderer, this.camera, this.cameraConfig.config))
             }
         }

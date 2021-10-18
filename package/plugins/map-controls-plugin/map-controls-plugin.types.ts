@@ -6,6 +6,7 @@ import { IScenePlugin } from "../../types";
 export interface IMapControlsPlugin extends IScenePlugin {
     camera: Camera;
     canvas: HTMLCanvasElement,
+    mapControls: MapControls,
     createMapControls: (camera: Camera, canvas: HTMLCanvasElement) => MapControls,
 }
 

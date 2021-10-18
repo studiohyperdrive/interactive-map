@@ -8,8 +8,7 @@
     "build": "npm run next build",
     "start": "npm run next start",
     "lint": "npm run next lint",
-    "symlink": "cd ../package && npm run build && npm link && cd ../example && npm link @studiohyperdrive/interactive-map",
-    "local": "cd ../package && npm run build && cd ../example && npm run symlink && npm run dev"
+    "symlink": "cd ../package && npm run build && npm link && cd ../example && npm link @studiohyperdrive/interactive-map"
   },
   "dependencies": {
     "@emotion/react": "^11.4.1",

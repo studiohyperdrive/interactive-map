@@ -13,6 +13,8 @@ export default class WebglRendererPlugin {
         return class implements IWebglRendererPlugin{
             private dataStore: IDataStore;
 
+            public config: IWebglRendererConfig | undefined = config;
+
             public canvas: HTMLCanvasElement;
             public sizes: ISize;
             public scene: Scene;
@@ -36,6 +38,7 @@ export default class WebglRendererPlugin {
 
             public setRenderer(canvas: HTMLCanvasElement, sizes: ISize, config?: IWebglRendererConfig): WebGLRenderer {
                 const renderer = buildRenderer(canvas, sizes, config);
+
                 this.dataStore.set(constants.store.renderer, renderer);
 
                 return renderer;

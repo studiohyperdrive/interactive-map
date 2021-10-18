@@ -19,6 +19,7 @@ import {
   IlluminationPlugin,
   WebglRendererPlugin,
 } from "@studiohyperdrive/interactive-map/dist/plugins";
+import { setNewCanvas } from "@studiohyperdrive/interactive-map/dist/utils";
 
 import animationConfig from "../../bindings/animation";
 import createClickBindings from "../../bindings/click";
@@ -75,13 +76,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
       });
     } else {
       if (threeRootElement.current) {
-        const rendererPlugin = three.manager.plugins.find(plugin => {
-          return plugin.renderer && plugin.sizes &&  plugin.setRenderer;
-        });
-
-        if (rendererPlugin) {
-          rendererPlugin.renderer = rendererPlugin.setRenderer(threeRootElement.current, rendererPlugin.sizes, rendererConfig);
-        }
+        setNewCanvas(three, threeRootElement.current);
       }
     }
   }, [router, three]);

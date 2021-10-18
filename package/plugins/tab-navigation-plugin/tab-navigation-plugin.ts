@@ -26,7 +26,7 @@ export class TabNavigationPlugin {
             constructor(dataStore: DataStore) {
                 this.dataStore = dataStore;
 
-                this.scene = dataStore.get(constants.store.scene);
+                this.scene = this.dataStore.get(constants.store.scene);
 
                 this.listeners = {
                     tab: this.handleTabPress.bind(this) as EventListener,
