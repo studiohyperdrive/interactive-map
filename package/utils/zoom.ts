@@ -1,7 +1,9 @@
-import { Box3, Mesh, Object3D, OrthographicCamera, PerspectiveCamera, Vector3 } from "three";
+import { Box3, Mesh, Object3D, OrthographicCamera, PerspectiveCamera, Sphere, Vector3 } from "three";
 import { MapControls } from "three/examples/jsm/controls/OrbitControls";
 
 export const zoomCameraToSelection = (camera: PerspectiveCamera | OrthographicCamera, controls: MapControls, selection: Array<Object3D | Mesh>, fitRatio = 1.2) => {
+    // Create new bounding box based on selection
+
     const box = new Box3();
 
     for (const object of selection) box.expandByObject(object);
@@ -16,6 +18,17 @@ export const zoomCameraToSelection = (camera: PerspectiveCamera | OrthographicCa
 
     if (camera instanceof PerspectiveCamera) {
         fov = camera.fov;
+    }
+
+    if (camera instanceof OrthographicCamera) {
+        // Set ortho zoom based on bounding sphere
+
+        let bsphere = box.getBoundingSphere(new Sphere(center));
+
+        camera.top = bsphere.radius * fitRatio;
+        camera.bottom = - bsphere.radius * fitRatio;
+        camera.right = bsphere.radius * aspect * fitRatio;
+        camera.left = - bsphere.radius * aspect * fitRatio;
     }
 
     const maxSize = Math.max(size.x, size.y, size.z);

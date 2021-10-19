@@ -4,13 +4,13 @@ export const ortho: ISceneConfig = {
     camera: {
         type: "orthographic",
         config: {
-            frustumSize: 1400,
+            frustumSize: 2,
             near: 1,
-            far: 10000,
+            far: 100,
             position: {
-                x: 1500,
-                y: -1500,
-                z: 1500
+                x: 3,
+                y: -3,
+                z: 3,
             }
         }
     }

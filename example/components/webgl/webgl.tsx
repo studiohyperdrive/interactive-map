@@ -53,8 +53,8 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
             new TabNavigationPlugin(createTabNavigationBindings()),
           ],
           [
-            new GltfDracoLoaderPlugin("/models/boerderleren-draco.gltf"),
-            // new GlobalIlluminationPlugin(),
+            new GltfDracoLoaderPlugin("/models/interactive-map_v2.8-draco.glb"),
+            new GlobalIlluminationPlugin(),
             new IlluminationPlugin(illuminationConfig),
             new ClockPlugin(),
             new AnimationMixerPlugin(),

@@ -5,7 +5,7 @@ import { ITabNavigationBinding } from "@shd-developer/interactive-map/dist/plugi
 import { zoomCameraToSelection, mutateRandomColor } from "@shd-developer/interactive-map/dist/utils";
 
 const zoomAndColor = (camera: PerspectiveCamera | OrthographicCamera, controls: MapControls, children: Array<Object3D | Mesh>) => {
-    zoomCameraToSelection(camera, controls, children, 5);
+    zoomCameraToSelection(camera, controls, children, 3);
 
     children.forEach(child => {
         mutateRandomColor((child as Mesh));

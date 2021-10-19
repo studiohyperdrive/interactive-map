@@ -3,6 +3,7 @@ import { IMapControlsConfig } from "@shd-developer/interactive-map/dist/plugins"
 
 export default {
     enableDamping: true,
+    enablePan: false,
     dampingFactor: 0.1,
     rotateSpeed: 0.3,
     panSpeed: 0.5,
@@ -21,10 +22,6 @@ export default {
         maxPolarAngle: 0.9553166181245092,
         minAzimuthAngle: Math.PI / 6,
         maxAzimuthAngle: Math.PI / 3,
-    },
-    panLimits: {
-        minPan: new Vector3(0, 0, 0),
-        maxPan: new Vector3(0, 0, 0),
     },
     zoomLimits: {
         minZoom: 1,
