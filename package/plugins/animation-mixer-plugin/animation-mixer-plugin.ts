@@ -16,10 +16,10 @@ export class AnimationMixerPlugin {
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
-                this.scene = dataStore.get(constants.store.scene);
+                this.scene = this.dataStore.get(constants.store.scene);
                 this.mixer = new AnimationMixer(this.scene);
 
-                dataStore.set(constants.store.animationMixer, this.mixer);
+                this.dataStore.set(constants.store.animationMixer, this.mixer);
             }
 
             public update() {

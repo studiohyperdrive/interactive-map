@@ -20,8 +20,8 @@ export class RaycasterPlugin {
                 this.dataStore = dataStore;
                 this.raycaster = new Raycaster();
 
-                this.camera = dataStore.get(constants.store.camera);
-                this.scene = dataStore.get(constants.store.scene);
+                this.camera = this.dataStore.get(constants.store.camera);
+                this.scene = this.dataStore.get(constants.store.scene);
 
                 this.listener = this.handleClick.bind(this) as EventListener;
             }

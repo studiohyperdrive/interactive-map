@@ -19,7 +19,7 @@ export class AnimationPlugin {
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
-                this.mixer = dataStore.get(constants.store.animationMixer);
+                this.mixer = this.dataStore.get(constants.store.animationMixer);
 
                 this.dataStore.set(constants.store.animationConfig, config);
 

@@ -19,6 +19,7 @@ import {
   IlluminationPlugin,
   WebglRendererPlugin,
 } from "@studiohyperdrive/interactive-map/dist/plugins";
+import { setNewCanvas } from "@studiohyperdrive/interactive-map/dist/utils";
 
 import animationConfig from "../../bindings/animation";
 import createClickBindings from "../../bindings/click";
@@ -50,7 +51,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
             new RaycasterPlugin({ trigger: "mousemove" }),
             new ClickPlugin(createClickBindings(store, router)),
             // new HoverPlugin(createHoverBindings(store)),
-            new TabNavigationPlugin(createTabNavigationBindings()),
+            // new TabNavigationPlugin(createTabNavigationBindings()),
           ],
           [
             new GltfDracoLoaderPlugin("/models/boerderleren-draco.gltf"),
@@ -74,7 +75,9 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
         payload: buildThree(),
       });
     } else {
-      threeRootElement.current?.replaceWith(three.canvas);
+      if (threeRootElement.current) {
+        setNewCanvas(three, threeRootElement.current);
+      }
     }
   }, [router, three]);
 

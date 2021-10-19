@@ -19,10 +19,10 @@ export class GltfDracoLoaderPlugin {
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
-                dataStore.set(constants.store.mapLoaded, false);
-                dataStore.set(constants.store.animations, []);
+                this.dataStore.set(constants.store.mapLoaded, false);
+                this.dataStore.set(constants.store.animations, []);
 
-                this.scene = dataStore.get(constants.store.scene);
+                this.scene = this.dataStore.get(constants.store.scene);
 
                 this.dracoLoader = new DRACOLoader();
                 this.dracoLoader.setDecoderPath('decoder/');

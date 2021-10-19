@@ -5,5 +5,8 @@ export * from "./general";
 export * from "./gltf";
 export * from "./plain-color";
 export * from "./random-color";
+export * from "./manage-controls";
+export * from "./manage-renderer";
 export * from "./opacity";
+export * from "./set-new-canvas";
 export * from "./zoom";
