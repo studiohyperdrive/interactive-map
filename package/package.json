@@ -1,6 +1,6 @@
 {
   "name": "@studiohyperdrive/interactive-map",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "A package aimed at simplifying common three.js setups for interactive maps.",
   "type": "module",
   "main": "dist/index.js",
