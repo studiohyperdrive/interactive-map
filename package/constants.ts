@@ -16,6 +16,7 @@ export default {
         mousePosition: "mousePosition",
         renderer: "renderer",
         scene: "scene",
-        sizes: "sizes"
+        sizes: "sizes",
+        zoomTarget: "zoomTarget",
     }
 }

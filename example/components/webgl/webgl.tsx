@@ -13,6 +13,7 @@ import {
   ClockPlugin,
   AnimationMixerPlugin,
   TabNavigationPlugin,
+  TabNavigationTransitionPlugin,
   BrowserResizePlugin,
   GlobalIlluminationPlugin,
   MapControlsPlugin,
@@ -60,6 +61,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
             new AnimationMixerPlugin(),
             new AnimationPlugin(animationConfig),
             new MapControlsPlugin(controlsConfig),
+            new TabNavigationTransitionPlugin(2),
             new WebglRendererPlugin(rendererConfig)
           ]
         )

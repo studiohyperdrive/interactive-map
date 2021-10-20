@@ -37,5 +37,8 @@ export * from "./raycaster-plugin/raycaster-plugin.types";
 export { default as TabNavigationPlugin } from "./tab-navigation-plugin/tab-navigation-plugin";
 export * from "./tab-navigation-plugin/tab-navigation-plugin.types";
 
+export { default as TabNavigationTransitionPlugin } from "./tab-navigation-transition-plugin/tab-navigation-transition-plugin";
+export * from "./tab-navigation-transition-plugin/tab-navigation-transition-plugin.types";
+
 export { default as WebglRendererPlugin } from "./webgl-renderer-plugin/webgl-renderer-plugin";
 export * from "./webgl-renderer-plugin/webgl-renderer-plugin.types";

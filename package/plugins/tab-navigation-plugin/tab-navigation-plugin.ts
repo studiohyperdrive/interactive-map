@@ -1,4 +1,4 @@
-import { Scene } from "three";
+import { Scene, Vector3 } from "three";
 
 import { flattenChildren, isMatching } from "../../utils";
 
@@ -26,6 +26,8 @@ export class TabNavigationPlugin {
 
                 this.scene = dataStore.get(constants.store.scene);
 
+                dataStore.set(constants.store.zoomTarget, new Vector3);
+
                 this.handleTabPressListener = (e: Event) => {this.handleTabPress((e as KeyboardEvent))};
                 this.handleShiftTabPressListener = (e: Event) => {this.handleShiftTabPress((e as KeyboardEvent))};
             }
@@ -50,6 +52,10 @@ export class TabNavigationPlugin {
                 if (e.code !== "Tab" || !e.shiftKey) return;
 
                 this.navigate(e, false)
+            }
+
+            public setZoomTarget = (target: Vector3) => {
+                this.dataStore.set(constants.store.zoomTarget, target);
             }
 
             public navigate(e: KeyboardEvent, forward: boolean): void {
@@ -78,7 +84,12 @@ export class TabNavigationPlugin {
                 if (next?.afterNavigate) {
                     flattenChildren(this.scene.children).forEach(child => {
                         if (next && isMatching(child, next)) {
-                            (next.afterNavigate as Function)(this.dataStore.get(constants.store.camera), this.dataStore.get(constants.store.controls), [child]);
+                            (next.afterNavigate as Function)(
+                                this.dataStore.get(constants.store.camera),
+                                this.dataStore.get(constants.store.controls),
+                                [child],
+                                this.setZoomTarget,
+                            );
                         }
                     });
                 }

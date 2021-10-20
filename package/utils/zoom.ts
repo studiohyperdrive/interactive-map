@@ -1,7 +1,7 @@
 import { Box3, Mesh, Object3D, OrthographicCamera, PerspectiveCamera, Sphere, Vector3 } from "three";
 import { MapControls } from "three/examples/jsm/controls/OrbitControls";
 
-export const zoomCameraToSelection = (camera: PerspectiveCamera | OrthographicCamera, controls: MapControls, selection: Array<Object3D | Mesh>, fitRatio = 1.2) => {
+export const zoomCameraToSelection = (camera: PerspectiveCamera | OrthographicCamera, controls: MapControls, selection: Array<Object3D | Mesh>, setTarget: (target: Vector3) => void, fitRatio = 1.2) => {
     // Create new bounding box based on selection
 
     const box = new Box3();
@@ -43,7 +43,12 @@ export const zoomCameraToSelection = (camera: PerspectiveCamera | OrthographicCa
         .multiplyScalar(distance);
 
     controls.maxDistance = distance * 10;
-    controls.target.copy(center);
+
+    // Instantly jump to new position
+    // controls.target.copy(center);
+
+    // Set target to transition to
+    setTarget(center);
 
     camera.near = distance / 100;
     camera.far = distance * 100;
