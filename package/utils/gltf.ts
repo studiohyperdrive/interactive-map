@@ -1,7 +1,5 @@
 import { Mesh, Object3D } from "three";
 
-import { IBindingConfig } from "../types";
-
 /**
  * @link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat#reduce_concat_isarray_recursivity
  */
