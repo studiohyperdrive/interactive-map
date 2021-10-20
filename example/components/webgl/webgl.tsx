@@ -26,7 +26,7 @@ import createClickBindings from "../../bindings/click";
 import createHoverBindings from "../../bindings/hover";
 import createTabNavigationBindings from "../../bindings/tab-navigation";
 
-import { ortho, perspective } from "../../config/sceneConfig";
+import { ortho, ortho2, perspective } from "../../config/sceneConfig";
 import controlsConfig from "../../config/controlsConfig";
 import illuminationConfig from "../../config/illuminationConfig";
 import rendererConfig from "../../config/rendererConfig";
@@ -50,11 +50,11 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
             new MousePositionPlugin(),
             new RaycasterPlugin({ trigger: "mousemove" }),
             new ClickPlugin(createClickBindings(store, router)),
-            // new HoverPlugin(createHoverBindings(store)),
-            // new TabNavigationPlugin(createTabNavigationBindings()),
+            new HoverPlugin(createHoverBindings(store)),
+            new TabNavigationPlugin(createTabNavigationBindings()),
           ],
           [
-            new GltfDracoLoaderPlugin("/models/boerderleren-draco.gltf"),
+            new GltfDracoLoaderPlugin("/models/boerderleren_201021.gltf"),
             // new GlobalIlluminationPlugin(),
             new IlluminationPlugin(illuminationConfig),
             new ClockPlugin(),
