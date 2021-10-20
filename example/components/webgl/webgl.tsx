@@ -35,23 +35,22 @@ import actions from "../../redux/actions";
 import store from "../../redux/store";
 
 import { WebGLProps } from "./webgl.types";
-import { Scene, Vector3 } from "three";
+import { Scene } from "three";
 
 const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   const threeRootElement = useRef<HTMLCanvasElement | null>(null);
   const router = useRouter();
 
   const hideCheckmarks = (scene: Scene): void => {
-    const keys = ["Checkmark", "Light", "Shadow"];
+    const keys = ["checkmark-1", "checkmark-2", "checkmark-3", "checkmark-4"];
     const targets = getChildren(scene, keys, "partial");
 
     targets.forEach(target => {
-      const original = { ...target.scale } as Vector3;
       hideChild(target);
 
-      setTimeout(() => {
-        showChild(target, original);
-      }, 1000);
+      // setTimeout(() => {
+      //   showChild(target);
+      // }, 1000);
     });
   }
 
@@ -69,7 +68,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
           new TabNavigationPlugin(createTabNavigationBindings()),
         ],
         [
-          new GltfDracoLoaderPlugin("/models/boerderleren_201021.gltf", hideCheckmarks),
+          new GltfDracoLoaderPlugin("/models/boerderleren_201021--checkmark-names.gltf", hideCheckmarks),
           // new GlobalIlluminationPlugin(),
           new IlluminationPlugin(illuminationConfig),
           new ClockPlugin(),
