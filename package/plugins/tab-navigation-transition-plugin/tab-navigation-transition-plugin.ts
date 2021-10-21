@@ -43,6 +43,9 @@ export class TabNavigationTransitionPlugin {
                         this.camera.left = - zoom * zoomProps.aspect;
                     }
 
+                    // Keep camera direction
+                    this.camera.position.lerp((target.sub(zoomProps.direction)), delta * speed);
+
                     this.camera.updateProjectionMatrix();
                 }
             }

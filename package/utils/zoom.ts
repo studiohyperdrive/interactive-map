@@ -29,17 +29,6 @@ export const zoomCameraToSelection = (camera: PerspectiveCamera | OrthographicCa
         .normalize()
         .multiplyScalar(distance);
 
-    controls.maxDistance = distance * 10;
-
-    // Instantly jump to new position
-    // controls.target.copy(center);
-
-    camera.near = distance / 100;
-    camera.far = distance * 100;
-    camera.updateProjectionMatrix();
-
-    camera.position.copy(controls.target).sub(direction);
-
     controls.update();
 
     // Set zoomProps for transition in tab-navigation-transition-plugin
@@ -47,6 +36,7 @@ export const zoomCameraToSelection = (camera: PerspectiveCamera | OrthographicCa
         boundingBox: box,
         aspect: aspect,
         fitRatio: fitRatio,
+        direction: direction,
     });
 }
 
