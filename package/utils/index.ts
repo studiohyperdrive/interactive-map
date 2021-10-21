@@ -9,4 +9,5 @@ export * from "./manage-controls";
 export * from "./manage-renderer";
 export * from "./opacity";
 export * from "./set-new-canvas";
+export * from "./visibility";
 export * from "./zoom";

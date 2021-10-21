@@ -19,14 +19,14 @@ import {
   IlluminationPlugin,
   WebglRendererPlugin,
 } from "@studiohyperdrive/interactive-map/dist/plugins";
-import { setNewCanvas } from "@studiohyperdrive/interactive-map/dist/utils";
+import { getChildren, hideChild, showChild, setNewCanvas } from "@studiohyperdrive/interactive-map/dist/utils";
 
 import animationConfig from "../../bindings/animation";
 import createClickBindings from "../../bindings/click";
 import createHoverBindings from "../../bindings/hover";
 import createTabNavigationBindings from "../../bindings/tab-navigation";
 
-import { ortho, perspective } from "../../config/sceneConfig";
+import { ortho, ortho2, perspective } from "../../config/sceneConfig";
 import controlsConfig from "../../config/controlsConfig";
 import illuminationConfig from "../../config/illuminationConfig";
 import rendererConfig from "../../config/rendererConfig";
@@ -35,35 +35,49 @@ import actions from "../../redux/actions";
 import store from "../../redux/store";
 
 import { WebGLProps } from "./webgl.types";
+import { Scene } from "three";
 
 const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   const threeRootElement = useRef<HTMLCanvasElement | null>(null);
   const router = useRouter();
 
+  const hideCheckmarks = (scene: Scene): void => {
+    const keys = ["checkmark-1", "checkmark-2", "checkmark-3", "checkmark-4"];
+    const targets = getChildren(scene, keys, "partial");
+
+    targets.forEach(target => {
+      hideChild(target);
+
+      // setTimeout(() => {
+      //   showChild(target);
+      // }, 1000);
+    });
+  }
+
   const buildThree = (): ThreeEntryPoint | null => {
     return threeRootElement.current
       ? new ThreeEntryPoint(
-          threeRootElement.current,
-          ortho,
-          [
-            new BrowserResizePlugin(window),
-            new MousePositionPlugin(),
-            new RaycasterPlugin({ trigger: "mousemove" }),
-            new ClickPlugin(createClickBindings(store, router)),
-            // new HoverPlugin(createHoverBindings(store)),
-            // new TabNavigationPlugin(createTabNavigationBindings()),
-          ],
-          [
-            new GltfDracoLoaderPlugin("/models/boerderleren-draco.gltf"),
-            // new GlobalIlluminationPlugin(),
-            new IlluminationPlugin(illuminationConfig),
-            new ClockPlugin(),
-            new AnimationMixerPlugin(),
-            new AnimationPlugin(animationConfig),
-            new MapControlsPlugin(controlsConfig),
-            new WebglRendererPlugin(rendererConfig)
-          ]
-        )
+        threeRootElement.current,
+        ortho,
+        [
+          new BrowserResizePlugin(window),
+          new MousePositionPlugin(),
+          new RaycasterPlugin({ trigger: "mousemove" }),
+          new ClickPlugin(createClickBindings(store, router)),
+          new HoverPlugin(createHoverBindings(store)),
+          new TabNavigationPlugin(createTabNavigationBindings()),
+        ],
+        [
+          new GltfDracoLoaderPlugin("/models/boerderleren_201021--checkmark-names.gltf", hideCheckmarks),
+          // new GlobalIlluminationPlugin(),
+          new IlluminationPlugin(illuminationConfig),
+          new ClockPlugin(),
+          new AnimationMixerPlugin(),
+          new AnimationPlugin(animationConfig),
+          new MapControlsPlugin(controlsConfig),
+          new WebglRendererPlugin(rendererConfig)
+        ]
+      )
       : null;
   };
 
