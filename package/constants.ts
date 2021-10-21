@@ -17,6 +17,6 @@ export default {
         renderer: "renderer",
         scene: "scene",
         sizes: "sizes",
-        zoomTarget: "zoomTarget",
+        zoomProps: "zoomProps",
     }
 }

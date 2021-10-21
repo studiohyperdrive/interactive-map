@@ -1,36 +1,23 @@
-import { Box3, Mesh, Object3D, OrthographicCamera, PerspectiveCamera, Sphere, Vector3 } from "three";
+import { Box3, Mesh, Object3D, OrthographicCamera, PerspectiveCamera, Vector3 } from "three";
 import { MapControls } from "three/examples/jsm/controls/OrbitControls";
 
-export const zoomCameraToSelection = (camera: PerspectiveCamera | OrthographicCamera, controls: MapControls, selection: Array<Object3D | Mesh>, setTarget: (target: Vector3) => void, fitRatio = 1.2) => {
+export const zoomCameraToSelection = (camera: PerspectiveCamera | OrthographicCamera, controls: MapControls, selection: Array<Object3D | Mesh>, setZoomProps: (props: any) => void, fitRatio = 1.2) => {
     // Create new bounding box based on selection
-
     const box = new Box3();
 
     for (const object of selection) box.expandByObject(object);
 
-    const size = box.getSize(new Vector3());
-    const center = box.getCenter(new Vector3());
-    const aspect = getAspectRatioFromControls(controls);
-
     // Determine FOV
-
+    const aspect = getAspectRatioFromControls(controls);
+    
     let fov = Math.atan(aspect);
 
     if (camera instanceof PerspectiveCamera) {
         fov = camera.fov;
     }
-
-    if (camera instanceof OrthographicCamera) {
-        // Set ortho zoom based on bounding sphere
-
-        let bsphere = box.getBoundingSphere(new Sphere(center));
-
-        camera.top = bsphere.radius * fitRatio;
-        camera.bottom = - bsphere.radius * fitRatio;
-        camera.right = bsphere.radius * aspect * fitRatio;
-        camera.left = - bsphere.radius * aspect * fitRatio;
-    }
-
+    
+    // adjust camera settings
+    const size = box.getSize(new Vector3());
     const maxSize = Math.max(size.x, size.y, size.z);
     const fitHeightDistance = maxSize / (2 * Math.atan((Math.PI * fov) / 360));
     const fitWidthDistance = fitHeightDistance / aspect;
@@ -47,9 +34,6 @@ export const zoomCameraToSelection = (camera: PerspectiveCamera | OrthographicCa
     // Instantly jump to new position
     // controls.target.copy(center);
 
-    // Set target to transition to
-    setTarget(center);
-
     camera.near = distance / 100;
     camera.far = distance * 100;
     camera.updateProjectionMatrix();
@@ -57,6 +41,13 @@ export const zoomCameraToSelection = (camera: PerspectiveCamera | OrthographicCa
     camera.position.copy(controls.target).sub(direction);
 
     controls.update();
+
+    // Set zoomProps for transition in tab-navigation-transition-plugin
+    setZoomProps({
+        boundingBox: box,
+        aspect: aspect,
+        fitRatio: fitRatio,
+    });
 }
 
 const getAspectRatioFromControls = (controls: MapControls): number => {
