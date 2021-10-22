@@ -7,9 +7,9 @@ const far: IPosition = {
 };
 
 const near: IPosition = {
-    x: 2,
-    y: 2,
-    z: 2
+    x: 3,
+    y: 3,
+    z: 3
 };
 
 export const ortho: ISceneConfig = {
@@ -30,7 +30,7 @@ export const ortho2: ISceneConfig = {
         config: {
             frustumSize: 5,
             near: 0.1,
-            far: 5,
+            far: 10,
             position: near
         }
     }

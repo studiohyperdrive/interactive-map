@@ -11,9 +11,8 @@ export const setNewCanvas = (three: ThreeEntryPoint, canvas: HTMLCanvasElement) 
         rebuildRendererPlugin(rendererPlugin, canvas, rendererPlugin.sizes, rendererPlugin.config);
     }
 
-    const controlsPlugin: IMapControlsPlugin | undefined = getControlsPlugin(three);
-    if (controlsPlugin) {
-        rebuildMapControlsPlugin(controlsPlugin, controlsPlugin.camera, canvas);
-    }
+    // const controlsPlugin: IMapControlsPlugin | undefined = getControlsPlugin(three);
+    // if (controlsPlugin) {
+    //     rebuildMapControlsPlugin(controlsPlugin, controlsPlugin.camera, canvas);
+    // }
 }
-
