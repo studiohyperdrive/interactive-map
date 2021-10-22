@@ -1,4 +1,4 @@
-import ThreeEntryPoint from "@shd-developer/interactive-map/dist/three-entry-point";
+import ThreeEntryPoint from "@studiohyperdrive/interactive-map/dist/three-entry-point";
 
 export interface WebGLProps {
     three?: ThreeEntryPoint,

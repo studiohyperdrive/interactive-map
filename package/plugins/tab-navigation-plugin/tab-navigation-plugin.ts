@@ -18,28 +18,32 @@ export class TabNavigationPlugin {
             public current?: ITabNavigationBinding = undefined;
             public bindings: ITabNavigationBinding[] = bindings.sort((a,b) => a.order - b.order);
 
-            private handleTabPressListener: EventListenerOrEventListenerObject;
-            private handleShiftTabPressListener: EventListenerOrEventListenerObject;
+            public listeners: {
+                tab: EventListener,
+                shiftTab: EventListener
+            }
 
             constructor(dataStore: DataStore) {
                 this.dataStore = dataStore;
 
-                this.scene = dataStore.get(constants.store.scene);
+                this.scene = this.dataStore.get(constants.store.scene);
 
                 dataStore.set(constants.store.zoomProps, undefined);
 
-                this.handleTabPressListener = (e: Event) => {this.handleTabPress((e as KeyboardEvent))};
-                this.handleShiftTabPressListener = (e: Event) => {this.handleShiftTabPress((e as KeyboardEvent))};
+                this.listeners = {
+                    tab: this.handleTabPress.bind(this) as EventListener,
+                    shiftTab: this.handleShiftTabPress.bind(this) as EventListener
+                };
             }
 
             public bindEventListener(): void {
-                document.addEventListener("keydown", this.handleTabPressListener);
-                document.addEventListener("keydown", this.handleShiftTabPressListener);
+                document.addEventListener("keydown", this.listeners.tab);
+                document.addEventListener("keydown", this.listeners.shiftTab);
             }
 
             public unbindEventListener(): void {
-                document.removeEventListener("keydown", this.handleTabPressListener);
-                document.removeEventListener("keydown", this.handleShiftTabPressListener);
+                document.removeEventListener("keydown", this.listeners.tab);
+                document.removeEventListener("keydown", this.listeners.shiftTab);
             }
 
             public handleTabPress(e: KeyboardEvent): void {

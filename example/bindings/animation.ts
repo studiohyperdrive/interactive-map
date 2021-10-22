@@ -1,5 +1,5 @@
 import { LoopOnce, MathUtils, AnimationAction } from 'three';
-import { IAnimationConfig } from '@shd-developer/interactive-map/dist/types';
+import { IAnimationConfig } from '@studiohyperdrive/interactive-map/dist/types';
 
 export default [
     {

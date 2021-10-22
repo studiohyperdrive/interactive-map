@@ -1,13 +1,13 @@
 {
-  "name": "@shd-developer/interactive-map",
-  "version": "2.2.5",
+  "name": "@studiohyperdrive/interactive-map",
+  "version": "2.5.1",
   "description": "A package aimed at simplifying common three.js setups for interactive maps.",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/studiohyperdrive/projects/studio-hyperdrive/studio-hyperdrive_interactive-map.git"
+    "url": "https://github.com/studiohyperdrive/interactive-map"
   },
   "scripts": {
     "dev": "rm -rf dist/* && node node_modules/typescript/lib/tsc.js --watch --checkJs --pretty",
@@ -19,7 +19,7 @@
     "threejs",
     "webgl"
   ],
-  "homepage": "https://gitlab.com/studiohyperdrive/projects/studio-hyperdrive/studio-hyperdrive_interactive-map",
+  "homepage": "https://github.com/studiohyperdrive/interactive-map",
   "author": "Studio Hyperdrive",
   "license": "MIT",
   "dependencies": {

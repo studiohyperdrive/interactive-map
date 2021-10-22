@@ -18,12 +18,10 @@ export class MapControlsPlugin {
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
-                this.camera = dataStore.get(constants.store.camera);
-                this.canvas = dataStore.get(constants.store.canvas);
+                this.camera = this.dataStore.get(constants.store.camera);
+                this.canvas = this.dataStore.get(constants.store.canvas);
 
                 this.mapControls = this.createMapControls(this.camera, this.canvas);
-
-                this.dataStore.set(constants.store.controls, this.mapControls);
             }
 
             public update() {
@@ -116,6 +114,8 @@ export class MapControlsPlugin {
                     mapControls.minZoom = limits.minZoom ? limits.minZoom : 0;
                     mapControls.maxZoom = limits.maxZoom ? limits.maxZoom : Infinity;
                 }
+
+                this.dataStore.set(constants.store.controls, mapControls);
 
                 return mapControls
             }

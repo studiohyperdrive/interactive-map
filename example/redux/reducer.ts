@@ -1,7 +1,7 @@
 import { AnyAction } from "redux";
 
-import ThreeEntryPoint from "@shd-developer/interactive-map/dist/three-entry-point";
-import { IMousePositionPlugin, IRaycasterPlugin } from "@shd-developer/interactive-map/dist/plugins";
+import ThreeEntryPoint from "@studiohyperdrive/interactive-map/dist/three-entry-point";
+import { IMousePositionPlugin, IRaycasterPlugin } from "@studiohyperdrive/interactive-map/dist/plugins";
 
 import actions from "./actions";
 

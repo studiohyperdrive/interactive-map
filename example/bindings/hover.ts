@@ -1,9 +1,9 @@
 import { Store } from "redux";
 import { LoopRepeat, Mesh } from "three";
 
-import { IHoverBindingConfig } from "@shd-developer/interactive-map/dist/types";
-import { mutateRandomColor } from "@shd-developer/interactive-map/dist/utils/random-color";
-import { mutatePlainColor } from "@shd-developer/interactive-map/dist/utils/plain-color";
+import { IHoverBindingConfig } from "@studiohyperdrive/interactive-map/dist/types";
+import { mutateRandomColor } from "@studiohyperdrive/interactive-map/dist/utils/random-color";
+import { mutatePlainColor } from "@studiohyperdrive/interactive-map/dist/utils/plain-color";
 
 import actions from "../redux/actions";
 

@@ -17,30 +17,32 @@ export class BrowserResizePlugin {
             public camera: PerspectiveCamera | OrthographicCamera;
             public cameraConfig: ICameraConfig;
 
+            public listener: EventListener;
+
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
 
-                this.renderer = dataStore.get(constants.store.renderer);
-                this.camera = dataStore.get(constants.store.camera);
-                this.cameraConfig = dataStore.get(constants.store.cameraConfig);
+                this.renderer = this.dataStore.get(constants.store.renderer);
+                this.camera = this.dataStore.get(constants.store.camera);
+                this.cameraConfig = this.dataStore.get(constants.store.cameraConfig);
+
+                this.listener = this.handleResize.bind(this) as EventListener;
             }
 
             public bindEventListener(): void {
-                window.addEventListener("resize", this.handleResize);
+                window.addEventListener("resize", this.listener);
 
                 // Call once when binding to catch unregistered events
-                this.setSize();
+                this.handleResize();
             }
 
             public unbindEventListener(): void {
-                window.removeEventListener("resize", this.handleResize);
+                window.removeEventListener("resize", this.listener);
             }
 
-            public handleResize(e: Event) {
-                this.setSize();
-            }
+            public handleResize(e?: Event) {
+                this.renderer = this.dataStore.get(constants.store.renderer);
 
-            public setSize() {
                 this.dataStore.set(constants.store.sizes, onWindowResize(element ? element : window, this.renderer, this.camera, this.cameraConfig.config))
             }
         }

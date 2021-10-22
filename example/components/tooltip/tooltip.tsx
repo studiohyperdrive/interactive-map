@@ -10,13 +10,13 @@ const Tooltip: React.FC<TooltipProps> = ({ title }) => {
 
   useEffect(() => {
     const listener = (e: MouseEvent) => {
-      const coords = {x: 0, y: 0};
+      const coords = { x: 0, y: 0 };
 
       // Adapted from https://stackoverflow.com/questions/7790725/javascript-track-mouse-position
       e = e || window.event; // IE-ism
 
       if (e.pageX == null && e.clientX != null) {
-        const target = (e.target && (e.target as EventTarget & {ownerDocument: Document}).ownerDocument) || document;
+        const target = (e.target && (e.target as EventTarget & { ownerDocument: Document }).ownerDocument) || document;
         const doc = target.documentElement;
         const body = target.body;
 
@@ -44,6 +44,7 @@ const Tooltip: React.FC<TooltipProps> = ({ title }) => {
     }
   }, []);
 
+  // Use CSS to adjust the position to the cursor
   const getStyle = (): object => {
     const top = coords.y + 'px';
     const left = coords.x + 'px';
@@ -53,11 +54,12 @@ const Tooltip: React.FC<TooltipProps> = ({ title }) => {
     }
   }
 
-  return (
-    title ? <MaterialTooltip title={title} open={open} placement="top">
+  // Wrapped in a div to avoid https://stackoverflow.com/a/59845764
+  return <div>
+    {title && <MaterialTooltip title={title} open={open} placement="top">
       <section style={getStyle()} id="overlay"></section>
-    </MaterialTooltip> : null
-  );
+    </MaterialTooltip>}
+  </div>
 }
 
 export default connect((state: { tooltip?: string }) => {

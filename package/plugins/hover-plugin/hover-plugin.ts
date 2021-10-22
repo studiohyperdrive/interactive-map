@@ -18,21 +18,25 @@ export class HoverPlugin {
             public mixer: AnimationMixer;
             public hovered: Mesh | null = null;
 
+            public listener: EventListener;
+
             constructor(dataStore: DataStore) {
                 this.dataStore = dataStore;
 
-                this.animations = dataStore.get(constants.store.animations);
-                this.mixer = dataStore.get(constants.store.animationMixer);
+                this.animations = this.dataStore.get(constants.store.animations);
+                this.mixer = this.dataStore.get(constants.store.animationMixer);
 
                 this.dataStore.set(constants.store.hoverBindings, bindings);
+
+                this.listener = this.handleHover.bind(this) as EventListener;
             }
 
             public bindEventListener(): void {
-                window.addEventListener("mousemove", this.handleHover);
+                window.addEventListener("mousemove", this.listener);
             }
 
             public unbindEventListener(): void {
-                window.removeEventListener("mousemove", this.handleHover);
+                window.removeEventListener("mousemove", this.listener);
             }
 
             public handleHover = (e: MouseEvent): void => {
