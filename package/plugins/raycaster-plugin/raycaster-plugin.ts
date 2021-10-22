@@ -4,6 +4,7 @@ import { IDataStore } from "../../data-store/data-store.types";
 import constants from "../../constants";
 
 import { IRaycasterPlugin, IRaycasterConfig } from "./raycaster-plugin.types";
+import { flattenChildren } from "../../utils";
 
 export class RaycasterPlugin {
     constructor(config: IRaycasterConfig) {
@@ -41,10 +42,13 @@ export class RaycasterPlugin {
                     this.dataStore.set(constants.store.intersection, []);
                     return
                 };
-        
+
                 this.raycaster.setFromCamera(pos, this.camera);
-        
-                this.dataStore.set(constants.store.intersection, this.raycaster.intersectObjects(this.scene.children, true)[0]);                
+
+                const visible = flattenChildren(this.scene.children);
+                const intersected = this.raycaster.intersectObjects(visible, true).filter(i => i.object.visible)[0];
+
+                this.dataStore.set(constants.store.intersection, intersected);
             }
         }
     }

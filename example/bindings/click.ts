@@ -3,26 +3,20 @@ import { Store } from "redux";
 import { NextRouter } from "next/dist/client/router";
 
 import { IClickBindingConfig } from "@studiohyperdrive/interactive-map/dist/types";
-import { mutateRandomColor } from "@studiohyperdrive/interactive-map/dist/utils";
+import { mutateRandomColor, highlightOneOfList } from "@studiohyperdrive/interactive-map/dist/utils";
 
 import actions from "../redux/actions";
 
-// import { handleOpacity } from "./helpers";
-
-// const barns = [
-//     "livestock-farm",
-//     "agriculture",
-//     "dairy-farm",
-//     "horticulture"
-// ]
-
 export default function createClickBindings(store: Store, router: NextRouter) {
     return ([
-        // {
-        //     name: "farm",
-        //     matching: "partial",
-        //     onClick: (mesh: Mesh) => handleOpacity(mesh, store)
-        // },
+        {
+            name: "",
+            matching: "partial",
+            onClick: (mesh: Mesh) => {
+                const keys = ['dairy-farm', 'agriculture-farm', 'horticulture-farm', 'livestock-farm'];
+                highlightOneOfList(keys, mesh);
+            }
+        },
         // {
         //     name: "lake",
         //     matching: "partial",
