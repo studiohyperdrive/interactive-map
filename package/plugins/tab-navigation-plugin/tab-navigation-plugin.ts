@@ -9,7 +9,7 @@ import constants from "../../constants";
 import { ITabNavigationPlugin, ITabNavigationBinding } from "./tab-navigation-plugin.types";
 
 export class TabNavigationPlugin {
-    constructor(bindings: ITabNavigationBinding[]) {
+    constructor(bindings: ITabNavigationBinding[], first?: Function, last?: Function) {
         return class implements ITabNavigationPlugin {
             private dataStore: IDataStore;
 
@@ -80,6 +80,15 @@ export class TabNavigationPlugin {
 
                 if (next) {
                     e.preventDefault();
+                } else {
+                    // Provide support to execute an additional "afterNavigate" as the first and last item
+                    let f = forward ? last : first;
+                    f && f(
+                        this.dataStore.get(constants.store.camera),
+                        this.dataStore.get(constants.store.controls),
+                        [],
+                        this.setZoomProps
+                    );
                 }
 
                 this.current = next;
