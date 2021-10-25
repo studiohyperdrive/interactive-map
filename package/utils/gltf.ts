@@ -1,4 +1,7 @@
 import { Mesh, Object3D, Scene } from "three";
+
+import { IBindingConfig } from "../types";
+
 import { isMatching } from "./bindings";
 
 /**
@@ -25,4 +28,13 @@ export const getChildren = (scene: Scene, keys: string[], matching: "exact" | "p
 			});
 		});
 	});
+}
+
+export const findParent = (mesh: { name: string, parent: Object3D | null }, binding: IBindingConfig): Object3D | null => {
+	let parent = null;
+
+	if (isMatching(mesh, binding)) parent = mesh as Object3D;
+	else if (mesh.parent && mesh.parent.name) parent = findParent(mesh.parent, binding);
+
+	return parent;
 }
