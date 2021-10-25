@@ -5,6 +5,9 @@ import { IOrthographicCameraConfig, IPerspectiveCameraConfig } from "../types";
 /**
  * This function will adjust the camera and controls to zoom in and center on a set of objects.
  * 
+ * ⚠️ **NOTE:** To allow this function to work, make sure the object you are selecting is within the `panLimits` of your `MapControls` instance.
+ * If these `panLimits` are set min/max 0,0,0 nothing will happen
+ * 
  * @param camera The active camera
  * @param controls The MapControls instance governing interaction
  * @param selection A selection of objects to center on
