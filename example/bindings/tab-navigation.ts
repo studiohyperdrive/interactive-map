@@ -6,7 +6,7 @@ import { zoomCameraToSelection, mutateRandomColor, setCameraToConfig } from "@st
 
 import { ortho, ortho2 } from "../config/sceneConfig";
 
-const zoomAndColor = (
+export const zoomAndColor = (
     camera: PerspectiveCamera | OrthographicCamera,
     controls: MapControls,
     children: Array<Object3D | Mesh>,
@@ -17,23 +17,19 @@ const zoomAndColor = (
     children.forEach(child => {
         mutateRandomColor((child as Mesh));
     });
+};
+
+export const resetCamera = (
+    camera: PerspectiveCamera | OrthographicCamera,
+    controls: MapControls,
+    children: Array<Object3D | Mesh>,
+    setZoomProps: (props: any) => void
+) => {
+    setCameraToConfig(camera, controls, ortho2.camera.config, setZoomProps);
 }
 
-export default function createTabNavigationBindings(): ITabNavigationBinding[] {
+export function createTabNavigationBindings(): ITabNavigationBinding[] {
     return [
-        {
-            name: "base",
-            matching: "exact",
-            order: 0,
-            afterNavigate: (
-                camera: PerspectiveCamera | OrthographicCamera,
-                controls: MapControls,
-                children: Array<Object3D | Mesh>,
-                setZoomProps: (props: any) => void
-            ) => {
-                setCameraToConfig(camera, controls, ortho2.camera.config, setZoomProps);
-            }
-        },
         {
             name: "small-house",
             matching: "exact",
@@ -111,19 +107,6 @@ export default function createTabNavigationBindings(): ITabNavigationBinding[] {
             matching: "exact",
             order: 2,
             afterNavigate: zoomAndColor
-        },
-        {
-            name: "base",
-            matching: "exact",
-            order: 9999,
-            afterNavigate: (
-                camera: PerspectiveCamera | OrthographicCamera,
-                controls: MapControls,
-                children: Array<Object3D | Mesh>,
-                setZoomProps: (props: any) => void
-            ) => {
-                setCameraToConfig(camera, controls, ortho2.camera.config, setZoomProps);
-            }
         }
     ];
 }

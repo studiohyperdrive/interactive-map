@@ -22,10 +22,10 @@ import {
 } from "@studiohyperdrive/interactive-map/dist/plugins";
 import { getChildren, hideChild, showChild, setNewCanvas } from "@studiohyperdrive/interactive-map/dist/utils";
 
-import animationConfig from "../../bindings/animation";
-import createClickBindings from "../../bindings/click";
-import createHoverBindings from "../../bindings/hover";
-import createTabNavigationBindings from "../../bindings/tab-navigation";
+import { animationConfig } from "../../bindings/animation";
+import { createClickBindings } from "../../bindings/click";
+import { createHoverBindings } from "../../bindings/hover";
+import { createTabNavigationBindings, resetCamera } from "../../bindings/tab-navigation";
 
 import { ortho, ortho2, perspective } from "../../config/sceneConfig";
 import controlsConfig from "../../config/controlsConfig";
@@ -58,28 +58,28 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   const buildThree = (): ThreeEntryPoint | null => {
     return threeRootElement.current
       ? new ThreeEntryPoint(
-          threeRootElement.current,
-          ortho2,
-          [
-            new BrowserResizePlugin(window),
-            new MousePositionPlugin(),
-            new RaycasterPlugin({ trigger: "mousemove" }),
-            new ClickPlugin(createClickBindings(store, router)),
-            new HoverPlugin(createHoverBindings(store)),
-            new TabNavigationPlugin(createTabNavigationBindings()),
-          ],
-          [
-            new GltfDracoLoaderPlugin("/models/interactive-map_v2.8-draco.glb"),
-            new GlobalIlluminationPlugin(),
-            new IlluminationPlugin(illuminationConfig),
-            new ClockPlugin(),
-            new AnimationMixerPlugin(),
-            new AnimationPlugin(animationConfig),
-            new MapControlsPlugin(controlsConfig),
-            new CameraLerpPlugin(2),
-            new WebglRendererPlugin(rendererConfig)
-          ]
-        )
+        threeRootElement.current,
+        ortho2,
+        [
+          new BrowserResizePlugin(window),
+          new MousePositionPlugin(),
+          new RaycasterPlugin({ trigger: "mousemove" }),
+          new ClickPlugin(createClickBindings(store, router)),
+          new HoverPlugin(createHoverBindings(store)),
+          new TabNavigationPlugin(createTabNavigationBindings(), resetCamera, resetCamera),
+        ],
+        [
+          new GltfDracoLoaderPlugin("/models/interactive-map_v2.8-draco.glb"),
+          new GlobalIlluminationPlugin(),
+          new IlluminationPlugin(illuminationConfig),
+          new ClockPlugin(),
+          new AnimationMixerPlugin(),
+          new AnimationPlugin(animationConfig),
+          new MapControlsPlugin(controlsConfig),
+          new CameraLerpPlugin(2),
+          new WebglRendererPlugin(rendererConfig)
+        ]
+      )
       : null;
   };
 
