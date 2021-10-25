@@ -42,7 +42,7 @@ export const perspective: ISceneConfig = {
         config: {
             fov: 75,
             near: 0.1,
-            far: 5,
+            far: 1000,
             position: near
         }
     }
