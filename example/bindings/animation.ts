@@ -1,7 +1,7 @@
 import { LoopOnce, MathUtils, AnimationAction } from 'three';
 import { IAnimationConfig } from '@studiohyperdrive/interactive-map/dist/types';
 
-export default [
+export const animationConfig = [
     {
         name: 'chicken',
         matching: 'partial',

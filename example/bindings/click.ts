@@ -7,7 +7,7 @@ import { mutateRandomColor, highlightOneOfList } from "@studiohyperdrive/interac
 
 import actions from "../redux/actions";
 
-export default function createClickBindings(store: Store, router: NextRouter) {
+export function createClickBindings(store: Store, router: NextRouter) {
     return ([
         {
             name: "",

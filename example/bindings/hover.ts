@@ -7,7 +7,7 @@ import { mutatePlainColor } from "@studiohyperdrive/interactive-map/dist/utils/p
 
 import actions from "../redux/actions";
 
-export default function createHoverBindings(store: Store) {
+export function createHoverBindings(store: Store) {
     return ([
         {
             name: 'skyscraper',
