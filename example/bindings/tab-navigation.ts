@@ -1,4 +1,4 @@
-import { Mesh, Object3D, OrthographicCamera, PerspectiveCamera, Sphere, Vector3 } from "three";
+import { Mesh, Object3D, OrthographicCamera, PerspectiveCamera } from "three";
 import { MapControls } from "three/examples/jsm/controls/OrbitControls";
 
 import { ITabNavigationBinding } from "@studiohyperdrive/interactive-map/dist/plugins";
