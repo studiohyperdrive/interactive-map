@@ -23,8 +23,8 @@ export default function createClickBindings(store: Store, router: NextRouter) {
         //     onClick: (mesh: Mesh) => handleOpacity(mesh, store)
         // },
         {
-            name: "strawberry_1",
-            matching: "exact",
+            name: "skyscraper",
+            matching: "partial",
             onClick: (mesh: Mesh) => {
                 mutateRandomColor(mesh);
                 store.dispatch({ type: actions.three.disable });
