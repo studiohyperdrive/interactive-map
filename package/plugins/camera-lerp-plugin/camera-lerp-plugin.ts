@@ -4,11 +4,11 @@ import { MapControls } from "three/examples/jsm/controls/OrbitControls";
 import { IDataStore } from "../../data-store/data-store.types";
 import constants from "../../constants";
 
-import { ITabNavigationTransitionPlugin } from "./tab-navigation-transition-plugin.types";
+import { ICameraLerpPlugin } from "./camera-lerp-plugin.types";
 
-export class TabNavigationTransitionPlugin {
+export class CameraLerpPlugin {
     constructor(speed: number) {
-        return class implements ITabNavigationTransitionPlugin {
+        return class implements ICameraLerpPlugin {
             private dataStore: IDataStore;
             private currentTarget: Box3 | undefined;
             private animating: boolean;
@@ -18,15 +18,15 @@ export class TabNavigationTransitionPlugin {
 
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
+
                 this.currentTarget = undefined;
                 this.animating = false;
 
-                this.controls = dataStore.get(constants.store.controls);
-                this.camera = dataStore.get(constants.store.camera);
+                this.controls = this.dataStore.get(constants.store.controls);
+                this.camera = this.dataStore.get(constants.store.camera);
             }
 
             public update() {
-                const delta = this.dataStore.get(constants.store.deltaTime);
                 const zoomProps = this.dataStore.get(constants.store.zoomProps);
 
                 if (zoomProps) { // Only exists when zoomCameraToSelection util is fired at least once
@@ -38,6 +38,12 @@ export class TabNavigationTransitionPlugin {
 
                         // Point to animate towards
                         const target = zoomProps.boundingBox.getCenter(new Vector3());
+
+                        // Fetch fresh instances
+                        this.controls = this.dataStore.get(constants.store.controls);
+                        this.camera = this.dataStore.get(constants.store.camera);
+                        
+                        const delta = this.dataStore.get(constants.store.deltaTime);
     
                         if (this.controls.target.distanceTo(target) > 0.01) {
                             // Animate orbitcontrols focus point
@@ -70,4 +76,4 @@ export class TabNavigationTransitionPlugin {
     }
 }
 
-export default TabNavigationTransitionPlugin;
+export default CameraLerpPlugin;

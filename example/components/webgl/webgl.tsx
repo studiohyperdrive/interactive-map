@@ -13,7 +13,7 @@ import {
   ClockPlugin,
   AnimationMixerPlugin,
   TabNavigationPlugin,
-  TabNavigationTransitionPlugin,
+  CameraLerpPlugin,
   BrowserResizePlugin,
   GlobalIlluminationPlugin,
   MapControlsPlugin,
@@ -76,7 +76,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
             new AnimationMixerPlugin(),
             new AnimationPlugin(animationConfig),
             new MapControlsPlugin(controlsConfig),
-            new TabNavigationTransitionPlugin(2),
+            new CameraLerpPlugin(2),
             new WebglRendererPlugin(rendererConfig)
           ]
         )
@@ -92,7 +92,10 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
       });
     } else {
       if (threeRootElement.current) {
-        setNewCanvas(three, threeRootElement.current);
+        threeRootElement.current.replaceWith(three.canvas);
+
+        // See note in setNewCanvas function
+        // setNewCanvas(three, threeRootElement.current);
       }
     }
   }, [router, three]);
