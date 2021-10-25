@@ -28,7 +28,7 @@ export class TabNavigationPlugin {
 
                 this.scene = this.dataStore.get(constants.store.scene);
 
-                dataStore.set(constants.store.zoomProps, undefined);
+                this.dataStore.set(constants.store.zoomProps, undefined);
 
                 this.listeners = {
                     tab: this.handleTabPress.bind(this) as EventListener,
