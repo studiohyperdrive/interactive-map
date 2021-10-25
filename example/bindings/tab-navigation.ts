@@ -10,8 +10,7 @@ const zoomAndColor = (
     camera: PerspectiveCamera | OrthographicCamera,
     controls: MapControls,
     children: Array<Object3D | Mesh>,
-    setZoomProps: (props: any) => void,
-    setBoundingSphere: (sphere: Sphere) => void
+    setZoomProps: (props: any) => void
 ) => {
     zoomCameraToSelection(camera, controls, children, setZoomProps, 3);
 
@@ -30,8 +29,7 @@ export default function createTabNavigationBindings(): ITabNavigationBinding[] {
                 camera: PerspectiveCamera | OrthographicCamera,
                 controls: MapControls,
                 children: Array<Object3D | Mesh>,
-                setZoomProps: (props: any) => void,
-                setBoundingSphere: (sphere: Sphere) => void
+                setZoomProps: (props: any) => void
             ) => {
                 setCameraToConfig(camera, controls, ortho2.camera.config, setZoomProps);
             }
@@ -122,8 +120,7 @@ export default function createTabNavigationBindings(): ITabNavigationBinding[] {
                 camera: PerspectiveCamera | OrthographicCamera,
                 controls: MapControls,
                 children: Array<Object3D | Mesh>,
-                setZoomProps: (props: any) => void,
-                setBoundingSphere: (sphere: Sphere) => void
+                setZoomProps: (props: any) => void
             ) => {
                 setCameraToConfig(camera, controls, ortho2.camera.config, setZoomProps);
             }
