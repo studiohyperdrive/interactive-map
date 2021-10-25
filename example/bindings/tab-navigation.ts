@@ -2,9 +2,17 @@ import { Mesh, Object3D, OrthographicCamera, PerspectiveCamera, Sphere, Vector3 
 import { MapControls } from "three/examples/jsm/controls/OrbitControls";
 
 import { ITabNavigationBinding } from "@studiohyperdrive/interactive-map/dist/plugins";
-import { zoomCameraToSelection, mutateRandomColor } from "@studiohyperdrive/interactive-map/dist/utils";
+import { zoomCameraToSelection, mutateRandomColor, setCameraToConfig } from "@studiohyperdrive/interactive-map/dist/utils";
 
-const zoomAndColor = (camera: PerspectiveCamera | OrthographicCamera, controls: MapControls, children: Array<Object3D | Mesh>, setZoomProps: (props: any) => void, setBoundingSphere: (sphere: Sphere) => void) => {
+import { ortho, ortho2 } from "../config/sceneConfig";
+
+const zoomAndColor = (
+    camera: PerspectiveCamera | OrthographicCamera,
+    controls: MapControls,
+    children: Array<Object3D | Mesh>,
+    setZoomProps: (props: any) => void,
+    setBoundingSphere: (sphere: Sphere) => void
+) => {
     zoomCameraToSelection(camera, controls, children, setZoomProps, 3);
 
     children.forEach(child => {
@@ -14,6 +22,20 @@ const zoomAndColor = (camera: PerspectiveCamera | OrthographicCamera, controls: 
 
 export default function createTabNavigationBindings(): ITabNavigationBinding[] {
     return [
+        {
+            name: "base",
+            matching: "exact",
+            order: 0,
+            afterNavigate: (
+                camera: PerspectiveCamera | OrthographicCamera,
+                controls: MapControls,
+                children: Array<Object3D | Mesh>,
+                setZoomProps: (props: any) => void,
+                setBoundingSphere: (sphere: Sphere) => void
+            ) => {
+                setCameraToConfig(camera, controls, ortho2.camera.config, setZoomProps);
+            }
+        },
         {
             name: "small-house",
             matching: "exact",
@@ -91,6 +113,20 @@ export default function createTabNavigationBindings(): ITabNavigationBinding[] {
             matching: "exact",
             order: 2,
             afterNavigate: zoomAndColor
+        },
+        {
+            name: "base",
+            matching: "exact",
+            order: 9999,
+            afterNavigate: (
+                camera: PerspectiveCamera | OrthographicCamera,
+                controls: MapControls,
+                children: Array<Object3D | Mesh>,
+                setZoomProps: (props: any) => void,
+                setBoundingSphere: (sphere: Sphere) => void
+            ) => {
+                setCameraToConfig(camera, controls, ortho2.camera.config, setZoomProps);
+            }
         }
     ];
 }
