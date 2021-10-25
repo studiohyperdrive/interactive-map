@@ -95,7 +95,7 @@ export class TabNavigationPlugin {
 
                 // Only look through children if hook is defined
                 if (next?.afterNavigate) {
-                    flattenChildren(this.scene.children).forEach(child => {
+                    flattenChildren(this.scene.children, Infinity).forEach(child => {
                         if (next && isMatching(child, next)) {
                             (next.afterNavigate as Function)(
                                 this.dataStore.get(constants.store.camera),
