@@ -1,6 +1,7 @@
-import { Scene } from "three";
+import { AnimationClip, AnimationMixer, Scene } from "three";
 
-import { flattenChildren, isMatching } from "../../utils";
+import { IAnimate } from "../../types";
+import { flattenChildren, handleBindingAnimations, isMatching } from "../../utils";
 
 import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
@@ -15,8 +16,10 @@ export class TabNavigationPlugin {
 
             public scene: Scene;
 
+            public animations: AnimationClip[];
+            public bindings: ITabNavigationBinding[] = bindings.sort((a, b) => a.order - b.order);
             public current?: ITabNavigationBinding = undefined;
-            public bindings: ITabNavigationBinding[] = bindings.sort((a,b) => a.order - b.order);
+            public mixer: AnimationMixer;
 
             public listeners: {
                 tab: EventListener,
@@ -26,7 +29,9 @@ export class TabNavigationPlugin {
             constructor(dataStore: DataStore) {
                 this.dataStore = dataStore;
 
+                this.animations = this.dataStore.get(constants.store.animations);
                 this.scene = this.dataStore.get(constants.store.scene);
+                this.mixer = this.dataStore.get(constants.store.animationMixer);
 
                 this.dataStore.set(constants.store.zoomProps, undefined);
 
@@ -103,6 +108,24 @@ export class TabNavigationPlugin {
                                 [child],
                                 this.setZoomProps,
                             );
+
+                            // Check for animations
+                            if (next.animate && next.animate.length > 0) {
+                                this.animations = this.dataStore.get(constants.store.animations);
+
+                                handleBindingAnimations(
+                                    next.animate,
+                                    this.animations,
+                                    (animation: AnimationClip, bind: IAnimate) => {
+                                        // Reset and start and bound animations
+                                        const action = this.mixer.clipAction(animation);
+                                        action.loop = bind.loop;
+
+                                        if (!action.isRunning()) {
+                                            action.reset().play();
+                                        }
+                                    });
+                            }
                         }
                     });
                 }
