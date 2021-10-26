@@ -1,34 +1,33 @@
-import { Mesh, Object3D, OrthographicCamera, PerspectiveCamera } from "three";
-import { MapControls } from "three/examples/jsm/controls/OrbitControls";
+import { Mesh, Object3D } from "three";
 
-import { ITabNavigationBinding } from "@studiohyperdrive/interactive-map/dist/plugins";
+import { IDataStore } from "@studiohyperdrive/interactive-map/dist/data-store/data-store.types";
+import { ITabNavigationBindingConfig } from "@studiohyperdrive/interactive-map/dist/plugins";
 import { zoomCameraToSelection, mutateRandomColor, setCameraToConfig } from "@studiohyperdrive/interactive-map/dist/utils";
 
 import { ortho, ortho2 } from "../config/sceneConfig";
+import { BindingCallback } from "@studiohyperdrive/interactive-map/dist/types";
 
-export const zoomAndColor = (
-    camera: PerspectiveCamera | OrthographicCamera,
-    controls: MapControls,
-    children: Array<Object3D | Mesh>,
-    setZoomProps: (props: any) => void
+export const zoomAndColor: BindingCallback = (
+    object: Object3D | null,
+    datastore: IDataStore
 ) => {
-    zoomCameraToSelection(camera, controls, children, setZoomProps, 3);
+    const objects = object ? [object] : [];
 
-    children.forEach(child => {
-        mutateRandomColor((child as Mesh));
+    zoomCameraToSelection(objects, datastore, 3);
+
+    objects.forEach(object => {
+        mutateRandomColor((object as Mesh));
     });
 };
 
-export const resetCamera = (
-    camera: PerspectiveCamera | OrthographicCamera,
-    controls: MapControls,
-    children: Array<Object3D | Mesh>,
-    setZoomProps: (props: any) => void
+export const resetCamera: BindingCallback = (
+    object: Object3D | null,
+    datastore: IDataStore
 ) => {
-    setCameraToConfig(camera, controls, ortho2.camera.config, setZoomProps);
+    setCameraToConfig(datastore, ortho2.camera.config);
 }
 
-export function createTabNavigationBindings(): ITabNavigationBinding[] {
+export function createTabNavigationBindings(): ITabNavigationBindingConfig[] {
     return [
         {
             name: "small-house",

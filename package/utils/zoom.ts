@@ -1,26 +1,30 @@
-import { Box3, Mesh, Object3D, OrthographicCamera, PerspectiveCamera, Vector3 } from "three";
+import { Box3, Mesh, Object3D, PerspectiveCamera, Vector3 } from "three";
 import { MapControls } from "three/examples/jsm/controls/OrbitControls";
+
+import constants from "../constants";
 import { IOrthographicCameraConfig, IPerspectiveCameraConfig } from "../types";
+
+import { IDataStore } from "../data-store/data-store.types";
 
 /**
  * This function will adjust the camera and controls to zoom in and center on a set of objects.
  * 
  * ⚠️ **NOTE:** To allow this function to work, make sure the object you are selecting is within the `panLimits` of your `MapControls` instance.
- * If these `panLimits` are set min/max 0,0,0 nothing will happen
+ * If these `panLimits` are set to min/max 0,0,0 nothing will happen
  * 
- * @param camera The active camera
- * @param controls The MapControls instance governing interaction
  * @param selection A selection of objects to center on
- * @param setZoomProps A function exposed by the TabNavigationPlugin that updates the zoomProps value in the package's internal Datastore
+ * @param store The IDataStore instance exposed by e.g. "action" plugins (click/hover/tab/...)
  * @param fitRatio A number dictating how much "padding" should be around the zoomed-to object
  */
 export const zoomCameraToSelection = (
-  camera: PerspectiveCamera | OrthographicCamera,
-  controls: MapControls,
   selection: Array<Object3D | Mesh>,
-  setZoomProps: (props: any) => void,
+  store: IDataStore,
   fitRatio = 1.2
 ) => {
+  const camera = store.get(constants.store.camera);
+  const controls = store.get(constants.store.controls);
+  const setZoomProps = (data: any) => store.set(constants.store.zoomProps, data);
+  
   // Create bounding box for selection  
   const box = new Box3();
 
@@ -64,11 +68,13 @@ export const zoomCameraToSelection = (
 }
 
 export const setCameraToConfig = (
-  camera: PerspectiveCamera | OrthographicCamera,
-  controls: MapControls,
+  store: IDataStore,
   config: IOrthographicCameraConfig | IPerspectiveCameraConfig,
-  setZoomProps: (props: any) => void,
 ) => {
+  const camera = store.get(constants.store.camera);
+  const controls = store.get(constants.store.controls);
+  const setZoomProps = (data: any) => store.set(constants.store.zoomProps, data);
+
   const ratio = getAspectRatioFromControls(controls);
 
   // Stop any animations
@@ -94,7 +100,7 @@ export const setCameraToConfig = (
       break;
 
     case "PerspectiveCamera":
-      const perspectiveConfig = config as PerspectiveCamera;
+      const perspectiveConfig = config as IPerspectiveCameraConfig;
 
       camera.fov = perspectiveConfig.fov;
       camera.aspect = ratio;

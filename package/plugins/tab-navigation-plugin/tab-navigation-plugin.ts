@@ -96,11 +96,9 @@ export class TabNavigationPlugin {
                 if (next?.afterNavigate) {
                     flattenChildren(this.scene.children, Infinity).forEach(child => {
                         if (next && isMatching(child, next)) {
-                            (next.afterNavigate as Function)(
-                                this.dataStore.get(constants.store.camera),
-                                this.dataStore.get(constants.store.controls),
-                                [child],
-                                this.setZoomProps,
+                            (next.afterNavigate as BindingCallback)(
+                                child,
+                                this.dataStore
                             );
 
                             // Check for animations

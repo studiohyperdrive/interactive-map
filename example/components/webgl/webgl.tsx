@@ -2,6 +2,8 @@ import { FC, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { useRouter } from "next/dist/client/router";
 
+import { MathUtils, Scene } from "three";
+
 import ThreeEntryPoint from "@studiohyperdrive/interactive-map/dist/three-entry-point";
 import {
   ClickPlugin,
@@ -20,7 +22,7 @@ import {
   IlluminationPlugin,
   WebglRendererPlugin,
 } from "@studiohyperdrive/interactive-map/dist/plugins";
-import { getChildren, hideChild, showChild, setNewCanvas } from "@studiohyperdrive/interactive-map/dist/utils";
+import { getChildren, hideChild, showChild } from "@studiohyperdrive/interactive-map/dist/utils";
 
 import { animationConfig } from "../../bindings/animation";
 import { createClickBindings } from "../../bindings/click";
@@ -36,12 +38,12 @@ import actions from "../../redux/actions";
 import store from "../../redux/store";
 
 import { WebGLProps } from "./webgl.types";
-import { Scene } from "three";
 
 const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   const threeRootElement = useRef<HTMLCanvasElement | null>(null);
   const router = useRouter();
 
+  // A demonstation of how to hide objects after load, see GltfDracoLoaderPlugin
   const hideCheckmarks = (scene: Scene): void => {
     const keys = ["checkmark-1", "checkmark-2", "checkmark-3", "checkmark-4"];
     const targets = getChildren(scene, keys, "partial");
@@ -49,9 +51,9 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
     targets.forEach(target => {
       hideChild(target);
 
-      // setTimeout(() => {
-      //   showChild(target);
-      // }, 1000);
+      setTimeout(() => {
+        showChild(target);
+      }, MathUtils.randInt(1000, 5000));
     });
   }
 
@@ -69,7 +71,7 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
           new TabNavigationPlugin(createTabNavigationBindings(), resetCamera, resetCamera),
         ],
         [
-          new GltfDracoLoaderPlugin("/models/interactive-map_v2.8-draco.glb"),
+          new GltfDracoLoaderPlugin("/models/interactive-map_v2.8-draco.glb", (scene: Scene) => hideCheckmarks(scene)),
           new GlobalIlluminationPlugin(),
           new IlluminationPlugin(illuminationConfig),
           new ClockPlugin(),
