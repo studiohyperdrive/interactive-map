@@ -44,10 +44,12 @@ export class HoverPlugin {
                 const previous = this.hovered;
                 const current = this.dataStore.get(constants.store.intersection)?.object;
 
+                // Do nothing if the intersection didn't change
                 if (previous === current) {
                     return
                 }
 
+                // Handle hover away first
                 if (previous instanceof Mesh) {
                     this.bindings.forEach(binding => {
                         if (isMatching(previous, binding)) {
@@ -70,6 +72,7 @@ export class HoverPlugin {
                     });
                 }
 
+                // Then handle hover next
                 if (current instanceof Mesh) {
                     this.bindings.forEach(binding => {
                         if (isMatching(current, binding)) {
@@ -96,6 +99,7 @@ export class HoverPlugin {
                     });
                 }
 
+                // Remember the active element
                 this.hovered = (current as Mesh);
             }
         }

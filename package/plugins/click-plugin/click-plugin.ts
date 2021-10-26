@@ -54,6 +54,7 @@ export class ClickPlugin {
                         if (isMatching(clicked, binding)) {
                             binding.onClick(clicked);
 
+                            // Check for animations
                             if (binding.animate && binding.animate.length > 0) {
                                 this.animations = this.dataStore.get(constants.store.animations);
 
