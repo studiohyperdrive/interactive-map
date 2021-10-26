@@ -9,7 +9,7 @@ import constants from "../../constants";
 import { ITabNavigationPlugin, ITabNavigationBinding } from "./tab-navigation-plugin.types";
 
 export class TabNavigationPlugin {
-    constructor(bindings: ITabNavigationBinding[]) {
+    constructor(bindings: ITabNavigationBinding[], first?: Function, last?: Function) {
         return class implements ITabNavigationPlugin {
             private dataStore: IDataStore;
 
@@ -27,6 +27,8 @@ export class TabNavigationPlugin {
                 this.dataStore = dataStore;
 
                 this.scene = this.dataStore.get(constants.store.scene);
+
+                this.dataStore.set(constants.store.zoomProps, undefined);
 
                 this.listeners = {
                     tab: this.handleTabPress.bind(this) as EventListener,
@@ -56,6 +58,10 @@ export class TabNavigationPlugin {
                 this.navigate(e, false)
             }
 
+            public setZoomProps = (props: any) => {
+                this.dataStore.set(constants.store.zoomProps, props);
+            }
+
             public navigate(e: KeyboardEvent, forward: boolean): void {
                 if (!this.dataStore.get(constants.store.mapLoaded)) return;
 
@@ -74,15 +80,29 @@ export class TabNavigationPlugin {
 
                 if (next) {
                     e.preventDefault();
+                } else {
+                    // Provide support to execute an additional "afterNavigate" as the first and last item
+                    let f = forward ? last : first;
+                    f && f(
+                        this.dataStore.get(constants.store.camera),
+                        this.dataStore.get(constants.store.controls),
+                        [],
+                        this.setZoomProps
+                    );
                 }
 
                 this.current = next;
 
                 // Only look through children if hook is defined
                 if (next?.afterNavigate) {
-                    flattenChildren(this.scene.children).forEach(child => {
+                    flattenChildren(this.scene.children, Infinity).forEach(child => {
                         if (next && isMatching(child, next)) {
-                            (next.afterNavigate as Function)(this.dataStore.get(constants.store.camera), this.dataStore.get(constants.store.controls), [child]);
+                            (next.afterNavigate as Function)(
+                                this.dataStore.get(constants.store.camera),
+                                this.dataStore.get(constants.store.controls),
+                                [child],
+                                this.setZoomProps,
+                            );
                         }
                     });
                 }

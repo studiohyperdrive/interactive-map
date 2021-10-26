@@ -2,17 +2,33 @@ import { Mesh, Object3D, OrthographicCamera, PerspectiveCamera } from "three";
 import { MapControls } from "three/examples/jsm/controls/OrbitControls";
 
 import { ITabNavigationBinding } from "@studiohyperdrive/interactive-map/dist/plugins";
-import { zoomCameraToSelection, mutateRandomColor } from "@studiohyperdrive/interactive-map/dist/utils";
+import { zoomCameraToSelection, mutateRandomColor, setCameraToConfig } from "@studiohyperdrive/interactive-map/dist/utils";
 
-const zoomAndColor = (camera: PerspectiveCamera | OrthographicCamera, controls: MapControls, children: Array<Object3D | Mesh>) => {
-    zoomCameraToSelection(camera, controls, children, 5);
+import { ortho, ortho2 } from "../config/sceneConfig";
+
+export const zoomAndColor = (
+    camera: PerspectiveCamera | OrthographicCamera,
+    controls: MapControls,
+    children: Array<Object3D | Mesh>,
+    setZoomProps: (props: any) => void
+) => {
+    zoomCameraToSelection(camera, controls, children, setZoomProps, 3);
 
     children.forEach(child => {
         mutateRandomColor((child as Mesh));
     });
+};
+
+export const resetCamera = (
+    camera: PerspectiveCamera | OrthographicCamera,
+    controls: MapControls,
+    children: Array<Object3D | Mesh>,
+    setZoomProps: (props: any) => void
+) => {
+    setCameraToConfig(camera, controls, ortho2.camera.config, setZoomProps);
 }
 
-export default function createTabNavigationBindings(): ITabNavigationBinding[] {
+export function createTabNavigationBindings(): ITabNavigationBinding[] {
     return [
         {
             name: "small-house",

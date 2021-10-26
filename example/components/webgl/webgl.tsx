@@ -13,6 +13,7 @@ import {
   ClockPlugin,
   AnimationMixerPlugin,
   TabNavigationPlugin,
+  CameraLerpPlugin,
   BrowserResizePlugin,
   GlobalIlluminationPlugin,
   MapControlsPlugin,
@@ -21,10 +22,10 @@ import {
 } from "@studiohyperdrive/interactive-map/dist/plugins";
 import { getChildren, hideChild, showChild, setNewCanvas } from "@studiohyperdrive/interactive-map/dist/utils";
 
-import animationConfig from "../../bindings/animation";
-import createClickBindings from "../../bindings/click";
-import createHoverBindings from "../../bindings/hover";
-import createTabNavigationBindings from "../../bindings/tab-navigation";
+import { animationConfig } from "../../bindings/animation";
+import { createClickBindings } from "../../bindings/click";
+import { createHoverBindings } from "../../bindings/hover";
+import { createTabNavigationBindings, resetCamera } from "../../bindings/tab-navigation";
 
 import { ortho, ortho2, perspective } from "../../config/sceneConfig";
 import controlsConfig from "../../config/controlsConfig";
@@ -58,23 +59,24 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
     return threeRootElement.current
       ? new ThreeEntryPoint(
         threeRootElement.current,
-        ortho,
+        ortho2,
         [
           new BrowserResizePlugin(window),
           new MousePositionPlugin(),
           new RaycasterPlugin({ trigger: "mousemove" }),
           new ClickPlugin(createClickBindings(store, router)),
           new HoverPlugin(createHoverBindings(store)),
-          new TabNavigationPlugin(createTabNavigationBindings()),
+          new TabNavigationPlugin(createTabNavigationBindings(), resetCamera, resetCamera),
         ],
         [
-          new GltfDracoLoaderPlugin("/models/boerderleren_201021--checkmark-names.gltf", hideCheckmarks),
-          // new GlobalIlluminationPlugin(),
+          new GltfDracoLoaderPlugin("/models/interactive-map_v2.8-draco.glb"),
+          new GlobalIlluminationPlugin(),
           new IlluminationPlugin(illuminationConfig),
           new ClockPlugin(),
           new AnimationMixerPlugin(),
           new AnimationPlugin(animationConfig),
           new MapControlsPlugin(controlsConfig),
+          new CameraLerpPlugin(2),
           new WebglRendererPlugin(rendererConfig)
         ]
       )
@@ -90,7 +92,10 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
       });
     } else {
       if (threeRootElement.current) {
-        setNewCanvas(three, threeRootElement.current);
+        threeRootElement.current.replaceWith(three.canvas);
+
+        // See note in setNewCanvas function
+        // setNewCanvas(three, threeRootElement.current);
       }
     }
   }, [router, three]);

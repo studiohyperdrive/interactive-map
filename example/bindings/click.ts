@@ -7,7 +7,7 @@ import { mutateRandomColor, highlightOneOfList } from "@studiohyperdrive/interac
 
 import actions from "../redux/actions";
 
-export default function createClickBindings(store: Store, router: NextRouter) {
+export function createClickBindings(store: Store, router: NextRouter) {
     return ([
         {
             name: "",
@@ -23,8 +23,8 @@ export default function createClickBindings(store: Store, router: NextRouter) {
         //     onClick: (mesh: Mesh) => handleOpacity(mesh, store)
         // },
         {
-            name: "strawberry_1",
-            matching: "exact",
+            name: "skyscraper",
+            matching: "partial",
             onClick: (mesh: Mesh) => {
                 mutateRandomColor(mesh);
                 store.dispatch({ type: actions.three.disable });

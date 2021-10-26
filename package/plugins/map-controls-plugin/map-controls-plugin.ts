@@ -31,19 +31,19 @@ export class MapControlsPlugin {
             public createMapControls(camera: Camera, canvas: HTMLCanvasElement): MapControls {
                 const mapControls = new MapControls(camera, canvas);
 
-                if (config.enableDamping) {
+                if (config.enableDamping !== undefined) {
                     mapControls.enableDamping = config.enableDamping;
                 }
 
-                if (config.enableRotate) {
+                if (config.enableRotate !== undefined) {
                     mapControls.enableRotate = config.enableRotate;
                 }
 
-                if (config.enablePan) {
+                if (config.enablePan !== undefined) {
                     mapControls.enablePan = config.enablePan;
                 }
 
-                if (config.enableZoom) {
+                if (config.enableZoom !== undefined) {
                     mapControls.enableZoom = config.enableZoom;
                 }
 

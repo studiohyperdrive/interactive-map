@@ -24,7 +24,7 @@ export const buildRenderer = (canvas: HTMLCanvasElement, sizes: ISize, config?: 
 };
 
 export const buildPerspectiveCamera = (scene: Scene, sizes: ISize, config: IPerspectiveCameraConfig): PerspectiveCamera => {
-    const camera: PerspectiveCamera = new PerspectiveCamera(config.fov, sizes.width / sizes.height, 0.1, 100);
+    const camera: PerspectiveCamera = new PerspectiveCamera(config.fov, sizes.width / sizes.height, config.near, config.far);
 
     camera.position.set(config.position.x, config.position.y, config.position.z);
     camera.lookAt(new Vector3);
