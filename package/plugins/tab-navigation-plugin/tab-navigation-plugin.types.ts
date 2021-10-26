@@ -1,4 +1,4 @@
-import { IEventPlugin, IBindingConfig } from "../../types";
+import { IEventPlugin, IBindingConfig, BindingCallback } from "../../types";
 
 export interface ITabNavigationPlugin extends IEventPlugin {
     handleTabPress(e: KeyboardEvent): void
@@ -6,8 +6,8 @@ export interface ITabNavigationPlugin extends IEventPlugin {
     navigate(e: KeyboardEvent, forward: boolean): void
 }
 
-export interface ITabNavigationBinding extends IBindingConfig {
-    afterNavigate?: Function
+export interface ITabNavigationBindingConfig extends IBindingConfig {
+    afterNavigate?: BindingCallback
     boundingBoxScale?: number
     order: number
 }

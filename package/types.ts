@@ -1,4 +1,17 @@
-import { AnimationActionLoopStyles, Light, MOUSE, OrthographicCamera, PerspectiveCamera, Scene, TextureEncoding, TOUCH, Vector3 } from "three";
+import {
+    AnimationActionLoopStyles,
+    Light,
+    MOUSE,
+    Object3D,
+    OrthographicCamera,
+    PerspectiveCamera,
+    Scene,
+    TextureEncoding,
+    TOUCH,
+    Vector3,
+} from "three";
+
+import { IDataStore } from "./data-store/data-store.types";
 
 // Base
 
@@ -15,12 +28,14 @@ export interface IEntryPoint {
 
 export interface IManager {
     sizes: ISize;
-	sceneConfig: ISceneConfig;
-	scene: Scene;
-	camera: PerspectiveCamera | OrthographicCamera;
-	plugins: any[];
+    sceneConfig: ISceneConfig;
+    scene: Scene;
+    camera: PerspectiveCamera | OrthographicCamera;
+    plugins: any[];
     update: Function;
 }
+
+// Generic
 
 export interface ISize {
     width: number;
@@ -33,6 +48,11 @@ export interface IPosition {
     z: number,
 }
 
+export type BindingCallback = (
+    object: Object3D | null,
+    store: IDataStore
+) => void;
+
 // Bindings
 
 export interface IBindingConfig {
@@ -41,14 +61,7 @@ export interface IBindingConfig {
     animate?: IAnimate[],
 }
 
-export interface IClickBindingConfig extends IBindingConfig {
-    onClick: Function,
-}
-
-export interface IHoverBindingConfig extends IBindingConfig {
-    onHoverStart: Function,
-    onHoverEnd: Function,
-}
+// Animations
 
 export interface IAnimate extends IBindingConfig {
     loop: AnimationActionLoopStyles,
@@ -58,15 +71,7 @@ export interface IAnimationConfig extends IBindingConfig, IAnimate {
     startAnimation: Function;
 }
 
-// POC types
-export interface IEventPlugin {
-    bindEventListener: () => void,
-    unbindEventListener: () => void,
-}
-
-export interface IScenePlugin {
-    update: () => void,
-}
+// Scene
 
 export interface IPerspectiveCameraConfig {
     fov: number,

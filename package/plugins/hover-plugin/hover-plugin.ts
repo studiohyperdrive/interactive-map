@@ -1,13 +1,13 @@
 import { AnimationClip, AnimationMixer, LoopOnce, Mesh } from "three";
 
-import { IAnimate, IHoverBindingConfig } from "../../types";
+import { IAnimate } from "../../types";
 import constants from "../../constants";
 import { handleBindingAnimations, isMatching } from "../../utils";
 
 import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
 
-import { IHoverPlugin } from "./hover-plugin.types";
+import { IHoverPlugin, IHoverBindingConfig } from "./hover-plugin.types";
 
 export class HoverPlugin {
     constructor(bindings: IHoverBindingConfig[]) {
@@ -53,7 +53,7 @@ export class HoverPlugin {
                 if (previous instanceof Mesh) {
                     this.bindings.forEach(binding => {
                         if (isMatching(previous, binding)) {
-                            binding.onHoverEnd(previous);
+                            binding.onHoverEnd(previous, this.dataStore);
 
                             // Check for animations
                             if (binding.animate && binding.animate.length > 0) {
@@ -76,7 +76,7 @@ export class HoverPlugin {
                 if (current instanceof Mesh) {
                     this.bindings.forEach(binding => {
                         if (isMatching(current, binding)) {
-                            binding.onHoverStart(current);
+                            binding.onHoverStart(current, this.dataStore);
 
                             // Check for animations
                             if (binding.animate && binding.animate.length > 0) {
