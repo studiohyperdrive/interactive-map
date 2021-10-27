@@ -1,13 +1,12 @@
 import { AnimationClip, AnimationMixer, Mesh } from "three";
 
-import { IAnimate, IClickBindingConfig } from "../../types";
-import { isMatching } from "../../utils";
+import { IAnimate } from "../../types";
+import { handleBindingAnimations, isMatching } from "../../utils";
 
 import { IDataStore } from "../../data-store/data-store.types";
 import constants from "../../constants";
 
-import { IClickPlugin } from "./click-plugin.types";
-import { handleBindingAnimations } from "../../utils";
+import { IClickPlugin, IClickBindingConfig } from "./click-plugin.types";
 
 export class ClickPlugin {
     constructor(bindings: IClickBindingConfig[]) {
@@ -15,7 +14,6 @@ export class ClickPlugin {
             private dataStore: IDataStore;
 
             public bindings: IClickBindingConfig[] = bindings;
-
             public animations: AnimationClip[];
             public mixer: AnimationMixer;
 
@@ -52,7 +50,7 @@ export class ClickPlugin {
                 if (clicked instanceof Mesh) {
                     this.bindings.forEach(binding => {
                         if (isMatching(clicked, binding)) {
-                            binding.onClick(clicked);
+                            binding.onClick(clicked, this.dataStore);
 
                             // Check for animations
                             if (binding.animate && binding.animate.length > 0) {

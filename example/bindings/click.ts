@@ -1,8 +1,9 @@
-import { Mesh } from "three";
+import { Mesh, Object3D } from "three";
 import { Store } from "redux";
 import { NextRouter } from "next/dist/client/router";
 
-import { IClickBindingConfig } from "@studiohyperdrive/interactive-map/dist/types";
+import { IDataStore } from "@studiohyperdrive/interactive-map/dist/data-store/data-store.types";
+import { IClickBindingConfig } from "@studiohyperdrive/interactive-map/dist/plugins";
 import { mutateRandomColor, highlightOneOfList } from "@studiohyperdrive/interactive-map/dist/utils";
 
 import actions from "../redux/actions";
@@ -12,21 +13,24 @@ export function createClickBindings(store: Store, router: NextRouter) {
         {
             name: "",
             matching: "partial",
-            onClick: (mesh: Mesh) => {
+            onClick: (object: Mesh | Object3D, datastore: IDataStore) => {
                 const keys = ['dairy-farm', 'agriculture-farm', 'horticulture-farm', 'livestock-farm'];
-                highlightOneOfList(keys, mesh);
+                highlightOneOfList(keys, object);
             }
         },
         // {
         //     name: "lake",
         //     matching: "partial",
-        //     onClick: (mesh: Mesh) => handleOpacity(mesh, store)
+        //     onClick: (object: Mesh | Object3D, datastore: IDataStore) => handleOpacity(mesh, store)
         // },
         {
             name: "skyscraper",
             matching: "partial",
-            onClick: (mesh: Mesh) => {
-                mutateRandomColor(mesh);
+            onClick: (object: Mesh | Object3D, datastore: IDataStore) => {
+                if (object instanceof Mesh) {
+                    mutateRandomColor(object);
+                }
+
                 store.dispatch({ type: actions.three.disable });
                 router.push("/tower");
             }
@@ -34,7 +38,7 @@ export function createClickBindings(store: Store, router: NextRouter) {
         // {
         //     name: "ring",
         //     matching: "exact",
-        //     onClick: (mesh: Mesh) => {
+        //     onClick: (object: Mesh | Object3D, datastore: IDataStore) => {
         //         store.dispatch({ type: actions.three.disable });
         //         store.dispatch({ type: actions.dialogs.ring.open });
         //         store.dispatch({ type: actions.tooltip.reset });
@@ -43,7 +47,7 @@ export function createClickBindings(store: Store, router: NextRouter) {
         // {
         //     name: 'small-house',
         //     matching: 'exact',
-        //     onClick: (mesh: Mesh) => {
+        //     onClick: (object: Mesh | Object3D, datastore: IDataStore) => {
         //         const material = (mesh.material as MeshStandardMaterial).clone();
         //         material.color.setHex(Math.random() * 0xffffff);
 

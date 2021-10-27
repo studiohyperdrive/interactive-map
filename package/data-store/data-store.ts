@@ -1,7 +1,7 @@
 import { IDataStore } from "./data-store.types";
 
-export default class DataStore implements IDataStore{
-    public data: {[key: string]: any};
+export default class DataStore implements IDataStore {
+    public data: { [key: string]: any };
 
     constructor() {
         this.data = {};
