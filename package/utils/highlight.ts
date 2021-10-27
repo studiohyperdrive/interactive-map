@@ -11,7 +11,7 @@ export type highlightCallback = (selected: { name: string, object: Object3D }, o
  * @param list A list of names that should dictate which objects are "highlight"-able. Note that the objects with these names should match exactly and are expected to be on the same hierarchical level.
  * @param object The mesh to start searching from. This object will be used as the origin from which to search for the first object that matches a name in the `list`-parameter.
  */
-export const highlightOneOfList = (list: string[], object: Object3D, onHighlight: highlightCallback) => {
+export const highlightOneOfList = (list: string[], object: Object3D, onHighlight?: highlightCallback) => {
     const parents = list.map(key => findParent(object, { name: key, matching: 'exact' }));
 
     const clicked = parents.findIndex(parent => parent !== null);
@@ -23,7 +23,7 @@ export const highlightOneOfList = (list: string[], object: Object3D, onHighlight
         highlightOnSameLevel(selected, others);
 
         // Execute callback
-        onHighlight({
+        onHighlight && onHighlight({
             name: list[clicked],
             object: selected
         }, others);
