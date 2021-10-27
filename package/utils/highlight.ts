@@ -1,4 +1,4 @@
-import { Mesh, MeshStandardMaterial, Object3D } from "three";
+import { MeshStandardMaterial, Object3D } from "three";
 
 import { findParent } from "./gltf";
 
@@ -7,10 +7,10 @@ import { flattenChildren, getMeshes, setOpacity } from "./index";
 /**
  * Function to define a list of objects that can be highlighted.
  * @param list A list of names that should dictate which objects are "highlight"-able. Note that the objects with these names should match exactly and are expected to be on the same hierarchical level.
- * @param mesh The mesh to start searching from. This mesh will be used as the origin from which to search for the first object that matches a name in the `list`-parameter.
+ * @param object The mesh to start searching from. This object will be used as the origin from which to search for the first object that matches a name in the `list`-parameter.
  */
-export const highlightOneOfList = (list: string[], mesh: Mesh) => {
-    const parents = list.map(key => findParent(mesh, { name: key, matching: 'exact' }));
+export const highlightOneOfList = (list: string[], object: Object3D) => {
+    const parents = list.map(key => findParent(object, { name: key, matching: 'exact' }));
 
     const clicked = parents.findIndex(parent => parent !== null);
 

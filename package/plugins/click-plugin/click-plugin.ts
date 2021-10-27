@@ -1,18 +1,19 @@
 import { AnimationClip, AnimationMixer, Mesh } from "three";
 
-import { IAnimate, IBindingConfig, IClickBindingConfig } from "../../types";
-import { isMatching } from "../../utils";
+import { IAnimate } from "../../types";
+import { handleBindingAnimations, isMatching } from "../../utils";
 
 import { IDataStore } from "../../data-store/data-store.types";
 import constants from "../../constants";
 
-import { IClickPlugin } from "./click-plugin.types";
+import { IClickPlugin, IClickBindingConfig } from "./click-plugin.types";
 
 export class ClickPlugin {
     constructor(bindings: IClickBindingConfig[]) {
         return class implements IClickPlugin {
             private dataStore: IDataStore;
 
+            public bindings: IClickBindingConfig[] = bindings;
             public animations: AnimationClip[];
             public mixer: AnimationMixer;
 
@@ -47,32 +48,28 @@ export class ClickPlugin {
                 const clicked = intersection.object;
 
                 if (clicked instanceof Mesh) {
-                    bindings.forEach(binding => {
+                    this.bindings.forEach(binding => {
                         if (isMatching(clicked, binding)) {
-                            binding.onClick(clicked);
+                            binding.onClick(clicked, this.dataStore);
 
-                            this.handleBindingAnimation(binding, (animation: AnimationClip, animationBinding: IAnimate) => {
-                                const action = this.mixer.clipAction(animation);
-                                action.loop = animationBinding.loop;
-                                if (!action.isRunning()) {
-                                    action.reset().play();
-                                }
-                            });
-                        }
-                    });
-                }
-            }
+                            // Check for animations
+                            if (binding.animate && binding.animate.length > 0) {
+                                this.animations = this.dataStore.get(constants.store.animations);
 
-            public handleBindingAnimation(binding: IBindingConfig, callback: (animation: AnimationClip, animationBinding: IAnimate) => void) {
-                if (binding.animate) {
-                    this.animations = this.dataStore.get(constants.store.animations)
+                                handleBindingAnimations(
+                                    binding.animate,
+                                    this.animations,
+                                    (animation: AnimationClip, bind: IAnimate) => {
+                                        // Reset and start and bound animations
+                                        const action = this.mixer.clipAction(animation);
+                                        action.loop = bind.loop;
 
-                    binding.animate.forEach((animationBinding) => {
-                        this.animations.forEach(animation => {
-                            if (isMatching(animation, animationBinding)) {
-                                callback(animation, animationBinding);
+                                        if (!action.isRunning()) {
+                                            action.reset().play();
+                                        }
+                                    });
                             }
-                        });
+                        }
                     });
                 }
             }

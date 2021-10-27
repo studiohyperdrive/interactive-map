@@ -1,19 +1,20 @@
 import { AnimationClip, AnimationMixer, LoopOnce, Mesh } from "three";
 
-import { IAnimate, IBindingConfig, IHoverBindingConfig } from "../../types";
+import { IAnimate } from "../../types";
+import constants from "../../constants";
+import { handleBindingAnimations, isMatching } from "../../utils";
 
 import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
-import constants from "../../constants";
 
-import { IHoverPlugin } from "./hover-plugin.types";
-import { isMatching } from "../../utils/bindings";
+import { IHoverPlugin, IHoverBindingConfig } from "./hover-plugin.types";
 
 export class HoverPlugin {
     constructor(bindings: IHoverBindingConfig[]) {
-        return class implements IHoverPlugin{
+        return class implements IHoverPlugin {
             private dataStore: IDataStore;
 
+            public bindings: IHoverBindingConfig[] = bindings;
             public animations: AnimationClip[];
             public mixer: AnimationMixer;
             public hovered: Mesh | null = null;
@@ -42,53 +43,64 @@ export class HoverPlugin {
             public handleHover = (e: MouseEvent): void => {
                 const previous = this.hovered;
                 const current = this.dataStore.get(constants.store.intersection)?.object;
-        
+
+                // Do nothing if the intersection didn't change
                 if (previous === current) {
                     return
                 }
-        
-                if (previous instanceof Mesh) {
-                    bindings.forEach(binding => {
-                        if (isMatching(previous, binding)) {
-                            binding.onHoverEnd(previous);
-                            this.handleBindingAnimation(binding, (animation: AnimationClip, animationBinding: IAnimate) => {
-                                const action = this.mixer.clipAction(animation);
-                                action.loop = LoopOnce;
-                            });
-                        }
-                    });
-                }
-        
-                if (current instanceof Mesh) {
-                    bindings.forEach(binding => {
-                        if (isMatching(current, binding)) {
-                            binding.onHoverStart(current);
-                            this.handleBindingAnimation(binding, (animation: AnimationClip, animationBinding: IAnimate) => {
-                                const action = this.mixer.clipAction(animation);
-                                action.loop = animationBinding.loop;
-                                if (!action.isRunning()) {
-                                    action.reset().play();
-                                }
-                            });
-                        }
-                    });
-                }
-        
-                this.hovered = (current as Mesh);
-            }
 
-            public handleBindingAnimation(binding: IBindingConfig, callback: (animation: AnimationClip, animationBinding: IAnimate) => void) {
-                if (binding.animate) {
-                    this.animations = this.dataStore.get(constants.store.animations)
-                    
-                    binding.animate.forEach((animationBinding) => {
-                        this.animations.forEach(animation => {
-                            if (isMatching(animation, animationBinding)) {
-                                callback(animation, animationBinding);
+                // Handle hover away first
+                if (previous instanceof Mesh) {
+                    this.bindings.forEach(binding => {
+                        if (isMatching(previous, binding)) {
+                            binding.onHoverEnd(previous, this.dataStore);
+
+                            // Check for animations
+                            if (binding.animate && binding.animate.length > 0) {
+                                this.animations = this.dataStore.get(constants.store.animations);
+
+                                handleBindingAnimations(
+                                    binding.animate,
+                                    this.animations,
+                                    (animation: AnimationClip, bind: IAnimate) => {
+                                        // Run the configured animations one final time
+                                        const action = this.mixer.clipAction(animation);
+                                        action.loop = LoopOnce;
+                                    });
                             }
-                        });
+                        }
                     });
                 }
+
+                // Then handle hover next
+                if (current instanceof Mesh) {
+                    this.bindings.forEach(binding => {
+                        if (isMatching(current, binding)) {
+                            binding.onHoverStart(current, this.dataStore);
+
+                            // Check for animations
+                            if (binding.animate && binding.animate.length > 0) {
+                                this.animations = this.dataStore.get(constants.store.animations);
+
+                                handleBindingAnimations(
+                                    binding.animate,
+                                    this.animations,
+                                    (animation: AnimationClip, bind: IAnimate) => {
+                                        // Reset and start and bound animations
+                                        const action = this.mixer.clipAction(animation);
+                                        action.loop = bind.loop;
+
+                                        if (!action.isRunning()) {
+                                            action.reset().play();
+                                        }
+                                    });
+                            }
+                        }
+                    });
+                }
+
+                // Remember the active element
+                this.hovered = (current as Mesh);
             }
         }
     }

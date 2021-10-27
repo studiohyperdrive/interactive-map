@@ -377,7 +377,7 @@ This allows for tab-based navigation, highlighting and/or accessibility. This pl
 
 | Property | Description |
 | --- | --- |
-| `bindings` | A list of objects implementing `ITabNavigationBinding`. |
+| `bindings` | A list of objects implementing `ITabNavigationBindingConfig`. |
 
 ```js
 new TabNavigationPlugin(

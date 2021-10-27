@@ -1,22 +1,24 @@
-import { Scene } from "three";
+import { AnimationClip, AnimationMixer, Scene } from "three";
 
-import { flattenChildren, isMatching } from "../../utils";
+import { BindingCallback, IAnimate } from "../../types";
+import { flattenChildren, handleBindingAnimations, isMatching } from "../../utils";
 
 import DataStore from "../../data-store/data-store";
 import { IDataStore } from "../../data-store/data-store.types";
 import constants from "../../constants";
 
-import { ITabNavigationPlugin, ITabNavigationBinding } from "./tab-navigation-plugin.types";
+import { ITabNavigationPlugin, ITabNavigationBindingConfig } from "./tab-navigation-plugin.types";
 
 export class TabNavigationPlugin {
-    constructor(bindings: ITabNavigationBinding[], first?: Function, last?: Function) {
+    constructor(bindings: ITabNavigationBindingConfig[], first?: BindingCallback, last?: BindingCallback) {
         return class implements ITabNavigationPlugin {
             private dataStore: IDataStore;
 
             public scene: Scene;
-
-            public current?: ITabNavigationBinding = undefined;
-            public bindings: ITabNavigationBinding[] = bindings.sort((a,b) => a.order - b.order);
+            public animations: AnimationClip[];
+            public bindings: ITabNavigationBindingConfig[] = bindings.sort((a, b) => a.order - b.order);
+            public current?: ITabNavigationBindingConfig = undefined;
+            public mixer: AnimationMixer;
 
             public listeners: {
                 tab: EventListener,
@@ -26,7 +28,9 @@ export class TabNavigationPlugin {
             constructor(dataStore: DataStore) {
                 this.dataStore = dataStore;
 
+                this.animations = this.dataStore.get(constants.store.animations);
                 this.scene = this.dataStore.get(constants.store.scene);
+                this.mixer = this.dataStore.get(constants.store.animationMixer);
 
                 this.dataStore.set(constants.store.zoomProps, undefined);
 
@@ -68,7 +72,7 @@ export class TabNavigationPlugin {
                 const fallback = forward ? -1 : this.bindings.length;
                 const i = this.current ? this.bindings.indexOf(this.current) : fallback;
 
-                let next: ITabNavigationBinding | undefined = undefined;
+                let next: ITabNavigationBindingConfig | undefined = undefined;
 
                 if (forward && (i + 1) <= this.bindings.length) {
                     next = this.bindings[i + 1];
@@ -83,12 +87,7 @@ export class TabNavigationPlugin {
                 } else {
                     // Provide support to execute an additional "afterNavigate" as the first and last item
                     let f = forward ? last : first;
-                    f && f(
-                        this.dataStore.get(constants.store.camera),
-                        this.dataStore.get(constants.store.controls),
-                        [],
-                        this.setZoomProps
-                    );
+                    f && f(null, this.dataStore);
                 }
 
                 this.current = next;
@@ -97,12 +96,28 @@ export class TabNavigationPlugin {
                 if (next?.afterNavigate) {
                     flattenChildren(this.scene.children, Infinity).forEach(child => {
                         if (next && isMatching(child, next)) {
-                            (next.afterNavigate as Function)(
-                                this.dataStore.get(constants.store.camera),
-                                this.dataStore.get(constants.store.controls),
-                                [child],
-                                this.setZoomProps,
+                            (next.afterNavigate as BindingCallback)(
+                                child,
+                                this.dataStore
                             );
+
+                            // Check for animations
+                            if (next.animate && next.animate.length > 0) {
+                                this.animations = this.dataStore.get(constants.store.animations);
+
+                                handleBindingAnimations(
+                                    next.animate,
+                                    this.animations,
+                                    (animation: AnimationClip, bind: IAnimate) => {
+                                        // Reset and start and bound animations
+                                        const action = this.mixer.clipAction(animation);
+                                        action.loop = bind.loop;
+
+                                        if (!action.isRunning()) {
+                                            action.reset().play();
+                                        }
+                                    });
+                            }
                         }
                     });
                 }

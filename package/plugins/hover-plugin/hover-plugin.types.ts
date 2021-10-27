@@ -1,10 +1,14 @@
 import { AnimationClip, AnimationMixer, Mesh } from "three";
-import { IEventPlugin, IBindingConfig, IAnimate } from "../../types";
+import { BindingCallback, IBindingConfig, IEventPlugin } from "../../types";
 
 export interface IHoverPlugin extends IEventPlugin {
     animations: AnimationClip[],
     mixer: AnimationMixer,
     hovered: Mesh | null,
     handleHover: (e: MouseEvent) => void,
-    handleBindingAnimation: (binding: IBindingConfig, callback: (animation: AnimationClip, animationBinding: IAnimate) => void) => void,
+}
+
+export interface IHoverBindingConfig extends IBindingConfig {
+    onHoverStart: BindingCallback,
+    onHoverEnd: BindingCallback,
 }
