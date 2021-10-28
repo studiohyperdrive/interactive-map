@@ -24,7 +24,7 @@ export class RaycasterPlugin {
                 this.camera = this.dataStore.get(constants.store.camera);
                 this.scene = this.dataStore.get(constants.store.scene);
 
-                this.listener = this.handleClick.bind(this) as EventListener;
+                this.listener = this.handleCast.bind(this) as EventListener;
             }
 
             public bindEventListener() {
@@ -35,7 +35,7 @@ export class RaycasterPlugin {
                 window.removeEventListener(config.trigger, this.listener);
             }
 
-            public handleClick() {
+            public handleCast() {
                 const pos = this.dataStore.get(constants.store.mousePosition);
 
                 if (pos === undefined) {
