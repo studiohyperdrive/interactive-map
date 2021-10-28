@@ -30,8 +30,6 @@ export class CameraLerpSynchroniserPlugin {
                 }
 
                 if (this.lerp.isAnimating()) {
-                    console.info('casting & hovering');
-
                     this.raycaster.handleCast();
                     this.hover?.handleHover();
                 }
