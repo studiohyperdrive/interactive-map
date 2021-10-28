@@ -26,6 +26,10 @@ export class CameraLerpPlugin {
                 this.camera = this.dataStore.get(constants.store.camera);
             }
 
+            public isAnimating(): boolean {
+                return this.animating;
+            }
+
             public update() {
                 const zoomProps = this.dataStore.get(constants.store.zoomProps);
 
