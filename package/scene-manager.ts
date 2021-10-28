@@ -15,7 +15,7 @@ export default class SceneManager implements IManager {
 	public camera: PerspectiveCamera | OrthographicCamera;
 	public plugins: any[];
 
-	constructor(canvas: HTMLCanvasElement, sceneConfig: ISceneConfig, dataStore: DataStore, plugins: any[]) {
+	constructor(canvas: HTMLCanvasElement, sceneConfig: ISceneConfig, dataStore: DataStore, scenePlugins: any[]) {
 		this.dataStore = dataStore;
 
 		this.sizes = {
@@ -38,7 +38,7 @@ export default class SceneManager implements IManager {
 
 		this.dataStore.set(constants.store.cameraConfig, sceneConfig.camera);
 
-		this.plugins = plugins.map(Plugin => new Plugin(this.dataStore));
+		this.plugins = scenePlugins.map(Plugin => new Plugin(this.dataStore));
 	}
 
 	/**

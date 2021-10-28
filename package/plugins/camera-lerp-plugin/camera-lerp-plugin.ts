@@ -1,8 +1,8 @@
 import { OrthographicCamera, PerspectiveCamera, Sphere, Vector3, MathUtils, Box3 } from "three";
 import { MapControls } from "three/examples/jsm/controls/OrbitControls";
 
-import { IDataStore } from "../../data-store/data-store.types";
 import constants from "../../constants";
+import { IDataStore } from "../../data-store/data-store.types";
 
 import { ICameraLerpPlugin } from "./camera-lerp-plugin.types";
 
@@ -13,8 +13,8 @@ export class CameraLerpPlugin {
             private currentTarget: Box3 | undefined;
             private animating: boolean;
 
-            public controls: MapControls;
             public camera: PerspectiveCamera | OrthographicCamera;
+            public controls: MapControls;
 
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
@@ -76,7 +76,7 @@ export class CameraLerpPlugin {
 
                 }
             }
-        }
+        };
     }
 }
 

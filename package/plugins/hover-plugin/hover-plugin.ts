@@ -14,10 +14,10 @@ export class HoverPlugin {
         return class implements IHoverPlugin {
             private dataStore: IDataStore;
 
-            public bindings: IHoverBindingConfig[] = bindings;
             public animations: AnimationClip[];
-            public mixer: AnimationMixer;
+            public bindings: IHoverBindingConfig[] = bindings;
             public hovered: Mesh | null = null;
+            public mixer: AnimationMixer;
 
             public listener: EventListener;
 
@@ -40,7 +40,7 @@ export class HoverPlugin {
                 window.removeEventListener("mousemove", this.listener);
             }
 
-            public handleHover = (e: MouseEvent): void => {
+            public handleHover = (e?: MouseEvent): void => {
                 const previous = this.hovered;
                 const current = this.dataStore.get(constants.store.intersection)?.object;
 

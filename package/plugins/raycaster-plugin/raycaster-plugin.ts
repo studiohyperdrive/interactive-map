@@ -1,10 +1,10 @@
 import { Camera, Raycaster, Scene } from "three";
 
-import { IDataStore } from "../../data-store/data-store.types";
 import constants from "../../constants";
+import { IDataStore } from "../../data-store/data-store.types";
+import { flattenChildren } from "../../utils";
 
 import { IRaycasterPlugin, IRaycasterConfig } from "./raycaster-plugin.types";
-import { flattenChildren } from "../../utils";
 
 export class RaycasterPlugin {
     constructor(config: IRaycasterConfig) {
