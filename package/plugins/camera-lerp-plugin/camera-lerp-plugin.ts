@@ -52,15 +52,21 @@ export class CameraLerpPlugin {
                         // Animate orthographic zoom level
                         if (this.camera instanceof OrthographicCamera) {
                             const bSphere = zoomProps.boundingBox.getBoundingSphere(new Sphere(target));
-                            const zoom = MathUtils.lerp(this.camera.top, bSphere.radius * zoomProps.fitRatio, delta * speed);
+                            const zoom = MathUtils.lerp(
+                                this.camera.top,
+                                zoomProps.frustum
+                                    ? zoomProps.frustum / 2
+                                    : bSphere.radius * zoomProps.fitRatio,
+                                delta * speed
+                            );
 
+                            this.camera.left = - zoom * zoomProps.aspect;
+                            this.camera.right = zoom * zoomProps.aspect;
                             this.camera.top = zoom;
                             this.camera.bottom = - zoom;
-                            this.camera.right = zoom * zoomProps.aspect;
-                            this.camera.left = - zoom * zoomProps.aspect;
                         }
 
-                        if (this.controls.target.distanceTo(target) > 0.01) {
+                        if (this.controls.target.distanceTo(target) > 0.001) {
                             // Animate orbitcontrols focus point
                             this.controls.target.lerp(target, delta * speed);
 
@@ -69,6 +75,8 @@ export class CameraLerpPlugin {
                             this.controls.update();
 
                             this.camera.updateProjectionMatrix();
+
+                            console.info('cycle');
                         } else {
                             this.animating = false;
                         }
