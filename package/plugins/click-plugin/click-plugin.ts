@@ -1,23 +1,33 @@
 import { AnimationClip, AnimationMixer, Mesh } from "three";
 
 import { IAnimate } from "../../types";
-import { handleBindingAnimations, isMatching } from "../../utils";
+import { calculateCursorX, calculateCursorY, handleBindingAnimations, isMatching } from "../../utils";
 
-import { IDataStore } from "../../data-store/data-store.types";
 import constants from "../../constants";
+import { IDataStore } from "../../data-store/data-store.types";
 
 import { IClickPlugin, IClickBindingConfig } from "./click-plugin.types";
 
 export class ClickPlugin {
-    constructor(bindings: IClickBindingConfig[]) {
+    constructor(bindings: IClickBindingConfig[], clickMargin: number = 0.015) {
         return class implements IClickPlugin {
             private dataStore: IDataStore;
+
+            private position: {
+                start?: { x: number, y: number },
+                end?: { x: number, y: number }
+            } = {};
 
             public bindings: IClickBindingConfig[] = bindings;
             public animations: AnimationClip[];
             public mixer: AnimationMixer;
+            public margin: number = clickMargin;
 
-            public listener: EventListener;
+            public listeners: {
+                up: EventListener,
+                down: EventListener,
+                click: EventListener
+            }
 
             constructor(dataStore: IDataStore) {
                 this.dataStore = dataStore;
@@ -27,18 +37,32 @@ export class ClickPlugin {
 
                 this.dataStore.set(constants.store.clickBindings, bindings);
 
-                this.listener = this.handleClick.bind(this) as EventListener;
+                this.listeners = {
+                    down: this.handleMouseDown.bind(this) as EventListener,
+                    up: this.handleMouseUp.bind(this) as EventListener,
+                    click: this.handleClick.bind(this) as EventListener,
+                }
             }
 
             public bindEventListener(): void {
-                window.addEventListener("click", this.listener);
+                window.addEventListener("mousedown", this.listeners.down);
+                window.addEventListener("mouseup", this.listeners.up);
+                window.addEventListener("click", this.listeners.click);
             }
 
             public unbindEventListener(): void {
-                window.removeEventListener("click", this.listener);
+                window.removeEventListener("mousedown", this.listeners.down);
+                window.removeEventListener("mouseup", this.listeners.up);
+                window.removeEventListener("click", this.listeners.click);
             }
 
             public handleClick = (e: MouseEvent): void => {
+                const drag = this.isDragged(this.position);
+
+                if (drag) {
+                    return;
+                }
+
                 const intersection = this.dataStore.get(constants.store.intersection);
 
                 if (!intersection) {
@@ -72,6 +96,23 @@ export class ClickPlugin {
                         }
                     });
                 }
+            }
+
+            public handleMouseDown = (e: MouseEvent): void => {
+                this.position.start = { x: calculateCursorX(e), y: calculateCursorY(e) };
+            }
+
+            public handleMouseUp = (e: MouseEvent): void => {
+                this.position.end = { x: calculateCursorX(e), y: calculateCursorY(e) };
+            }
+
+            public isDragged = (pair: typeof this.position): boolean => {
+                const a = (pair.start?.x || 0) - (pair.end?.x || 0);
+                const b = (pair.start?.y || 0) - (pair.end?.y || 0);
+
+                const distance = Math.sqrt(a * a + b * b);
+
+                return distance > this.margin;
             }
         }
     }
