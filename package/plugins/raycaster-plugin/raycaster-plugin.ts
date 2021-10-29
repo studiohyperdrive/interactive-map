@@ -1,10 +1,10 @@
 import { Camera, Raycaster, Scene } from "three";
 
-import { IDataStore } from "../../data-store/data-store.types";
 import constants from "../../constants";
+import { IDataStore } from "../../data-store/data-store.types";
+import { flattenChildren } from "../../utils";
 
 import { IRaycasterPlugin, IRaycasterConfig } from "./raycaster-plugin.types";
-import { flattenChildren } from "../../utils";
 
 export class RaycasterPlugin {
     constructor(config: IRaycasterConfig) {
@@ -24,7 +24,7 @@ export class RaycasterPlugin {
                 this.camera = this.dataStore.get(constants.store.camera);
                 this.scene = this.dataStore.get(constants.store.scene);
 
-                this.listener = this.handleClick.bind(this) as EventListener;
+                this.listener = this.handleCast.bind(this) as EventListener;
             }
 
             public bindEventListener() {
@@ -35,7 +35,7 @@ export class RaycasterPlugin {
                 window.removeEventListener(config.trigger, this.listener);
             }
 
-            public handleClick() {
+            public handleCast() {
                 const pos = this.dataStore.get(constants.store.mousePosition);
 
                 if (pos === undefined) {

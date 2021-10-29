@@ -7,6 +7,12 @@ export * from "./animation-plugin/animation-plugin.types";
 export { default as BrowserResizePlugin } from "./browser-resize-plugin/browser-resize-plugin";
 export * from "./browser-resize-plugin/browser-resize-plugin.types";
 
+export { default as CameraLerpPlugin } from "./camera-lerp-plugin/camera-lerp-plugin";
+export * from "./camera-lerp-plugin/camera-lerp-plugin.types";
+
+export { default as CameraLerpSynchroniserPlugin } from "./camera-lerp-synchroniser-plugin/camera-lerp-synchroniser-plugin";
+export * from "./camera-lerp-synchroniser-plugin/camera-lerp-synchroniser-plugin.types";
+
 export { default as ClickPlugin } from "./click-plugin/click-plugin";
 export * from "./click-plugin/click-plugin.types";
 
@@ -36,9 +42,6 @@ export * from "./raycaster-plugin/raycaster-plugin.types";
 
 export { default as TabNavigationPlugin } from "./tab-navigation-plugin/tab-navigation-plugin";
 export * from "./tab-navigation-plugin/tab-navigation-plugin.types";
-
-export { default as CameraLerpPlugin } from "./camera-lerp-plugin/camera-lerp-plugin";
-export * from "./camera-lerp-plugin/camera-lerp-plugin.types";
 
 export { default as WebglRendererPlugin } from "./webgl-renderer-plugin/webgl-renderer-plugin";
 export * from "./webgl-renderer-plugin/webgl-renderer-plugin.types";

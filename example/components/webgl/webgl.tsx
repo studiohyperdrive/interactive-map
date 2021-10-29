@@ -21,6 +21,7 @@ import {
   MapControlsPlugin,
   IlluminationPlugin,
   WebglRendererPlugin,
+  CameraLerpSynchroniserPlugin,
 } from "@studiohyperdrive/interactive-map/dist/plugins";
 import { getChildren, hideChild, showChild } from "@studiohyperdrive/interactive-map/dist/utils";
 
@@ -58,31 +59,34 @@ const WebGL: FC<WebGLProps> = ({ three, disabled }) => {
   }
 
   const buildThree = (): ThreeEntryPoint | null => {
-    return threeRootElement.current
-      ? new ThreeEntryPoint(
-        threeRootElement.current,
-        ortho2,
-        [
-          new BrowserResizePlugin(window),
-          new MousePositionPlugin(),
-          new RaycasterPlugin({ trigger: "mousemove" }),
-          new ClickPlugin(createClickBindings(store, router)),
-          new HoverPlugin(createHoverBindings(store)),
-          new TabNavigationPlugin(createTabNavigationBindings(), resetCamera, resetCamera),
-        ],
-        [
-          new GltfDracoLoaderPlugin("/models/interactive-map_v2.8-draco.glb", (scene: Scene) => hideCheckmarks(scene)),
-          new GlobalIlluminationPlugin(),
-          new IlluminationPlugin(illuminationConfig),
-          new ClockPlugin(),
-          new AnimationMixerPlugin(),
-          new AnimationPlugin(animationConfig),
-          new MapControlsPlugin(controlsConfig),
-          new CameraLerpPlugin(2),
-          new WebglRendererPlugin(rendererConfig)
-        ]
-      )
-      : null;
+    if (!threeRootElement.current) {
+      return null;
+    }
+
+    return new ThreeEntryPoint(
+      threeRootElement.current,
+      ortho2,
+      [
+        new BrowserResizePlugin(window),
+        new MousePositionPlugin(),
+        new RaycasterPlugin({ trigger: "mousemove" }),
+        new ClickPlugin(createClickBindings(store, router)),
+        new HoverPlugin(createHoverBindings(store)),
+        new TabNavigationPlugin(createTabNavigationBindings(), resetCamera, resetCamera),
+      ],
+      [
+        new GltfDracoLoaderPlugin("/models/interactive-map_v2.8-draco.glb", (scene: Scene) => hideCheckmarks(scene)),
+        new GlobalIlluminationPlugin(),
+        new IlluminationPlugin(illuminationConfig),
+        new ClockPlugin(),
+        new AnimationMixerPlugin(),
+        new AnimationPlugin(animationConfig),
+        new MapControlsPlugin(controlsConfig),
+        new CameraLerpPlugin(2),
+        new WebglRendererPlugin(rendererConfig),
+        new CameraLerpSynchroniserPlugin(),
+      ]
+    );
   };
 
   // Run once

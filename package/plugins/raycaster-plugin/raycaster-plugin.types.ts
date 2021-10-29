@@ -6,7 +6,7 @@ export interface IRaycasterPlugin extends IEventPlugin {
     raycaster: Raycaster,
     camera: Camera,
     scene: Scene,
-    handleClick: () => void,
+    handleCast: () => void,
 }
 
 // Config

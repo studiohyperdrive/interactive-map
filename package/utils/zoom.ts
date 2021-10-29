@@ -6,6 +6,25 @@ import { IOrthographicCameraConfig, IPerspectiveCameraConfig } from "../types";
 
 import { IDataStore } from "../data-store/data-store.types";
 
+// Coordinate 0, 0, 0
+const OOO = new Vector3;
+
+export const getAspectRatioFromControls = (controls: MapControls): number => {
+  // Determine aspect ratio
+
+  let container = undefined;
+
+  if (controls.domElement instanceof Document) {
+    container = controls.domElement.body;
+  }
+
+  if (controls.domElement instanceof HTMLElement) {
+    container = controls.domElement
+  }
+
+  return container ? container.clientWidth / container.clientHeight : 1;
+}
+
 /**
  * This function will adjust the camera and controls to zoom in and center on a set of objects.
  * 
@@ -80,9 +99,6 @@ export const setCameraToConfig = (
   // Stop any animations
   setZoomProps(undefined);
 
-  // Coordinate 0, 0, 0
-  const OOO = new Vector3;
-
   camera.position.set(config.position.x, config.position.y, config.position.z);
   camera.lookAt(OOO);
 
@@ -117,18 +133,23 @@ export const setCameraToConfig = (
   camera.updateProjectionMatrix();
 }
 
-export const getAspectRatioFromControls = (controls: MapControls): number => {
-  // Determine aspect ratio
+export const zoomCameraToConfig = (
+  store: IDataStore,
+  config: IOrthographicCameraConfig | IPerspectiveCameraConfig
+) => {
+  const origin = new Object3D();
+  origin.position.set(config.position.x, config.position.y, config.position.z);
 
-  let container = undefined;
+  zoomCameraToSelection([origin], store);
 
-  if (controls.domElement instanceof Document) {
-    container = controls.domElement.body;
+  // Identify type of config
+  if ((config as IOrthographicCameraConfig).frustumSize) {
+    let c = config as IOrthographicCameraConfig;
+
+    const props = store.get(constants.store.zoomProps);
+    store.set(constants.store.zoomProps, {
+      ...props,
+      frustum: c.frustumSize
+    });
   }
-
-  if (controls.domElement instanceof HTMLElement) {
-    container = controls.domElement
-  }
-
-  return container ? container.clientWidth / container.clientHeight : 1;
 }

@@ -2,7 +2,7 @@ import { Mesh, Object3D } from "three";
 
 import { IDataStore } from "@studiohyperdrive/interactive-map/dist/data-store/data-store.types";
 import { ITabNavigationBindingConfig } from "@studiohyperdrive/interactive-map/dist/plugins";
-import { zoomCameraToSelection, mutateRandomColor, setCameraToConfig } from "@studiohyperdrive/interactive-map/dist/utils";
+import { zoomCameraToSelection, mutateRandomColor, zoomCameraToConfig } from "@studiohyperdrive/interactive-map/dist/utils";
 
 import { ortho, ortho2 } from "../config/sceneConfig";
 import { BindingCallback } from "@studiohyperdrive/interactive-map/dist/types";
@@ -24,7 +24,7 @@ export const resetCamera: BindingCallback = (
     object: Object3D | null,
     datastore: IDataStore
 ) => {
-    setCameraToConfig(datastore, ortho2.camera.config);
+    zoomCameraToConfig(datastore, ortho2.camera.config);
 }
 
 export function createTabNavigationBindings(): ITabNavigationBindingConfig[] {
